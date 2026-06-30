@@ -18,6 +18,14 @@ with Home Assistant, but fires alarms **on-device** so it works even if WiFi/HA 
 - **Interaction:** single VCNL4040 (proximity gesture + ambient lux) over I²C; 3 rear buttons
 - **Audio:** passive piezo + RTTTL (one LEDC/PWM GPIO); I²S DAC pads reserved for v2
 
+## Repository layout
+
+```
+software/   Rust firmware (esp-idf, ESP32-S3) — the Cargo project lives here
+hardware/   KiCad schematic + PCB + fab outputs (populated after bench validation)
+docs/       design handoff + options/trade-offs reference
+```
+
 ## Firmware structure
 
 `std` path: `esp-idf-hal` + `esp-idf-svc` (FreeRTOS underneath, exposed as `std::thread`).
@@ -25,16 +33,17 @@ Four threads, with shared state behind `Arc<Mutex<…>>` / channels:
 
 | Thread | File | Role |
 | --- | --- | --- |
-| Alarm / time | `src/alarm.rs` | **Source of truth.** RTC, preset eval, firing, snooze/dismiss. Never blocks on network. |
-| Network | `src/network.rs` | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
-| Interaction | `src/interaction.rs` | VCNL4040 gesture + lux, rear buttons, brightness. |
-| Display | `src/display.rs` | Renders time / alarm / preset / armed / dismiss-progress; fades. |
-| Shared state | `src/state.rs` | Preset model + state machine + settings (NVS-backed). |
+| Alarm / time | `software/src/alarm.rs` | **Source of truth.** RTC, preset eval, firing, snooze/dismiss. Never blocks on network. |
+| Network | `software/src/network.rs` | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
+| Interaction | `software/src/interaction.rs` | VCNL4040 gesture + lux, rear buttons, brightness. |
+| Display | `software/src/display.rs` | Renders time / alarm / preset / armed / dismiss-progress; fades. |
+| Shared state | `software/src/state.rs` | Preset model + state machine + settings (NVS-backed). |
 
 ## Toolchain setup
 
 This is the Xtensa ESP32-S3 target on the `std`/esp-idf path, so it needs the
-Espressif Rust fork (not stock `rustup`):
+Espressif Rust fork (not stock `rustup`). The Cargo project lives in `software/`,
+so run the build/flash commands from there (`cd software`):
 
 ```sh
 # 1. Install the Xtensa Rust toolchain + esp-idf prerequisites
