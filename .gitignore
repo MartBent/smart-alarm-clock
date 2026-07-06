@@ -2,3 +2,11 @@
 .embuild
 /.vscode
 *.log
+
+# esp-idf generated config (sdkconfig.defaults IS tracked; the resolved
+# sdkconfig and its backups are generated per-build)
+/sdkconfig
+/sdkconfig.old
+
+# RustRover / IDEA: keep shared run configs (.run/) but ignore per-user state
+/.idea

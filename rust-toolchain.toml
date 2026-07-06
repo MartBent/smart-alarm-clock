@@ -1,0 +1,3 @@
+[toolchain]
+# The Xtensa ESP32-S3 target needs Espressif's Rust fork, installed via espup.
+channel = "esp"

@@ -1,0 +1,12 @@
+# ESP-IDF sdkconfig defaults, consumed by esp-idf-sys on the device build.
+# Keep this small; add options as the firmware needs them.
+
+# Rust std + logging + format! can overflow the default main-task stack.
+# (Per-thread stacks are set in code via thread::Builder::stack_size.)
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=20000
+
+# 1 kHz FreeRTOS tick -> finer std::thread::sleep / timing granularity.
+CONFIG_FREERTOS_HZ=1000
+
+# Match the common ESP32-S3 dev-kit flash size.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y

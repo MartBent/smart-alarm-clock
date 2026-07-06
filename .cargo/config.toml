@@ -1,0 +1,17 @@
+[build]
+target = "xtensa-esp32s3-espidf"
+
+[target.xtensa-esp32s3-espidf]
+linker = "ldproxy"
+runner = "espflash flash --monitor" # `cargo run` builds, flashes over USB-C, and opens the monitor
+rustflags = ["--cfg", "espidf_time64"] # esp-idf uses 64-bit time_t
+
+[unstable]
+build-std = ["std", "panic_abort"]
+
+[env]
+MCU = "esp32s3"
+# Pin the ESP-IDF version esp-idf-sys downloads + builds against.
+ESP_IDF_VERSION = "v5.2.3"
+# Keep the bare scaffold build small: generated dummy main + pthread/std support.
+ESP_IDF_COMPONENTS = "main;pthread"

@@ -20,16 +20,22 @@ with Home Assistant, but fires alarms **on-device** so it works even if WiFi/HA 
 
 ## Firmware structure
 
-`std` path: `esp-idf-hal` + `esp-idf-svc` (FreeRTOS underneath, exposed as `std::thread`).
-Four threads, with shared state behind `Arc<Mutex<…>>` / channels:
+The repo is currently a **bare esp-idf entry point** (`src/main.rs`: `link_patches`,
+boot log, idle loop) — build the rest out from here.
 
-| Thread | File | Role |
-| --- | --- | --- |
-| Alarm / time | `src/alarm.rs` | **Source of truth.** RTC, preset eval, firing, snooze/dismiss. Never blocks on network. |
-| Network | `src/network.rs` | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
-| Interaction | `src/interaction.rs` | VCNL4040 gesture + lux, rear buttons, brightness. |
-| Display | `src/display.rs` | Renders time / alarm / preset / armed / dismiss-progress; fades. |
-| Shared state | `src/state.rs` | Preset model + state machine + settings (NVS-backed). |
+Planned target design (`std` path: `esp-idf-hal` + `esp-idf-svc`, FreeRTOS underneath
+exposed as `std::thread`): four threads with shared state behind `Arc<Mutex<…>>` /
+channels. Not yet created — this is the roadmap to implement:
+
+| Thread | Role |
+| --- | --- |
+| Alarm / time | **Source of truth.** RTC, preset eval, firing, snooze/dismiss. Never blocks on network. |
+| Network | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
+| Interaction | VCNL4040 gesture + lux, rear buttons, brightness. |
+| Display | Renders time / alarm / preset / armed / dismiss-progress; fades. |
+| Shared state | Preset model + state machine + settings (NVS-backed). |
+
+See `docs/handoff.md` for the full locked design behind this.
 
 ## Toolchain setup
 
@@ -37,28 +43,26 @@ This is the Xtensa ESP32-S3 target on the `std`/esp-idf path, so it needs the
 Espressif Rust fork (not stock `rustup`):
 
 ```sh
-# 1. Install the Xtensa Rust toolchain + esp-idf prerequisites
-cargo install espup
-espup install                 # installs the esp/xtensa toolchain
+# 1. Install the Xtensa Rust toolchain + flashing tools
+cargo install espup ldproxy espflash cargo-espflash --locked
+espup install                 # installs the esp/xtensa toolchain + LLVM
 . $HOME/export-esp.sh         # exports env each shell (source it, or add to your profile)
 
-# 2. Flashing + monitor
-cargo install cargo-espflash espflash
-
-# 3. (Optional) regenerate a fresh template to compare against this scaffold
-cargo install cargo-generate
-cargo generate esp-rs/esp-idf-template cargo   # pick esp32s3, std
-
-# 4. Build / flash / monitor (native USB-C)
-cargo build
-cargo espflash flash --monitor
+# 2. Build + flash + monitor over native USB-C
+cargo run                     # builds for esp32s3 and flashes (see .cargo/config.toml runner)
 ```
 
-You will still need the esp-idf build config that `esp-idf-template` generates
-(`.cargo/config.toml`, `sdkconfig.defaults`, `rust-toolchain.toml`, `build.rs`).
-Those were intentionally **left out of this skeleton** — generate them with the
-template above (or copy from it) so you own that setup. Reference: Espressif's
-"Embedded Rust on ESP" book (covers WiFi + MQTT).
+`rust-toolchain.toml` pins the `esp` channel and `.cargo/config.toml` sets the
+`xtensa-esp32s3-espidf` target + `espflash flash --monitor` runner, so a plain
+`cargo run` builds and flashes. The scaffold depends directly on `esp-idf-sys`;
+add `esp-idf-hal` / `esp-idf-svc` when you start wiring peripherals and services.
+In **RustRover**, the **Flash + monitor** run configuration (`.run/`) does the same.
+
+The esp-idf build config is **already included** — `.cargo/config.toml`,
+`rust-toolchain.toml`, `sdkconfig.defaults`, and `build.rs`. On the first build,
+`esp-idf-sys` downloads and builds ESP-IDF `v5.2.3` (pinned in `.cargo/config.toml`),
+which takes a while; later builds are fast. Reference: Espressif's "Embedded Rust on
+ESP" book (covers WiFi + MQTT).
 
 ## Build sequence (from the design)
 
