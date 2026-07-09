@@ -58,6 +58,33 @@ cargo run                     # builds for esp32s3 and flashes (see .cargo/confi
 add `esp-idf-hal` / `esp-idf-svc` when you start wiring peripherals and services.
 In **RustRover**, the **Flash + monitor** run configuration (`.run/`) does the same.
 
+> **If flashing can't connect** (`espflash`: "Error while connecting to device"):
+> it's almost always a **charge-only USB cable** — it enumerates the serial port but
+> the chip never syncs. Use a real **data** cable; then normal auto-reset works and no
+> BOOT-button sequence is needed. Sanity-check the chip with
+> `espflash board-info --port <PORT>` (this board reports **ESP32-S3**).
+
+### TTGO T-Display test board
+
+For a classic ESP32 TTGO T-Display, use the ESP32 target profile:
+
+```sh
+# Build only
+cargo build-ttgo
+
+# Build + flash + monitor
+cargo run-ttgo
+```
+
+This is equivalent to:
+
+```sh
+cargo run --target xtensa-esp32-espidf
+```
+
+The default `cargo build` / `cargo run` stays on the final ESP32-S3 target. If your
+board is the newer **T-Display-S3**, use the default ESP32-S3 profile instead.
+
 The esp-idf build config is **already included** — `.cargo/config.toml`,
 `rust-toolchain.toml`, `sdkconfig.defaults`, and `build.rs`. On the first build,
 `esp-idf-sys` downloads and builds ESP-IDF `v5.2.3` (pinned in `.cargo/config.toml`),
