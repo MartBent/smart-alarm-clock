@@ -131,6 +131,18 @@ static STATUS_HTML: &str = r##"<!doctype html><html lang="en"><head>
 <button class="primary" onclick="cmd('dismiss')">Dismiss</button>
 </div>
 <h2>Alarms</h2><div id="presets"></div>
+<h2>Home Assistant (MQTT)</h2>
+<label for="mh">Broker host</label>
+<input id="mh" type="text" placeholder="e.g. 192.168.0.10" autocomplete="off" autocapitalize="off">
+<label for="mp">Port</label>
+<input id="mp" type="text" value="1883">
+<label for="mu">Username <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+<input id="mu" type="text" autocomplete="off" autocapitalize="off">
+<label for="mpw">Password <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+<input id="mpw" type="password">
+<div class="btns" style="grid-template-columns:1fr;margin-top:.8rem">
+<button class="primary" onclick="savemqtt()">Save broker &amp; reboot</button></div>
+<div id="mout"></div>
 </div>
 <script>
 let lastPresets="";
@@ -149,6 +161,10 @@ async function post(u,b){await fetch(u,{method:'POST',headers:{'Content-Type':'a
 async function cmd(c){await post('/api/command',{cmd:c});refresh();}
 async function tog(idx,enabled){await post('/api/preset/enabled',{idx,enabled});}
 async function settime(idx,v){const[h,m]=v.split(':').map(Number);await post('/api/preset/time',{idx,hour:h,minute:m});}
+async function savemqtt(){mout.textContent='Saving…';
+ try{const r=await fetch('/api/mqtt',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({host:mh.value,port:Number(mp.value)||1883,username:mu.value,password:mpw.value})});
+ mout.textContent=await r.text();}catch(e){mout.textContent='Error: '+e;}}
 refresh();setInterval(refresh,1000);
 </script></body></html>"##;
 
@@ -171,6 +187,19 @@ struct PresetTimeReq {
 struct WifiReq {
     ssid: String,
     password: String,
+}
+#[derive(Deserialize)]
+struct MqttReq {
+    host: String,
+    #[serde(default = "default_mqtt_port")]
+    port: u16,
+    #[serde(default)]
+    username: String,
+    #[serde(default)]
+    password: String,
+}
+fn default_mqtt_port() -> u16 {
+    1883
 }
 
 pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
@@ -209,6 +238,21 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
             .stack_size(4096)
             .spawn(crate::dns::run)
             .ok();
+    }
+
+    // MQTT + Home Assistant (STA mode, if a broker is configured in NVS).
+    if !ap_mode {
+        match load_mqtt(&nvs_part) {
+            Some(mcfg) => {
+                let (sh, bs) = (shared.clone(), bus.clone());
+                std::thread::Builder::new()
+                    .name("mqtt".into())
+                    .stack_size(8 * 1024)
+                    .spawn(move || crate::mqtt::run(mcfg, sh, bs))
+                    .ok();
+            }
+            None => log::info!(target: "net", "no MQTT broker configured (POST /api/mqtt to set one)"),
+        }
     }
 
     let mut server = EspHttpServer::new(&HttpConfig {
@@ -345,6 +389,43 @@ fn save_creds(part: &EspDefaultNvsPartition, ssid: &str, pass: &str) -> anyhow::
     Ok(())
 }
 
+fn load_mqtt(part: &EspDefaultNvsPartition) -> Option<crate::mqtt::MqttCfg> {
+    let nvs = EspNvs::new(part.clone(), "mqtt", false).ok()?;
+    let mut hb = [0u8; 64];
+    let host = nvs.get_str("host", &mut hb).ok().flatten()?;
+    if host.is_empty() {
+        return None;
+    }
+    let host = host.to_string();
+    let mut pb = [0u8; 8];
+    let port = nvs
+        .get_str("port", &mut pb)
+        .ok()
+        .flatten()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(1883);
+    let mut ub = [0u8; 64];
+    let user = nvs.get_str("user", &mut ub).ok().flatten().unwrap_or("").to_string();
+    let mut xb = [0u8; 64];
+    let pass = nvs.get_str("pass", &mut xb).ok().flatten().unwrap_or("").to_string();
+    Some(crate::mqtt::MqttCfg { host, port, user, pass })
+}
+
+fn save_mqtt(
+    part: &EspDefaultNvsPartition,
+    host: &str,
+    port: u16,
+    user: &str,
+    pass: &str,
+) -> anyhow::Result<()> {
+    let mut nvs = EspNvs::new(part.clone(), "mqtt", true)?;
+    nvs.set_str("host", host)?;
+    nvs.set_str("port", &port.to_string())?;
+    nvs.set_str("user", user)?;
+    nvs.set_str("pass", pass)?;
+    Ok(())
+}
+
 // ---------------------------------------------------------------------------
 // HTTP handlers
 // ---------------------------------------------------------------------------
@@ -476,6 +557,7 @@ fn register(
 
     // POST /api/wifi — save STA creds and reboot into station mode.
     {
+        let nvs_part = nvs_part.clone();
         server
             .fn_handler::<anyhow::Error, _>("/api/wifi", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
@@ -487,14 +569,7 @@ fn register(
                         log::info!(target: "net", "saved creds for '{}', rebooting", r.ssid);
                         req.into_ok_response()?
                             .write_all(b"Saved. Rebooting to join your WiFi...")?;
-                        // Reboot shortly, after the response flushes.
-                        std::thread::Builder::new()
-                            .stack_size(2048)
-                            .spawn(|| {
-                                std::thread::sleep(core::time::Duration::from_secs(1));
-                                esp_idf_hal::reset::restart();
-                            })
-                            .ok();
+                        reboot_soon();
                     }
                     _ => return bad_request(req, "need {ssid, password}"),
                 }
@@ -502,6 +577,54 @@ fn register(
             })
             .unwrap();
     }
+
+    // POST /api/wifi/reset — forget WiFi creds and reboot into setup AP.
+    {
+        let nvs_part = nvs_part.clone();
+        server
+            .fn_handler::<anyhow::Error, _>("/api/wifi/reset", Method::Post, move |req| {
+                save_creds(&nvs_part, "", "")?; // empty ssid -> setup AP on next boot
+                log::info!(target: "net", "WiFi creds cleared; rebooting to setup AP");
+                req.into_ok_response()?
+                    .write_all(b"WiFi settings cleared. Rebooting to setup mode...")?;
+                reboot_soon();
+                Ok(())
+            })
+            .unwrap();
+    }
+
+    // POST /api/mqtt — save broker settings and reboot to connect.
+    {
+        server
+            .fn_handler::<anyhow::Error, _>("/api/mqtt", Method::Post, move |mut req| {
+                let Some(buf) = read_body(&mut req)? else {
+                    return bad_request(req, "bad body");
+                };
+                match serde_json::from_slice::<MqttReq>(&buf) {
+                    Ok(r) if !r.host.is_empty() => {
+                        save_mqtt(&nvs_part, &r.host, r.port, &r.username, &r.password)?;
+                        log::info!(target: "net", "saved MQTT broker {}:{}, rebooting", r.host, r.port);
+                        req.into_ok_response()?
+                            .write_all(b"Saved. Rebooting to connect to MQTT...")?;
+                        reboot_soon();
+                    }
+                    _ => return bad_request(req, "need {host, port, username, password}"),
+                }
+                Ok(())
+            })
+            .unwrap();
+    }
+}
+
+/// Reboot after a short delay so the HTTP response can flush first.
+fn reboot_soon() {
+    std::thread::Builder::new()
+        .stack_size(2048)
+        .spawn(|| {
+            std::thread::sleep(core::time::Duration::from_secs(1));
+            esp_idf_hal::reset::restart();
+        })
+        .ok();
 }
 
 fn read_body(req: &mut Request<&mut EspHttpConnection<'_>>) -> anyhow::Result<Option<Vec<u8>>> {
