@@ -13,6 +13,8 @@ use std::sync::{Arc, Mutex};
 /// Runtime phase of the alarm state machine.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Phase {
+    /// Waiting for the clock to sync (SNTP) before any alarm can be trusted.
+    Syncing,
     /// Disarmed and quiet.
     Idle,
     /// Armed, watching enabled presets.
@@ -128,6 +130,7 @@ pub fn fmt_hms(secs: u32) -> String {
 /// Lowercase phase name for JSON / logs.
 pub fn phase_str(p: Phase) -> &'static str {
     match p {
+        Phase::Syncing => "syncing",
         Phase::Idle => "idle",
         Phase::Armed => "armed",
         Phase::Ringing => "ringing",

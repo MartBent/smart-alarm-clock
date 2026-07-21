@@ -26,6 +26,8 @@ pub fn run(channel: CHANNEL0, pin: Gpio48, shared: SharedState) {
     loop {
         let phase = shared.lock().unwrap().phase;
         let color = match phase {
+            // Syncing: dim blue while waiting for SNTP.
+            Phase::Syncing => RGB8 { r: 0, g: 4, b: 18 },
             // Idle: slow rainbow — the device is alive but not armed.
             Phase::Idle => hsv2rgb(Hsv {
                 hue,

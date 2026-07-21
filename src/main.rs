@@ -30,6 +30,11 @@ fn main() {
     // Route the `log` crate to the ESP-IDF logger (levels, tags, timestamps).
     EspLogger::initialize_default();
 
+    // Local timezone (Europe/Amsterdam) so localtime() gives wall-clock time
+    // with DST once SNTP has set the system clock. TODO: make configurable.
+    std::env::set_var("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
+    unsafe { esp_idf_sys::tzset() };
+
     log::info!(target: "main", "smart-alarm-clock booting");
 
     let peripherals = Peripherals::take().expect("take peripherals");

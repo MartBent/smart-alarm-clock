@@ -28,6 +28,7 @@ use esp_idf_svc::http::server::{
     Configuration as HttpConfig, EspHttpConnection, EspHttpServer, Request,
 };
 use esp_idf_svc::nvs::{EspDefaultNvsPartition, EspNvs};
+use esp_idf_svc::sntp::EspSntp;
 use esp_idf_svc::wifi::{BlockingWifi, EspWifi};
 
 use serde::Deserialize;
@@ -219,7 +220,24 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
     register(&mut server, shared, bus, nvs_part, ap_mode);
     log::info!(target: "net", "HTTP server listening");
 
-    // Keep `wifi` and `server` alive for the lifetime of the process.
+    // Real time via SNTP (STA only — the AP has no upstream). The alarm core
+    // reads the system clock once this syncs.
+    let _sntp = if ap_mode {
+        None
+    } else {
+        match EspSntp::new_default() {
+            Ok(s) => {
+                log::info!(target: "net", "SNTP started (syncing time via pool.ntp.org)");
+                Some(s)
+            }
+            Err(e) => {
+                log::warn!(target: "net", "SNTP start failed: {e}");
+                None
+            }
+        }
+    };
+
+    // Keep `wifi`, `server`, and `_sntp` alive for the lifetime of the process.
     loop {
         std::thread::sleep(core::time::Duration::from_secs(3600));
     }
