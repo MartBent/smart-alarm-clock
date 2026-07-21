@@ -1,70 +1,57 @@
 //! Alarm core — the single source of truth (a worker thread).
 //!
-//! Runs the Idle → Armed → Ringing → Snoozed state machine, applies [`Command`]s
-//! from any transport, and publishes the current [`Phase`] + time into shared
-//! state for the LED worker (and later the web UI) to read.
+//! Runs the Idle → Armed → Ringing → Snoozed state machine, drains [`Command`]s
+//! from the bus, evaluates the presets, and publishes the current [`Phase`] +
+//! time into shared state for the LED worker + web UI to read.
 //!
-//! The clock is a STAND-IN until slice B wires real SNTP time: arming seeds the
-//! time of day to `ARM_LEAD` before the alarm and advances it with
-//! `Instant::elapsed()`, so the alarm always fires ~5 s after arming. That makes
-//! bench testing quick; slice B will compare real wall-clock time instead.
+//! Firing is by **edge crossing**: while Armed, when the clock crosses an
+//! enabled preset's time, it rings. This generalizes unchanged to real SNTP
+//! time in the WiFi slice. For now the clock is a STAND-IN that free-runs from a
+//! seed (~10 s before the earliest enabled preset) so a fire happens soon after
+//! boot; you can also POST a preset time of "now + 5 s" to re-test on demand.
 
 use std::time::{Duration, Instant};
 
-use crate::state::{fmt_hms, Command, CommandReceiver, Phase, SharedState};
+use crate::state::{fmt_hms, Command, CommandBus, Phase, SharedState};
 
-/// How long after arming the alarm fires (stand-in clock lead time).
-const ARM_LEAD: Duration = Duration::from_secs(5);
 /// Ignore button input for this long after ringing starts (fire-time guard).
 const GRACE: Duration = Duration::from_millis(1500);
 /// State-machine tick period.
 const TICK: Duration = Duration::from_millis(50);
+/// Stand-in clock: start this many seconds before the earliest enabled preset.
+const SEED_LEAD: u32 = 10;
 
-pub fn run(rx: CommandReceiver, shared: SharedState) {
+pub fn run(bus: CommandBus, shared: SharedState) {
     log::info!(target: "alarm", "worker started");
 
-    let (mut alarm_secs, snooze_secs) = {
+    let snooze_secs = shared.lock().unwrap().settings.snooze_secs;
+
+    // Seed the stand-in clock just before the earliest enabled preset.
+    let seed = {
         let s = shared.lock().unwrap();
-        (s.settings.alarm_secs, s.settings.snooze_secs)
+        earliest_enabled(&s.settings.presets)
+            .map(|t| t.saturating_sub(SEED_LEAD))
+            .unwrap_or(0)
     };
+    let clock_base = seed;
+    let epoch = Instant::now();
 
-    let mut phase = Phase::Idle;
-    let mut fire_at = Instant::now(); // Armed  -> Ringing deadline
-    let mut snooze_end = Instant::now(); // Snoozed -> Ringing deadline
-    let mut ring_start = Instant::now(); // for the grace window
-    let mut clock_base = 0u32; // secs-of-day shown = clock_base + since_arm
-    let mut arm_epoch = Instant::now();
-
-    // Arm helper: seed the stand-in clock so the alarm is ARM_LEAD out.
-    macro_rules! arm {
-        () => {{
-            phase = Phase::Armed;
-            fire_at = Instant::now() + ARM_LEAD;
-            clock_base = alarm_secs.saturating_sub(ARM_LEAD.as_secs() as u32);
-            arm_epoch = Instant::now();
-            log::info!(target: "alarm", "-> armed (alarm {}, fires in {}s)", fmt_hms(alarm_secs), ARM_LEAD.as_secs());
-        }};
-    }
-
-    // Auto-arm at boot so there's something to watch.
-    arm!();
+    let mut phase = Phase::Armed; // auto-arm at boot
+    let mut prev_secs = clock_base;
+    let mut snooze_end = Instant::now();
+    let mut ring_start = Instant::now();
+    log::info!(target: "alarm", "-> armed (clock seeded at {})", fmt_hms(clock_base));
 
     loop {
-        let now_secs = (clock_base + arm_epoch.elapsed().as_secs() as u32) % 86_400;
+        let now_secs = (clock_base + epoch.elapsed().as_secs() as u32) % 86_400;
 
-        while let Ok(cmd) = rx.try_recv() {
+        // Apply queued commands.
+        let cmds: Vec<Command> = bus.lock().unwrap().drain(..).collect();
+        for cmd in cmds {
             let in_grace = phase == Phase::Ringing && ring_start.elapsed() < GRACE;
             log::debug!(target: "alarm", "command {cmd:?} in phase {phase:?}");
             match cmd {
-                // --- stop everything: dismiss (while ringing/snoozed) or disarm ---
-                Command::ButtonLong | Command::Dismiss | Command::Disarm => {
-                    let is_button = matches!(cmd, Command::ButtonLong);
-                    if !(in_grace && is_button) {
-                        phase = Phase::Idle;
-                        log::info!(target: "alarm", "-> idle");
-                    }
-                }
-                // --- snooze (only meaningful while ringing) ---
+                // Snooze: quick press while ringing, or explicit intent.
                 Command::Snooze | Command::ButtonShort if phase == Phase::Ringing => {
                     if !in_grace {
                         phase = Phase::Snoozed;
@@ -72,29 +59,66 @@ pub fn run(rx: CommandReceiver, shared: SharedState) {
                         log::info!(target: "alarm", "-> snoozed {}s", snooze_secs);
                     }
                 }
-                // --- arm: explicit Arm intent, or a short press while idle ---
-                Command::Arm => arm!(),
-                Command::ButtonShort if phase == Phase::Idle => arm!(),
-                // --- reconfigure the alarm time (web/HA later) ---
-                Command::SetAlarm { secs } => {
-                    alarm_secs = secs % 86_400;
-                    shared.lock().unwrap().settings.alarm_secs = alarm_secs;
-                    log::info!(target: "alarm", "alarm time set to {}", fmt_hms(alarm_secs));
-                    if phase == Phase::Armed {
-                        arm!(); // re-seed so the change takes effect now
+                // Dismiss: stop ringing/snooze but stay armed.
+                Command::Dismiss => {
+                    if matches!(phase, Phase::Ringing | Phase::Snoozed) {
+                        phase = Phase::Armed;
+                        log::info!(target: "alarm", "-> armed (dismissed)");
                     }
                 }
-                // Snooze when not ringing, short press when armed/snoozed, etc.
+                // Long hold: dismiss while ringing/snoozed (unless in grace), else toggle arm.
+                Command::ButtonLong => {
+                    if matches!(phase, Phase::Ringing | Phase::Snoozed) {
+                        if !in_grace {
+                            phase = Phase::Armed;
+                            log::info!(target: "alarm", "-> armed (dismissed)");
+                        }
+                    } else {
+                        phase = if phase == Phase::Idle { Phase::Armed } else { Phase::Idle };
+                        log::info!(target: "alarm", "-> {}", if phase == Phase::Armed { "armed" } else { "idle" });
+                    }
+                }
+                Command::Arm => {
+                    phase = Phase::Armed;
+                    log::info!(target: "alarm", "-> armed");
+                }
+                Command::Disarm => {
+                    phase = Phase::Idle;
+                    log::info!(target: "alarm", "-> idle");
+                }
+                Command::SetPresetEnabled { idx, enabled } => {
+                    let mut s = shared.lock().unwrap();
+                    if let Some(p) = s.settings.presets.get_mut(idx) {
+                        p.enabled = enabled;
+                        log::info!(target: "alarm", "preset {idx} ({}) enabled={enabled}", p.label);
+                    }
+                }
+                Command::SetPresetTime { idx, secs } => {
+                    let secs = secs % 86_400;
+                    let mut s = shared.lock().unwrap();
+                    if let Some(p) = s.settings.presets.get_mut(idx) {
+                        p.secs = secs;
+                        log::info!(target: "alarm", "preset {idx} ({}) time={}", p.label, fmt_hms(secs));
+                    }
+                }
+                // Short press when not ringing, snooze when not ringing, etc.
                 _ => {}
             }
         }
 
-        // Automatic (time-driven) transitions.
+        // Automatic transitions.
         match phase {
-            Phase::Armed if Instant::now() >= fire_at => {
-                phase = Phase::Ringing;
-                ring_start = Instant::now();
-                log::warn!(target: "alarm", "*** RINGING ***");
+            // Fire when the clock crosses an enabled preset's time.
+            Phase::Armed => {
+                let hit = {
+                    let s = shared.lock().unwrap();
+                    s.settings.presets.iter().any(|p| p.enabled && crossed(prev_secs, now_secs, p.secs))
+                };
+                if hit {
+                    phase = Phase::Ringing;
+                    ring_start = Instant::now();
+                    log::warn!(target: "alarm", "*** RINGING *** ({})", fmt_hms(now_secs));
+                }
             }
             Phase::Snoozed if Instant::now() >= snooze_end => {
                 phase = Phase::Ringing;
@@ -104,13 +128,29 @@ pub fn run(rx: CommandReceiver, shared: SharedState) {
             _ => {}
         }
 
-        // Publish for readers (LED worker, later the web UI).
+        // Publish for readers.
         {
             let mut s = shared.lock().unwrap();
             s.phase = phase;
             s.now_secs = now_secs;
         }
 
+        prev_secs = now_secs;
         std::thread::sleep(TICK);
+    }
+}
+
+/// Earliest enabled preset time (seconds since midnight), if any.
+fn earliest_enabled(presets: &[crate::state::Preset]) -> Option<u32> {
+    presets.iter().filter(|p| p.enabled).map(|p| p.secs).min()
+}
+
+/// Did `target` fall within the half-open interval `(prev, now]` (mod 24 h)?
+fn crossed(prev: u32, now: u32, target: u32) -> bool {
+    if now >= prev {
+        prev < target && target <= now
+    } else {
+        // Wrapped past midnight.
+        target > prev || target <= now
     }
 }

@@ -9,7 +9,7 @@ use std::time::{Duration, Instant};
 use esp_idf_hal::gpio::{Gpio0, Pull};
 use esp_idf_hal::gpio::PinDriver;
 
-use crate::state::{Command, CommandSender};
+use crate::state::{submit, Command, CommandBus};
 
 /// Hold at least this long to count as a long press (dismiss).
 const LONG_MS: u128 = 1500;
@@ -18,7 +18,7 @@ const DEBOUNCE_MS: u128 = 25;
 /// Input poll period.
 const POLL: Duration = Duration::from_millis(10);
 
-pub fn run(pin: Gpio0, tx: CommandSender) {
+pub fn run(pin: Gpio0, bus: CommandBus) {
     let mut button = PinDriver::input(pin).expect("gpio0 input");
     button.set_pull(Pull::Up).expect("gpio0 pull-up");
     log::info!(target: "button", "worker started (BOOT = GPIO0)");
@@ -40,7 +40,7 @@ pub fn run(pin: Gpio0, tx: CommandSender) {
                         Command::ButtonShort
                     };
                     log::info!(target: "button", "{} press ({held}ms)", if long { "long" } else { "short" });
-                    let _ = tx.send(cmd);
+                    submit(&bus, cmd);
                 }
             }
             _ => {}

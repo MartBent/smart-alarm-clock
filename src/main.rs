@@ -4,19 +4,20 @@
 //! task). `main` takes the peripherals, builds the shared state + command bus,
 //! spawns the workers, and supervises.
 //!
-//!   alarm  — source of truth: state machine + timekeeping (consumes commands)
-//!   button — BOOT button -> commands (first input transport)
+//!   alarm  — source of truth: state machine + presets (drains the command bus)
+//!   button — BOOT button -> commands
 //!   led    — renders the current phase on the onboard WS2812
+//!   net    — SoftAP + HTTP REST API -> commands + state
 //!
-//! Every input transport (button now; web REST + MQTT/HA later) submits the
-//! same `Command`s into the alarm core. See docs/handoff.md for the design.
+//! Every input transport (button + REST now; MQTT/HA later) submits the same
+//! `Command`s onto the bus. See docs/handoff.md for the design.
 
 mod alarm;
 mod button;
 mod led;
+mod net;
 mod state;
 
-use std::sync::mpsc;
 use std::thread::Builder;
 
 use esp_idf_hal::peripherals::Peripherals;
@@ -32,30 +33,31 @@ fn main() {
 
     let peripherals = Peripherals::take().expect("take peripherals");
     let shared = state::new_shared();
-    let (tx, rx) = mpsc::channel::<state::Command>();
+    let bus = state::new_bus();
 
-    // Alarm core (source of truth) — owns the command Receiver.
+    // Alarm core (source of truth) — drains the command bus.
     {
         let shared = shared.clone();
+        let bus = bus.clone();
         Builder::new()
             .name("alarm".into())
             .stack_size(8 * 1024)
-            .spawn(move || alarm::run(rx, shared))
+            .spawn(move || alarm::run(bus, shared))
             .expect("spawn alarm worker");
     }
 
-    // BOOT-button transport — submits commands.
+    // BOOT-button transport.
     {
-        let tx = tx.clone();
+        let bus = bus.clone();
         let pin = peripherals.pins.gpio0;
         Builder::new()
             .name("button".into())
             .stack_size(4 * 1024)
-            .spawn(move || button::run(pin, tx))
+            .spawn(move || button::run(pin, bus))
             .expect("spawn button worker");
     }
 
-    // LED (display) worker — renders the phase.
+    // LED (display) worker.
     {
         let shared = shared.clone();
         let channel = peripherals.rmt.channel0;
@@ -67,8 +69,18 @@ fn main() {
             .expect("spawn led worker");
     }
 
-    // Drop our spare Sender; the button worker holds the live one.
-    drop(tx);
+    // Network worker — SoftAP + HTTP REST API.
+    {
+        let shared = shared.clone();
+        let bus = bus.clone();
+        let modem = peripherals.modem;
+        Builder::new()
+            .name("net".into())
+            .stack_size(16 * 1024)
+            .spawn(move || net::run(modem, shared, bus))
+            .expect("spawn net worker");
+    }
+
     log::info!(target: "main", "workers spawned");
 
     // Supervisor: stay alive so the workers keep running.

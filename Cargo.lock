@@ -454,9 +454,11 @@ dependencies = [
  "embedded-io-async",
  "enumset",
  "heapless",
+ "log",
  "num_enum",
  "serde",
  "strum 0.25.0",
+ "strum_macros 0.25.3",
 ]
 
 [[package]]
@@ -491,6 +493,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ccc5801fd11762e24d1e420d01d2ac518f2a2ca4329d4fbb6639f2412b6204e0"
 dependencies = [
  "enumset_derive",
+ "serde",
 ]
 
 [[package]]
@@ -734,6 +737,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0bfb9eb618601c89945a70e254898da93b13be0388091d42117462b265bb3fad"
 dependencies = [
  "hash32",
+ "serde",
  "stable_deref_trait",
 ]
 
@@ -1204,11 +1208,15 @@ checksum = "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
 name = "smart-alarm-clock"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "embedded-svc",
  "embuild",
  "esp-idf-hal",
  "esp-idf-svc",
  "esp-idf-sys",
  "log",
+ "serde",
+ "serde_json",
  "smart-leds",
  "ws2812-esp32-rmt-driver",
 ]

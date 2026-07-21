@@ -21,8 +21,13 @@ opt-level = "z"
 # RMT driver (which needs esp-idf-sys ^0.36) resolves without a `links` clash.
 esp-idf-sys = "0.36"
 esp-idf-hal = "0.45"
-esp-idf-svc = "0.51" # EspLogger now; WiFi + HTTP server + mDNS + SNTP + NVS next
+esp-idf-svc = "0.51" # EspLogger, WiFi (SoftAP), HTTP server, NVS
+embedded-svc = "0.28" # http::Method/Headers, io::{Read,Write}, wifi config types
 log = "0.4"
+# REST API (JSON bodies)
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
 # Onboard WS2812 RGB LED (GPIO48) driven over the RMT peripheral.
 ws2812-esp32-rmt-driver = { version = "0.13", features = ["smart-leds-trait"] }
 smart-leds = "0.4" # RGB8 + hsv2rgb + SmartLedsWrite (rainbow)
