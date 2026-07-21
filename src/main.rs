@@ -14,6 +14,7 @@
 
 mod alarm;
 mod button;
+mod dns;
 mod led;
 mod net;
 mod state;
