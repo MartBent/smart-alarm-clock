@@ -75,6 +75,37 @@ async function save(e){e.preventDefault();
  return false;}
 </script></body></html>"#;
 
+/// Control WebUI served at `/` once connected (STA mode).
+static STATUS_HTML: &str = r#"<!doctype html><html><head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Alarm Clock</title>
+<style>body{font-family:sans-serif;max-width:24rem;margin:1.5rem auto}
+button{padding:.5rem .8rem;margin:.15rem}input[type=time]{padding:.2rem}
+.row{display:flex;align-items:center;gap:.5rem;margin:.3rem 0}</style></head>
+<body>
+<h2>Smart Alarm Clock</h2>
+<p>Phase <b id="phase">…</b> · <span id="now"></span></p>
+<div>
+<button onclick="cmd('arm')">Arm</button>
+<button onclick="cmd('disarm')">Disarm</button>
+<button onclick="cmd('snooze')">Snooze</button>
+<button onclick="cmd('dismiss')">Dismiss</button>
+</div>
+<h3>Presets</h3><div id="presets"></div>
+<script>
+async function refresh(){try{const s=await(await fetch('/api/state')).json();
+ phase.textContent=s.phase;now.textContent=s.now;
+ presets.innerHTML=s.presets.map(p=>`<div class=row>
+  <label><input type=checkbox ${p.enabled?'checked':''} onchange="tog(${p.idx},this.checked)"> ${p.label}</label>
+  <input type=time value="${p.time.slice(0,5)}" onchange="settime(${p.idx},this.value)"></div>`).join('');
+ }catch(e){}}
+async function post(u,b){await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}
+async function cmd(c){await post('/api/command',{cmd:c});refresh();}
+async function tog(idx,enabled){await post('/api/preset/enabled',{idx,enabled});}
+async function settime(idx,v){const[h,m]=v.split(':').map(Number);await post('/api/preset/time',{idx,hour:h,minute:m});}
+refresh();setInterval(refresh,1000);
+</script></body></html>"#;
+
 #[derive(Deserialize)]
 struct CmdReq {
     cmd: String,
@@ -140,7 +171,7 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
         ..Default::default()
     })
     .expect("http server");
-    register(&mut server, shared, bus, nvs_part);
+    register(&mut server, shared, bus, nvs_part, ap_mode);
     log::info!(target: "net", "HTTP server listening");
 
     // Keep `wifi` and `server` alive for the lifetime of the process.
@@ -198,23 +229,28 @@ fn advertise_dns(wifi: &BlockingWifi<EspWifi<'static>>) {
         log::warn!(target: "net", "no AP netif handle; skipping DHCP DNS");
         return;
     }
+    // Known-good esp-idf order: stop -> enable DNS offer -> set DNS info -> start.
     unsafe {
-        sys::esp_netif_dhcps_stop(netif);
-        let mut dns: sys::esp_netif_dns_info_t = core::mem::zeroed();
-        dns.ip.type_ = 0; // ESP_IPADDR_TYPE_V4
-        dns.ip.u_addr.ip4.addr = u32::from_le_bytes([192, 168, 71, 1]);
-        sys::esp_netif_set_dns_info(netif, sys::esp_netif_dns_type_t_ESP_NETIF_DNS_MAIN, &mut dns);
+        let r_stop = sys::esp_netif_dhcps_stop(netif);
         let mut offer: u8 = 2; // OFFER_DNS
-        sys::esp_netif_dhcps_option(
+        let r_opt = sys::esp_netif_dhcps_option(
             netif,
             sys::esp_netif_dhcp_option_mode_t_ESP_NETIF_OP_SET,
             sys::esp_netif_dhcp_option_id_t_ESP_NETIF_DOMAIN_NAME_SERVER,
             &mut offer as *mut u8 as *mut core::ffi::c_void,
             1,
         );
-        sys::esp_netif_dhcps_start(netif);
+        let mut dns: sys::esp_netif_dns_info_t = core::mem::zeroed();
+        dns.ip.type_ = 0; // ESP_IPADDR_TYPE_V4
+        dns.ip.u_addr.ip4.addr = u32::from_le_bytes([192, 168, 71, 1]);
+        let r_dns =
+            sys::esp_netif_set_dns_info(netif, sys::esp_netif_dns_type_t_ESP_NETIF_DNS_MAIN, &mut dns);
+        let r_start = sys::esp_netif_dhcps_start(netif);
+        log::info!(
+            target: "net",
+            "DHCP-DNS setup rc: stop={r_stop} offer={r_opt} set_dns={r_dns} start={r_start} (0 = ok)"
+        );
     }
-    log::info!(target: "net", "AP DHCP advertises DNS 192.168.71.1 (captive portal)");
 }
 
 // ---------------------------------------------------------------------------
@@ -255,12 +291,24 @@ fn register(
     shared: SharedState,
     bus: CommandBus,
     nvs_part: EspDefaultNvsPartition,
+    ap_mode: bool,
 ) {
-    // Captive-portal setup page (served for `/` and OS detection URLs).
-    for path in PORTAL_PATHS {
+    if ap_mode {
+        // Setup mode: serve the WiFi-setup form for `/` and OS detection URLs
+        // so the captive portal triggers.
+        for path in PORTAL_PATHS {
+            server
+                .fn_handler::<anyhow::Error, _>(path, Method::Get, |req| {
+                    req.into_ok_response()?.write_all(PORTAL_HTML.as_bytes())?;
+                    Ok(())
+                })
+                .unwrap();
+        }
+    } else {
+        // Connected: `/` is the control WebUI, not the setup form.
         server
-            .fn_handler::<anyhow::Error, _>(path, Method::Get, |req| {
-                req.into_ok_response()?.write_all(PORTAL_HTML.as_bytes())?;
+            .fn_handler::<anyhow::Error, _>("/", Method::Get, |req| {
+                req.into_ok_response()?.write_all(STATUS_HTML.as_bytes())?;
                 Ok(())
             })
             .unwrap();

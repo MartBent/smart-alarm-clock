@@ -24,10 +24,29 @@ pub fn run() {
             Ok(x) => x,
             Err(_) => continue,
         };
+        log::info!(target: "dns", "query from {} for '{}'", src, qname(&buf[..len]));
         if let Some(reply) = build_reply(&buf[..len]) {
             let _ = socket.send_to(&reply, src);
         }
     }
+}
+
+/// Extract the queried domain name (for logging).
+fn qname(q: &[u8]) -> String {
+    let mut parts = Vec::new();
+    let mut i = 12;
+    while let Some(&label) = q.get(i) {
+        if label == 0 {
+            break;
+        }
+        let label = label as usize;
+        if i + 1 + label > q.len() {
+            break;
+        }
+        parts.push(String::from_utf8_lossy(&q[i + 1..i + 1 + label]).into_owned());
+        i += 1 + label;
+    }
+    parts.join(".")
 }
 
 /// Build a minimal reply that points the (first) queried name at `AP_IP`.
