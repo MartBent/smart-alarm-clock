@@ -1,15 +1,14 @@
 //! Smart alarm clock — ESP32-S3 (esp-idf std).
 //!
-//! Slice C (warm-up): cycle a rainbow on the onboard WS2812 RGB LED (GPIO48)
-//! via the RMT peripheral. Proves esp-idf-hal + the LED driver work end to end.
-//! Build the real firmware out from here (see docs/handoff.md).
+//! Worker-thread architecture: each subsystem runs on its own `std::thread`
+//! (a FreeRTOS task underneath). `main` takes the peripherals, spawns the
+//! workers, and then supervises. Right now there's just the `led` worker
+//! (rainbow) to validate the threading model; the alarm core and WiFi will
+//! join as their own workers next. See docs/handoff.md for the target design.
+
+mod led;
 
 use esp_idf_hal::peripherals::Peripherals;
-use smart_leds::{
-    hsv::{hsv2rgb, Hsv},
-    SmartLedsWrite,
-};
-use ws2812_esp32_rmt_driver::Ws2812Esp32Rmt;
 
 fn main() {
     // Required once at startup on the esp-idf std path.
@@ -18,23 +17,20 @@ fn main() {
     println!("smart-alarm-clock booting");
 
     let peripherals = Peripherals::take().expect("take peripherals");
-    // Onboard WS2812 RGB LED (GPIO48 on the YD-ESP32-S3), clocked out via RMT ch0.
-    let mut led = Ws2812Esp32Rmt::new(peripherals.rmt.channel0, peripherals.pins.gpio48)
-        .expect("init WS2812 RMT driver");
 
-    println!("rainbow start");
+    // LED worker — owns RMT channel 0 + the onboard WS2812 on GPIO48.
+    let led_channel = peripherals.rmt.channel0;
+    let led_pin = peripherals.pins.gpio48;
+    let _led = std::thread::Builder::new()
+        .name("led".into())
+        .stack_size(8 * 1024)
+        .spawn(move || led::run(led_channel, led_pin))
+        .expect("spawn led worker");
 
-    // Sweep the hue continuously; ~2.5 s per full rainbow. Low brightness — the
-    // onboard LED is bright.
-    let mut hue: u8 = 0;
+    println!("workers spawned");
+
+    // main becomes the supervisor; for now just stay alive so the workers run.
     loop {
-        let color = hsv2rgb(Hsv {
-            hue,
-            sat: 255,
-            val: 16,
-        });
-        led.write([color]).expect("write LED");
-        hue = hue.wrapping_add(2);
-        std::thread::sleep(std::time::Duration::from_millis(20));
+        std::thread::sleep(std::time::Duration::from_secs(60));
     }
 }
