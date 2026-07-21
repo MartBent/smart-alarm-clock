@@ -17,9 +17,13 @@ debug = true
 opt-level = "z"
 
 [dependencies]
-# Bare ESP-IDF startup/linkage. Add esp-idf-hal / esp-idf-svc back when the
-# firmware grows past the entry-point scaffold.
-esp-idf-sys = "0.37.2"
+# Aligned on the esp-idf-sys 0.36 / esp-idf-hal 0.45 generation so the WS2812
+# RMT driver (which needs esp-idf-sys ^0.36) resolves without a `links` clash.
+esp-idf-sys = "0.36"
+esp-idf-hal = "0.45"
+# Onboard WS2812 RGB LED (GPIO48) driven over the RMT peripheral.
+ws2812-esp32-rmt-driver = { version = "0.13", features = ["smart-leds-trait"] }
+smart-leds = "0.4" # RGB8 + hsv2rgb + SmartLedsWrite (rainbow)
 
 [build-dependencies]
 embuild = { version = "0.33.1", features = ["espidf"] }

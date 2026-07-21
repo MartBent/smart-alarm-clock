@@ -21,5 +21,8 @@ build-std = ["std", "panic_abort"]
 [env]
 # Pin the ESP-IDF version esp-idf-sys downloads + builds against.
 ESP_IDF_VERSION = "v5.2.3"
-# Keep the bare scaffold build small: generated dummy main + pthread/std support.
-ESP_IDF_COMPONENTS = "main;pthread"
+# NOTE: the "main;pthread" component trim was removed — driving peripherals
+# (RMT for the WS2812, and later I2C/SPI/LEDC/WiFi) needs the esp_driver_*
+# components, which the trim excluded (caused undefined-symbol link errors).
+# Build the full esp-idf for now; re-introduce a curated ESP_IDF_COMPONENTS
+# list later if release binary size matters.

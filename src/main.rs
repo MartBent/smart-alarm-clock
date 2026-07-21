@@ -1,11 +1,15 @@
-//! Smart alarm clock — ESP32-S3, embedded Rust (std / esp-idf).
+//! Smart alarm clock — ESP32-S3 (esp-idf std).
 //!
-//! "Dark & silent until summoned." HA-aware but offline-capable; the device is
-//! the source of truth and fires alarms on-device even with WiFi/HA down.
-//!
-//! Minimal entry-point scaffold — build the firmware out from here. See
-//! README "Toolchain" for espup / esp-idf setup, and docs/handoff.md for the
-//! locked design (four threads: alarm, network, interaction, display).
+//! Slice C (warm-up): cycle a rainbow on the onboard WS2812 RGB LED (GPIO48)
+//! via the RMT peripheral. Proves esp-idf-hal + the LED driver work end to end.
+//! Build the real firmware out from here (see docs/handoff.md).
+
+use esp_idf_hal::peripherals::Peripherals;
+use smart_leds::{
+    hsv::{hsv2rgb, Hsv},
+    SmartLedsWrite,
+};
+use ws2812_esp32_rmt_driver::Ws2812Esp32Rmt;
 
 fn main() {
     // Required once at startup on the esp-idf std path.
@@ -13,9 +17,24 @@ fn main() {
 
     println!("smart-alarm-clock booting");
 
-    // TODO (you): take peripherals, init buses (I2C/SPI/LEDC/GPIO/NVS), build
-    // shared state, and spawn the worker threads.
+    let peripherals = Peripherals::take().expect("take peripherals");
+    // Onboard WS2812 RGB LED (GPIO48 on the YD-ESP32-S3), clocked out via RMT ch0.
+    let mut led = Ws2812Esp32Rmt::new(peripherals.rmt.channel0, peripherals.pins.gpio48)
+        .expect("init WS2812 RMT driver");
+
+    println!("rainbow start");
+
+    // Sweep the hue continuously; ~2.5 s per full rainbow. Low brightness — the
+    // onboard LED is bright.
+    let mut hue: u8 = 0;
     loop {
-        std::thread::sleep(std::time::Duration::from_secs(60));
+        let color = hsv2rgb(Hsv {
+            hue,
+            sat: 255,
+            val: 16,
+        });
+        led.write([color]).expect("write LED");
+        hue = hue.wrapping_add(2);
+        std::thread::sleep(std::time::Duration::from_millis(20));
     }
 }
