@@ -54,57 +54,102 @@ const PORTAL_PATHS: &[&str] = &[
     "/canonical.html",
 ];
 
-static PORTAL_HTML: &str = r#"<!doctype html><html><head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Alarm Clock setup</title></head>
-<body style="font-family:sans-serif;max-width:20rem;margin:2rem auto">
-<h2>Smart Alarm Clock</h2>
-<p>Connect the clock to your WiFi:</p>
+/// Shared stylesheet: dark, warm-ember bedside aesthetic ("dark & silent until
+/// summoned"), system fonts only (no external assets — works with no internet).
+const STYLE: &str = r##"<style>
+:root{--panel:#171009;--line:#2b2015;--text:#ecdcc4;--muted:#9c8a72;--glow:#ffb35c;--ember:#e8792b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(130% 80% at 50% -15%,#20160b 0%,#0e0b08 62%);color:var(--text);font:16px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.card{width:100%;max-width:22rem;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.6rem 1.4rem;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.brand{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 1.1rem}
+.phase{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ember);margin-bottom:.15rem}
+.clock{font:600 3rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--glow);text-shadow:0 0 20px rgba(255,179,92,.45)}
+.hint{color:var(--muted);margin:.1rem 0 1.2rem}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.3rem 0 .2rem}
+button{font:inherit;font-weight:600;color:var(--text);background:#1f160c;border:1px solid var(--line);border-radius:12px;padding:.7rem;cursor:pointer;transition:border-color .15s,color .15s}
+button:hover{border-color:var(--ember);color:var(--glow)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+.primary{background:linear-gradient(180deg,var(--ember),#c85f1c);border-color:transparent;color:#1a0f05}
+.primary:hover{color:#1a0f05;filter:brightness(1.08)}
+label{display:block;font-size:.8rem;color:var(--muted);margin:1rem 0 .35rem}
+input[type=text],input[type=password]{width:100%;background:#120c06;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:.7rem;font:inherit}
+input[type=text]:focus,input[type=password]:focus{outline:none;border-color:var(--glow);box-shadow:0 0 0 3px rgba(255,179,92,.15)}
+h2{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .3rem}
+.preset{display:flex;align-items:center;gap:.7rem;padding:.65rem 0;border-top:1px solid var(--line)}
+.preset .name{flex:1}
+input[type=time]{background:#120c06;border:1px solid var(--line);border-radius:8px;color:var(--text);padding:.4rem .5rem;font:inherit;font-variant-numeric:tabular-nums}
+input[type=time]:focus{outline:none;border-color:var(--glow)}
+.sw{position:relative;width:42px;height:24px;flex:none;margin:0}
+.sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;background:#241a0e;border:1px solid var(--line);border-radius:99px;transition:.15s}
+.sw span:before{content:"";position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--muted);border-radius:50%;transition:.15s}
+.sw input:checked+span{background:rgba(232,121,43,.3);border-color:var(--ember)}
+.sw input:checked+span:before{transform:translateX(18px);background:var(--glow)}
+#out{color:var(--muted);font-size:.86rem;margin-top:.9rem;min-height:1.2em}
+@media(prefers-reduced-motion){*{transition:none!important}}
+</style>"##;
+
+static PORTAL_HTML: &str = r##"<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Alarm Clock setup</title>__STYLE__</head>
+<body><div class="card">
+<div class="brand">Smart Alarm Clock</div>
+<div class="phase">Setup</div>
+<p class="hint">Connect the clock to your Wi-Fi network.</p>
 <form onsubmit="return save(event)">
-<p><input id="ssid" placeholder="WiFi name (SSID)" style="width:100%;padding:.4rem"></p>
-<p><input id="pass" type="password" placeholder="WiFi password" style="width:100%;padding:.4rem"></p>
-<p><button type="submit" style="width:100%;padding:.5rem">Save &amp; connect</button></p>
+<label for="ssid">Network name</label>
+<input id="ssid" type="text" placeholder="Wi-Fi SSID" autocomplete="off" autocapitalize="off">
+<label for="pass">Password</label>
+<input id="pass" type="password" placeholder="Wi-Fi password">
+<div class="btns" style="grid-template-columns:1fr;margin-top:1.3rem">
+<button class="primary" type="submit">Save &amp; connect</button></div>
 </form>
-<pre id="out"></pre>
+<div id="out"></div>
+</div>
 <script>
-async function save(e){e.preventDefault();
- out.textContent='Saving…';
+async function save(e){e.preventDefault();out.textContent='Saving…';
  try{const r=await fetch('/api/wifi',{method:'POST',headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({ssid:ssid.value,password:pass.value})});
- out.textContent=await r.text();}catch(err){out.textContent='error: '+err;}
+  body:JSON.stringify({ssid:ssid.value,password:pass.value})});
+ out.textContent=await r.text();}catch(err){out.textContent='Error: '+err;}
  return false;}
-</script></body></html>"#;
+</script></body></html>"##;
 
 /// Control WebUI served at `/` once connected (STA mode).
-static STATUS_HTML: &str = r#"<!doctype html><html><head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Alarm Clock</title>
-<style>body{font-family:sans-serif;max-width:24rem;margin:1.5rem auto}
-button{padding:.5rem .8rem;margin:.15rem}input[type=time]{padding:.2rem}
-.row{display:flex;align-items:center;gap:.5rem;margin:.3rem 0}</style></head>
-<body>
-<h2>Smart Alarm Clock</h2>
-<p>Phase <b id="phase">…</b> · <span id="now"></span></p>
-<div>
+static STATUS_HTML: &str = r##"<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Alarm Clock</title>__STYLE__</head>
+<body><div class="card">
+<div class="brand">Smart Alarm Clock</div>
+<div class="phase" id="phase">&mdash;</div>
+<div class="clock" id="now">--:--:--</div>
+<div class="btns">
 <button onclick="cmd('arm')">Arm</button>
 <button onclick="cmd('disarm')">Disarm</button>
 <button onclick="cmd('snooze')">Snooze</button>
-<button onclick="cmd('dismiss')">Dismiss</button>
+<button class="primary" onclick="cmd('dismiss')">Dismiss</button>
 </div>
-<h3>Presets</h3><div id="presets"></div>
+<h2>Alarms</h2><div id="presets"></div>
+</div>
 <script>
+let lastPresets="";
 async function refresh(){try{const s=await(await fetch('/api/state')).json();
  phase.textContent=s.phase;now.textContent=s.now;
- presets.innerHTML=s.presets.map(p=>`<div class=row>
-  <label><input type=checkbox ${p.enabled?'checked':''} onchange="tog(${p.idx},this.checked)"> ${p.label}</label>
-  <input type=time value="${p.time.slice(0,5)}" onchange="settime(${p.idx},this.value)"></div>`).join('');
- }catch(e){}}
+ // Rebuild preset rows only when they change AND you aren't editing one,
+ // so the 1s poll never steals focus or clobbers typing.
+ const key=JSON.stringify(s.presets);
+ if(key!==lastPresets && !presets.contains(document.activeElement)){lastPresets=key;
+  presets.innerHTML=s.presets.map(p=>`<div class="preset">
+   <label class="sw"><input type="checkbox" ${p.enabled?'checked':''} onchange="tog(${p.idx},this.checked)"><span></span></label>
+   <span class="name">${p.label}</span>
+   <input type="time" value="${p.time.slice(0,5)}" onchange="settime(${p.idx},this.value)"></div>`).join('');
+ }}catch(e){}}
 async function post(u,b){await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}
 async function cmd(c){await post('/api/command',{cmd:c});refresh();}
 async function tog(idx,enabled){await post('/api/preset/enabled',{idx,enabled});}
 async function settime(idx,v){const[h,m]=v.split(':').map(Number);await post('/api/preset/time',{idx,hour:h,minute:m});}
 refresh();setInterval(refresh,1000);
-</script></body></html>"#;
+</script></body></html>"##;
 
 #[derive(Deserialize)]
 struct CmdReq {
@@ -299,7 +344,8 @@ fn register(
         for path in PORTAL_PATHS {
             server
                 .fn_handler::<anyhow::Error, _>(path, Method::Get, |req| {
-                    req.into_ok_response()?.write_all(PORTAL_HTML.as_bytes())?;
+                    req.into_ok_response()?
+                        .write_all(PORTAL_HTML.replace("__STYLE__", STYLE).as_bytes())?;
                     Ok(())
                 })
                 .unwrap();
@@ -308,7 +354,8 @@ fn register(
         // Connected: `/` is the control WebUI, not the setup form.
         server
             .fn_handler::<anyhow::Error, _>("/", Method::Get, |req| {
-                req.into_ok_response()?.write_all(STATUS_HTML.as_bytes())?;
+                req.into_ok_response()?
+                    .write_all(STATUS_HTML.replace("__STYLE__", STYLE).as_bytes())?;
                 Ok(())
             })
             .unwrap();
