@@ -74,6 +74,10 @@ pub struct Shared {
     pub settings: Settings,
     /// Time of day (seconds since midnight) as the core currently sees it.
     pub now_secs: u32,
+    /// Bumped by the alarm core on every *material* change (phase or settings),
+    /// but NOT on the per-second `now_secs` tick. Push transports (SSE, MQTT)
+    /// watch this to avoid re-serializing state twice a second while idle.
+    pub version: u64,
 }
 
 impl Default for Shared {
@@ -82,6 +86,7 @@ impl Default for Shared {
             phase: Phase::Idle,
             settings: Settings::default(),
             now_secs: 0,
+            version: 0,
         }
     }
 }

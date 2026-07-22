@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 from typing import Any
 
 import voluptuous as vol
@@ -30,9 +29,9 @@ class SmartAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
         if user_input is not None:
             host = user_input[CONF_HOST]
-            if await self._can_connect(host):
-                await self.async_set_unique_id(host)
-                self._abort_if_unique_id_configured()
+            state = await self._fetch_state(host)
+            if state is not None:
+                await self._set_unique_id(host, state)
                 return self.async_create_entry(title=DEFAULT_NAME, data={CONF_HOST: host})
             errors["base"] = "cannot_connect"
         return self.async_show_form(
@@ -45,8 +44,12 @@ class SmartAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
         self, discovery_info: ZeroconfServiceInfo
     ) -> ConfigFlowResult:
         self._host = discovery_info.host
-        await self.async_set_unique_id(self._host)
-        self._abort_if_unique_id_configured()
+        state = await self._fetch_state(self._host)
+        if state is None:
+            return self.async_abort(reason="cannot_connect")
+        # Sets the stable unique_id and, if this device is already configured,
+        # aborts while refreshing CONF_HOST to the (possibly new) discovered IP.
+        await self._set_unique_id(self._host, state)
         self.context["title_placeholders"] = {"name": DEFAULT_NAME}
         return await self.async_step_zeroconf_confirm()
 
@@ -55,7 +58,7 @@ class SmartAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         assert self._host is not None
         if user_input is not None:
-            if await self._can_connect(self._host):
+            if await self._fetch_state(self._host) is not None:
                 return self.async_create_entry(
                     title=DEFAULT_NAME, data={CONF_HOST: self._host}
                 )
@@ -65,11 +68,17 @@ class SmartAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
             description_placeholders={"host": self._host},
         )
 
-    async def _can_connect(self, host: str) -> bool:
+    async def _set_unique_id(self, host: str, state: dict) -> None:
+        """Use the device's stable id as unique_id so the entry survives DHCP
+        address changes; fall back to the host for older firmware without one."""
+        unique_id = state.get("id") or host
+        await self.async_set_unique_id(unique_id)
+        self._abort_if_unique_id_configured(updates={CONF_HOST: host})
+
+    async def _fetch_state(self, host: str) -> dict | None:
+        """Return the device state (also serves as a reachability check), or None."""
         api = SmartAlarmApi(async_get_clientsession(self.hass), host)
         try:
-            async with asyncio.timeout(10):
-                await api.get_state()
+            return await api.get_state()
         except Exception:  # noqa: BLE001
-            return False
-        return True
+            return None

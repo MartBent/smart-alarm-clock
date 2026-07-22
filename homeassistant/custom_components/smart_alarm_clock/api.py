@@ -29,8 +29,13 @@ class SmartAlarmApi:
     async def set_preset_enabled(self, idx: int, enabled: bool) -> None:
         await self._post("/api/preset/enabled", {"idx": idx, "enabled": enabled})
 
-    async def set_preset_time(self, idx: int, hour: int, minute: int) -> None:
-        await self._post("/api/preset/time", {"idx": idx, "hour": hour, "minute": minute})
+    async def set_preset_time(
+        self, idx: int, hour: int, minute: int, second: int = 0
+    ) -> None:
+        await self._post(
+            "/api/preset/time",
+            {"idx": idx, "hour": hour, "minute": minute, "second": second},
+        )
 
     async def _post(self, path: str, body: dict) -> None:
         async with asyncio.timeout(10):

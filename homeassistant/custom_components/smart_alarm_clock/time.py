@@ -44,5 +44,7 @@ class PresetTime(SmartAlarmEntity, TimeEntity):
         return None
 
     async def async_set_value(self, value: dt_time) -> None:
-        await self.coordinator.api.set_preset_time(self._idx, value.hour, value.minute)
+        await self.coordinator.api.set_preset_time(
+            self._idx, value.hour, value.minute, value.second
+        )
         await self.coordinator.async_request_refresh()

@@ -84,6 +84,7 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
     };
 
     let mut was_connected = false;
+    let mut last_version: Option<u64> = None;
     let mut last_phase: Option<Phase> = None;
     let mut last_enabled: Vec<bool> = Vec::new();
 
@@ -92,26 +93,33 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
         if now_conn && !was_connected {
             on_connect(&mut client, &shared);
             // Force a full state republish below.
+            last_version = None;
             last_phase = None;
             last_enabled.clear();
         }
         was_connected = now_conn;
 
         if now_conn {
-            let (phase, enabled) = {
-                let s = shared.lock().unwrap();
-                (s.phase, s.settings.presets.iter().map(|p| p.enabled).collect::<Vec<_>>())
-            };
-            if last_phase != Some(phase) {
-                enq(&mut client, &format!("{BASE}/phase"), phase_str(phase).as_bytes());
-                enq(&mut client, &format!("{BASE}/arm"), arm_str(phase).as_bytes());
-                last_phase = Some(phase);
-            }
-            if last_enabled != enabled {
-                for (i, on) in enabled.iter().enumerate() {
-                    enq(&mut client, &format!("{BASE}/preset/{i}/enable"), on_off(*on));
+            // Only snapshot state when the core reports a material change; the
+            // per-second `now` tick doesn't bump `version`.
+            let version = shared.lock().unwrap().version;
+            if last_version != Some(version) {
+                let (phase, enabled) = {
+                    let s = shared.lock().unwrap();
+                    (s.phase, s.settings.presets.iter().map(|p| p.enabled).collect::<Vec<_>>())
+                };
+                if last_phase != Some(phase) {
+                    enq(&mut client, &format!("{BASE}/phase"), phase_str(phase).as_bytes());
+                    enq(&mut client, &format!("{BASE}/arm"), arm_str(phase).as_bytes());
+                    last_phase = Some(phase);
                 }
-                last_enabled = enabled;
+                if last_enabled != enabled {
+                    for (i, on) in enabled.iter().enumerate() {
+                        enq(&mut client, &format!("{BASE}/preset/{i}/enable"), on_off(*on));
+                    }
+                    last_enabled = enabled;
+                }
+                last_version = Some(version);
             }
         }
 

@@ -29,9 +29,17 @@ pub fn run(bus: CommandBus, shared: SharedState) {
     let mut prev_secs: Option<u32> = None;
     let mut snooze_end = Instant::now();
     let mut ring_start = Instant::now();
+    // Whether the user wants the alarm armed. Applied when the clock syncs (so an
+    // arm/disarm issued during `Syncing` isn't lost); defaults to armed so a
+    // fresh boot arms itself once time is known.
+    let mut desired_armed = true;
+    // Last phase we published; a change bumps the shared `version`.
+    let mut published_phase: Option<Phase> = None;
 
     loop {
         let now = now_local_secs();
+        // Set when a command mutates settings, so we bump `version` this tick.
+        let mut settings_changed = false;
 
         // Apply queued commands.
         let cmds: Vec<Command> = bus.lock().unwrap().drain(..).collect();
@@ -48,6 +56,7 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                 }
                 Command::Dismiss => {
                     if matches!(phase, Phase::Ringing | Phase::Snoozed) {
+                        desired_armed = true;
                         phase = Phase::Armed;
                         log::info!(target: "alarm", "-> armed (dismissed)");
                     }
@@ -55,29 +64,45 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                 Command::ButtonLong => {
                     if matches!(phase, Phase::Ringing | Phase::Snoozed) {
                         if !in_grace {
+                            desired_armed = true;
                             phase = Phase::Armed;
                             log::info!(target: "alarm", "-> armed (dismissed)");
                         }
                     } else if phase == Phase::Idle {
+                        desired_armed = true;
                         phase = Phase::Armed;
                         log::info!(target: "alarm", "-> armed");
                     } else if phase == Phase::Armed {
+                        desired_armed = false;
                         phase = Phase::Idle;
                         log::info!(target: "alarm", "-> idle");
                     }
                 }
-                Command::Arm if phase != Phase::Syncing => {
-                    phase = Phase::Armed;
-                    log::info!(target: "alarm", "-> armed");
+                // Arm/Disarm record the user's intent even while `Syncing` (applied
+                // on sync) so the request is never silently dropped.
+                Command::Arm => {
+                    desired_armed = true;
+                    if phase != Phase::Syncing {
+                        phase = Phase::Armed;
+                        log::info!(target: "alarm", "-> armed");
+                    } else {
+                        log::info!(target: "alarm", "arm requested; will arm on time sync");
+                    }
                 }
-                Command::Disarm if phase != Phase::Syncing => {
-                    phase = Phase::Idle;
-                    log::info!(target: "alarm", "-> idle");
+                Command::Disarm => {
+                    desired_armed = false;
+                    if phase != Phase::Syncing {
+                        phase = Phase::Idle;
+                        log::info!(target: "alarm", "-> idle");
+                    } else {
+                        log::info!(target: "alarm", "disarm requested; will stay idle on time sync");
+                    }
                 }
                 Command::SetPresetEnabled { idx, enabled } => {
                     let mut s = shared.lock().unwrap();
                     if let Some(p) = s.settings.presets.get_mut(idx) {
                         p.enabled = enabled;
+                        settings_changed = true;
                         log::info!(target: "alarm", "preset {idx} ({}) enabled={enabled}", p.label);
                     }
                 }
@@ -86,6 +111,7 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                     let mut s = shared.lock().unwrap();
                     if let Some(p) = s.settings.presets.get_mut(idx) {
                         p.secs = secs;
+                        settings_changed = true;
                         log::info!(target: "alarm", "preset {idx} ({}) time={}", p.label, fmt_hms(secs));
                     }
                 }
@@ -103,8 +129,9 @@ pub fn run(bus: CommandBus, shared: SharedState) {
             }
             Some(secs) => {
                 if phase == Phase::Syncing {
-                    phase = Phase::Armed;
-                    log::info!(target: "alarm", "time synced ({}) -> armed", fmt_hms(secs));
+                    phase = if desired_armed { Phase::Armed } else { Phase::Idle };
+                    log::info!(target: "alarm", "time synced ({}) -> {}",
+                        fmt_hms(secs), if desired_armed { "armed" } else { "idle" });
                 }
                 if phase == Phase::Armed {
                     let hit = {
@@ -128,12 +155,17 @@ pub fn run(bus: CommandBus, shared: SharedState) {
             }
         }
 
-        // Publish for readers.
+        // Publish for readers. Bump `version` only on material change (phase or
+        // settings) so push transports don't re-serialize on every `now` tick.
         {
             let mut s = shared.lock().unwrap();
             s.phase = phase;
             s.now_secs = now.unwrap_or(0);
+            if published_phase != Some(phase) || settings_changed {
+                s.version = s.version.wrapping_add(1);
+            }
         }
+        published_phase = Some(phase);
 
         std::thread::sleep(TICK);
     }

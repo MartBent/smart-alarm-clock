@@ -183,6 +183,8 @@ struct PresetTimeReq {
     idx: usize,
     hour: u8,
     minute: u8,
+    #[serde(default)]
+    second: u8,
 }
 #[derive(Deserialize)]
 struct WifiReq {
@@ -320,10 +322,17 @@ fn start_mdns() -> Option<EspMdns> {
     }
 }
 
+/// Max concurrent SSE clients. Each runs on its own thread so one held/half-open
+/// connection can't block the others (or new clients) from being served.
+const MAX_SSE_CLIENTS: usize = 4;
+
 /// Realtime state push over Server-Sent Events (its own TCP server on :81).
 /// Streams `data: <state json>` whenever the state changes; the HA integration
 /// subscribes for instant updates.
 fn sse_server(shared: SharedState) {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::Arc;
+
     let listener = match std::net::TcpListener::bind("0.0.0.0:81") {
         Ok(l) => l,
         Err(e) => {
@@ -332,11 +341,28 @@ fn sse_server(shared: SharedState) {
         }
     };
     log::info!(target: "sse", "realtime endpoint up on :81 (GET /api/events)");
+    let clients = Arc::new(AtomicUsize::new(0));
     for stream in listener.incoming().flatten() {
-        log::info!(target: "sse", "client connected");
-        let mut stream = stream;
-        if let Err(e) = serve_sse(&mut stream, &shared) {
-            log::info!(target: "sse", "client closed ({e})");
+        if clients.load(Ordering::SeqCst) >= MAX_SSE_CLIENTS {
+            log::warn!(target: "sse", "too many clients; dropping connection");
+            continue; // stream dropped here -> connection closed, client can retry
+        }
+        clients.fetch_add(1, Ordering::SeqCst);
+        let shared = shared.clone();
+        let thread_clients = clients.clone();
+        let spawned = std::thread::Builder::new()
+            .name("sse-client".into())
+            .stack_size(6 * 1024)
+            .spawn(move || {
+                log::info!(target: "sse", "client connected");
+                let mut stream = stream;
+                if let Err(e) = serve_sse(&mut stream, &shared) {
+                    log::info!(target: "sse", "client closed ({e})");
+                }
+                thread_clients.fetch_sub(1, Ordering::SeqCst);
+            });
+        if spawned.is_err() {
+            clients.fetch_sub(1, Ordering::SeqCst); // spawn failed; undo the reservation
         }
     }
 }
@@ -349,13 +375,16 @@ fn serve_sse(stream: &mut std::net::TcpStream, shared: &SharedState) -> std::io:
           Cache-Control: no-cache\r\nConnection: keep-alive\r\n\
           Access-Control-Allow-Origin: *\r\n\r\n",
     )?;
-    let mut last = String::new();
+    // Drive off the shared `version` counter: only re-serialize + push when the
+    // core reports a material change, not on every 500ms poll.
+    let mut last_version: Option<u64> = None;
     let mut ticks: u32 = 0;
     loop {
-        let json = state_json(shared);
-        if json != last {
+        let version = shared.lock().unwrap().version;
+        if last_version != Some(version) {
+            let json = state_json(shared);
             stream.write_all(format!("data: {json}\n\n").as_bytes())?;
-            last = json;
+            last_version = Some(version);
         } else if ticks % 20 == 0 {
             stream.write_all(b": ping\n\n")?; // keep-alive every ~10s
         }
@@ -621,7 +650,7 @@ fn register(
                 };
                 match serde_json::from_slice::<PresetTimeReq>(&buf) {
                     Ok(r) => {
-                        let secs = (r.hour as u32) * 3600 + (r.minute as u32) * 60;
+                        let secs = (r.hour as u32) * 3600 + (r.minute as u32) * 60 + r.second as u32;
                         submit(&bus, Command::SetPresetTime { idx: r.idx, secs });
                         req.into_ok_response()?.write_all(b"{\"ok\":true}")?;
                     }
@@ -720,9 +749,25 @@ fn bad_request(req: Request<&mut EspHttpConnection<'_>>, msg: &str) -> anyhow::R
     Ok(())
 }
 
+/// Stable per-device id (the factory base MAC as 12 lowercase hex chars). Used
+/// by the Home Assistant integration as a unique_id so the config entry survives
+/// DHCP address changes. Read once from efuse and cached.
+fn device_id() -> &'static str {
+    use std::sync::OnceLock;
+    static ID: OnceLock<String> = OnceLock::new();
+    ID.get_or_init(|| {
+        let mut mac = [0u8; 6];
+        unsafe {
+            esp_idf_sys::esp_efuse_mac_get_default(mac.as_mut_ptr());
+        }
+        mac.iter().map(|b| format!("{b:02x}")).collect()
+    })
+}
+
 fn state_json(shared: &SharedState) -> String {
     let s = shared.lock().unwrap();
     serde_json::json!({
+        "id": device_id(),
         "phase": phase_str(s.phase),
         "now": fmt_hms(s.now_secs),
         "snooze_secs": s.settings.snooze_secs,
