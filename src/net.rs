@@ -27,6 +27,7 @@ use esp_idf_svc::handle::RawHandle; // brings EspNetif::handle() into scope
 use esp_idf_svc::http::server::{
     Configuration as HttpConfig, EspHttpConnection, EspHttpServer, Request,
 };
+use esp_idf_svc::mdns::EspMdns;
 use esp_idf_svc::nvs::{EspDefaultNvsPartition, EspNvs};
 use esp_idf_svc::sntp::EspSntp;
 use esp_idf_svc::wifi::{BlockingWifi, EspWifi};
@@ -289,23 +290,34 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
         }
     };
 
-    // mDNS auto-discovery — pending the espressif/mdns managed component.
-    if !ap_mode {
-        start_mdns();
-    }
+    // mDNS so Home Assistant auto-discovers us (and gives smart-alarm-clock.local).
+    let _mdns = if ap_mode { None } else { start_mdns() };
 
-    // Keep `wifi`, `server`, and `_sntp` alive for the process lifetime.
+    // Keep `wifi`, `server`, `_sntp`, and `_mdns` alive for the process lifetime.
     loop {
         std::thread::sleep(core::time::Duration::from_secs(3600));
     }
 }
 
-/// TODO: mDNS (`smart-alarm-clock.local` + a `_smartalarm._tcp` service with a
-/// TXT `sse` port) so HA Zeroconf auto-discovers us. `esp_idf_svc::mdns` is
-/// gated behind the `espressif/mdns` managed component, which isn't in the
-/// build yet — add it via esp-idf-sys extra_components to enable this.
-fn start_mdns() {
-    log::info!(target: "net", "mDNS not enabled yet (needs the espressif/mdns component)");
+/// Advertise over mDNS: `smart-alarm-clock.local` + a `_smartalarm._tcp` service
+/// (port 80) with a TXT `sse` pointing at the realtime port. HA's Zeroconf
+/// discovery picks this up.
+fn start_mdns() -> Option<EspMdns> {
+    match EspMdns::take() {
+        Ok(mut m) => {
+            let _ = m.set_hostname("smart-alarm-clock");
+            let _ = m.set_instance_name("Smart Alarm Clock");
+            match m.add_service(None, "_smartalarm", "_tcp", 80, &[("path", "/"), ("sse", "81")]) {
+                Ok(()) => log::info!(target: "net", "mDNS up: smart-alarm-clock.local (_smartalarm._tcp:80, sse:81)"),
+                Err(e) => log::warn!(target: "net", "mDNS add_service failed: {e}"),
+            }
+            Some(m)
+        }
+        Err(e) => {
+            log::warn!(target: "net", "mDNS take failed: {e}");
+            None
+        }
+    }
 }
 
 /// Realtime state push over Server-Sent Events (its own TCP server on :81).

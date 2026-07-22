@@ -34,3 +34,8 @@ smart-leds = "0.4" # RGB8 + hsv2rgb + SmartLedsWrite (rainbow)
 
 [build-dependencies]
 embuild = { version = "0.33.1", features = ["espidf"] }
+
+# Pull in the mDNS managed component (moved out of core ESP-IDF in 5.x) so
+# esp_idf_svc::mdns compiles -> smart-alarm-clock.local + HA Zeroconf discovery.
+[[package.metadata.esp-idf-sys.extra_components]]
+remote_component = { name = "espressif/mdns", version = "1.2.5" }

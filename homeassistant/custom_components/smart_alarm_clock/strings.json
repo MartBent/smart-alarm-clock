@@ -1,0 +1,22 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Enter the Smart Alarm Clock's IP address (or hostname).",
+        "data": { "host": "Host / IP address" }
+      },
+      "zeroconf_confirm": {
+        "title": "Smart Alarm Clock",
+        "description": "Add the Smart Alarm Clock discovered at {host}?"
+      }
+    },
+    "abort": {
+      "already_configured": "This device is already configured.",
+      "cannot_connect": "Could not reach the device."
+    },
+    "error": {
+      "cannot_connect": "Could not reach the device — check the IP and that it's on the network."
+    }
+  }
+}

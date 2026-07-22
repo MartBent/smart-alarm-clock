@@ -10,3 +10,7 @@
 
 # RustRover / IDEA: keep shared run configs (.run/) but ignore per-user state
 /.idea
+
+# Python bytecode (Home Assistant custom integration)
+__pycache__/
+*.pyc
