@@ -10,3 +10,6 @@ CONFIG_FREERTOS_HZ=1000
 
 # Match the common ESP32-S3 dev-kit flash size.
 CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# Room for HTTP server + MQTT + the SSE TCP server + mDNS without running out.
+CONFIG_LWIP_MAX_SOCKETS=16

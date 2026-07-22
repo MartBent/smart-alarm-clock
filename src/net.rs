@@ -253,6 +253,14 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
             }
             None => log::info!(target: "net", "no MQTT broker configured (POST /api/mqtt to set one)"),
         }
+        // Realtime push (SSE) for the HA integration — its own TCP server on
+        // :81 so a held connection can't block the single-task HTTP server.
+        let sh = shared.clone();
+        std::thread::Builder::new()
+            .name("sse".into())
+            .stack_size(6 * 1024)
+            .spawn(move || sse_server(sh))
+            .ok();
     }
 
     let mut server = EspHttpServer::new(&HttpConfig {
@@ -281,9 +289,66 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
         }
     };
 
-    // Keep `wifi`, `server`, and `_sntp` alive for the lifetime of the process.
+    // mDNS auto-discovery — pending the espressif/mdns managed component.
+    if !ap_mode {
+        start_mdns();
+    }
+
+    // Keep `wifi`, `server`, and `_sntp` alive for the process lifetime.
     loop {
         std::thread::sleep(core::time::Duration::from_secs(3600));
+    }
+}
+
+/// TODO: mDNS (`smart-alarm-clock.local` + a `_smartalarm._tcp` service with a
+/// TXT `sse` port) so HA Zeroconf auto-discovers us. `esp_idf_svc::mdns` is
+/// gated behind the `espressif/mdns` managed component, which isn't in the
+/// build yet — add it via esp-idf-sys extra_components to enable this.
+fn start_mdns() {
+    log::info!(target: "net", "mDNS not enabled yet (needs the espressif/mdns component)");
+}
+
+/// Realtime state push over Server-Sent Events (its own TCP server on :81).
+/// Streams `data: <state json>` whenever the state changes; the HA integration
+/// subscribes for instant updates.
+fn sse_server(shared: SharedState) {
+    let listener = match std::net::TcpListener::bind("0.0.0.0:81") {
+        Ok(l) => l,
+        Err(e) => {
+            log::warn!(target: "sse", "bind :81 failed: {e}");
+            return;
+        }
+    };
+    log::info!(target: "sse", "realtime endpoint up on :81 (GET /api/events)");
+    for stream in listener.incoming().flatten() {
+        log::info!(target: "sse", "client connected");
+        let mut stream = stream;
+        if let Err(e) = serve_sse(&mut stream, &shared) {
+            log::info!(target: "sse", "client closed ({e})");
+        }
+    }
+}
+
+fn serve_sse(stream: &mut std::net::TcpStream, shared: &SharedState) -> std::io::Result<()> {
+    use std::io::Write;
+    stream.set_write_timeout(Some(core::time::Duration::from_secs(5)))?;
+    stream.write_all(
+        b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\n\
+          Cache-Control: no-cache\r\nConnection: keep-alive\r\n\
+          Access-Control-Allow-Origin: *\r\n\r\n",
+    )?;
+    let mut last = String::new();
+    let mut ticks: u32 = 0;
+    loop {
+        let json = state_json(shared);
+        if json != last {
+            stream.write_all(format!("data: {json}\n\n").as_bytes())?;
+            last = json;
+        } else if ticks % 20 == 0 {
+            stream.write_all(b": ping\n\n")?; // keep-alive every ~10s
+        }
+        ticks = ticks.wrapping_add(1);
+        std::thread::sleep(core::time::Duration::from_millis(500));
     }
 }
 
