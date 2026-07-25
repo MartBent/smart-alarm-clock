@@ -158,9 +158,10 @@ Reference: Espressif "Embedded Rust on ESP" book (covers WiFi + MQTT).
 
 ## Build sequence
 
-1. **Bench validation first (~€60).** Dev-kit ESP32-S3 + VCNL4040 + DS3231(supercap) +
-   MAX7219/APA102 warm matrix + piezo + 3 buttons + **wood veneer samples** + frosted-acrylic/felt
-   fallbacks + breadboard. Goal: prove **IR-through-veneer**, the proximity gesture, and the warm
+1. **Bench validation first (~€30–55).** Concrete parts list in [`bench-bom.md`](bench-bom.md):
+   existing dev-kit ESP32-S3 + VCNL4040 + DS3231(supercap) + **two display candidates** (APA102
+   RGB + amber HT16K33 mono, compared through veneer) + piezo + on-hand buttons + **wood veneer
+   samples** + breadboard. Goal: prove **IR-through-veneer**, the proximity gesture, and the warm
    glow before committing to a PCB. (Piezo only — defer I²S audio.)
 2. Write/validate firmware on the breadboard: gesture classification + guards, presets in NVS,
    web UI + captive portal + mDNS, on-device firing, MQTT discovery + parity + LWT, RTC boot
@@ -174,7 +175,11 @@ Reference: Espressif "Embedded Rust on ESP" book (covers WiFi + MQTT).
 
 ## v2 / stretch (leave design hooks on v1)
 
-- I²S DAC + speaker pads (real audio / web radio / TTS)
+- I²S DAC + speaker pads → **real audio / HA media player**: default tone stored on device
+  (offline wake sound), user-uploadable sound files, and registering as an HA `media_player`
+  (TTS/chime/radio push). Needs a PSRAM board (N16R8) + MAX98357A + speaker. Open decisions:
+  upload format (WAV vs MP3) and Rust vs ESPHome for the media_player. See
+  [`bench-bom.md`](bench-bom.md#future-option--real-audio--ha-media-player).
 - Haptic motor (LRA + DRV2605L) for silent dismiss confirmation
 - Light-ramp / sunrise wake before the piezo
 - RGB ambient status backlight
