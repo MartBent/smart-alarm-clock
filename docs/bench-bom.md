@@ -26,7 +26,7 @@ Single-sourced at **Tinytronics** except the veneer (and, later, copper tape).
 | **Capacitive-touch electrode** — kitchen foil / jumper for the bench (proper copper tape later, *not* at Tinytronics) | reach/tap + hold gestures via the ESP32-S3's **native** touch peripheral, no sensor chip | touch → `Command` bus (to wire) | ~0 |
 | **Wood veneer sample pack** (~0.6 mm; walnut/oak/etc.) — *source elsewhere* | display glow-through look **and** capacitive-touch-through-veneer tuning | — | 5–10 |
 | Decoupling caps (100 nF / 10 µF) | supporting | — | 2 |
-| *Optional:* single **SK6812 / WS2812** discrete pixel | final placement of the RGB status LED (onboard WS2812 covers the bench) | already driven in `src/led.rs` | 1–2 |
+| *Optional:* single **SK6812 / WS2812** discrete pixel | final placement of the RGB status LED (onboard WS2812 covers the bench) | already driven in `software/firmware/src/led.rs` | 1–2 |
 | *Optional:* **Logic Analyzer 8-channel USB** (Tinytronics) | SPI/I²C bring-up debugging (sigrok/PulseView) | — | 9.75 |
 
 **Tinytronics core subtotal: ~€12.50** (matrix + RTC + buzzer + level converter). + ~€10 for the
@@ -48,7 +48,7 @@ cap-touch test).
   separate **PCB-stage** decision, since red vs amber diffuse differently through wood so the red
   panel is only an *approximate* glow test.
 - **Status (armed / AP mode / ringing / etc.) = a single RGB LED**, not the matrix. This is
-  **already implemented** — `src/led.rs` drives the onboard WS2812 with phase colors
+  **already implemented** — `software/firmware/src/led.rs` drives the onboard WS2812 with phase colors
   (syncing=blue, idle=rainbow, armed=green, ringing=red, snoozed=amber). Onboard pixel covers the
   bench; add one discrete SK6812/WS2812 for final placement.
 

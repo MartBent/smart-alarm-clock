@@ -9,6 +9,19 @@ with Home Assistant, but fires alarms **on-device** so it works even if WiFi/HA 
 > left as `TODO`s — the project owner is learning embedded Rust and wants to write it.
 > See `docs/` for the locked design and the options/trade-offs reference.
 
+## Repository layout
+
+```
+software/
+  firmware/       Rust (esp-idf) firmware for the ESP32-S3 — the device itself
+  homeassistant/  Home Assistant custom integration (Python) + docs
+  tools/          sim_device.py — a Python simulator of the device (REST + SSE) for HA testing
+hardware/         PCB + enclosure (KiCad, veneer bar) — see docs/bench-bom.md
+docs/             Locked design (handoff.md), bench BOM (bench-bom.md)
+```
+
+Firmware commands below run from `software/firmware/`.
+
 ## Hardware (v1)
 
 - **MCU:** ESP32-S3-WROOM-1 (native USB-JTAG for program + debug)
@@ -20,8 +33,7 @@ with Home Assistant, but fires alarms **on-device** so it works even if WiFi/HA 
 
 ## Firmware structure
 
-The repo is currently a **bare esp-idf entry point** (`src/main.rs`: `link_patches`,
-boot log, idle loop) — build the rest out from here.
+The firmware lives in `software/firmware/` (entry point `software/firmware/src/main.rs`).
 
 Planned target design (`std` path: `esp-idf-hal` + `esp-idf-svc`, FreeRTOS underneath
 exposed as `std::thread`): four threads with shared state behind `Arc<Mutex<…>>` /
@@ -49,10 +61,11 @@ espup install                 # installs the esp/xtensa toolchain + LLVM
 . $HOME/export-esp.sh         # exports env each shell (source it, or add to your profile)
 
 # 2. Build + flash + monitor over native USB-C
-cargo run                     # builds for esp32s3 and flashes (see .cargo/config.toml runner)
+cd software/firmware          # the firmware crate lives here
+cargo run                     # builds for esp32s3 and flashes (see software/firmware/.cargo/config.toml runner)
 ```
 
-`rust-toolchain.toml` pins the `esp` channel and `.cargo/config.toml` sets the
+`software/firmware/rust-toolchain.toml` pins the `esp` channel and `software/firmware/.cargo/config.toml` sets the
 `xtensa-esp32s3-espidf` target + `espflash flash --monitor` runner, so a plain
 `cargo run` builds and flashes. The scaffold depends directly on `esp-idf-sys`;
 add `esp-idf-hal` / `esp-idf-svc` when you start wiring peripherals and services.
@@ -85,9 +98,9 @@ cargo run --target xtensa-esp32-espidf
 The default `cargo build` / `cargo run` stays on the final ESP32-S3 target. If your
 board is the newer **T-Display-S3**, use the default ESP32-S3 profile instead.
 
-The esp-idf build config is **already included** — `.cargo/config.toml`,
-`rust-toolchain.toml`, `sdkconfig.defaults`, and `build.rs`. On the first build,
-`esp-idf-sys` downloads and builds ESP-IDF `v5.2.3` (pinned in `.cargo/config.toml`),
+The esp-idf build config is **already included** under `software/firmware/` —
+`.cargo/config.toml`, `rust-toolchain.toml`, `sdkconfig.defaults`, and `build.rs`. On the
+first build, `esp-idf-sys` downloads and builds ESP-IDF `v5.2.3` (pinned in `.cargo/config.toml`),
 which takes a while; later builds are fast. Reference: Espressif's "Embedded Rust on
 ESP" book (covers WiFi + MQTT).
 
