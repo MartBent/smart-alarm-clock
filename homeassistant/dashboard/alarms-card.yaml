@@ -1,0 +1,105 @@
+# Smart Alarm Clock — configure card (built-in cards only, no HACS needed).
+#
+# Paste into a dashboard: Edit dashboard → ⋮ → "Edit in YAML" and add this under
+# `cards:`, or "Add card → Manual" and paste one card at a time.
+#
+# Assumes a clean re-add of the integration so entity_ids are canonical
+# (switch.smart_alarm_clock_alarm_1..8 / time.smart_alarm_clock_alarm_1_time..8).
+type: vertical-stack
+cards:
+  - type: entities
+    title: Smart Alarm Clock
+    show_header_toggle: false
+    state_color: true
+    entities:
+      - entity: sensor.smart_alarm_clock_phase
+        name: Status
+        icon: mdi:alarm
+      - entity: sensor.smart_alarm_clock_time
+        name: Clock
+        icon: mdi:clock-outline
+      - type: buttons
+        entities:
+          - entity: button.smart_alarm_clock_snooze
+            name: Snooze
+            icon: mdi:alarm-snooze
+          - entity: button.smart_alarm_clock_dismiss
+            name: Dismiss
+            icon: mdi:alarm-off
+
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: entities
+        title: Alarm 1
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_1
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_1_time
+            name: Time
+      - type: entities
+        title: Alarm 2
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_2
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_2_time
+            name: Time
+      - type: entities
+        title: Alarm 3
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_3
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_3_time
+            name: Time
+      - type: entities
+        title: Alarm 4
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_4
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_4_time
+            name: Time
+      - type: entities
+        title: Alarm 5
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_5
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_5_time
+            name: Time
+      - type: entities
+        title: Alarm 6
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_6
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_6_time
+            name: Time
+      - type: entities
+        title: Alarm 7
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_7
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_7_time
+            name: Time
+      - type: entities
+        title: Alarm 8
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: switch.smart_alarm_clock_alarm_8
+            name: Enabled
+          - entity: time.smart_alarm_clock_alarm_8_time
+            name: Time

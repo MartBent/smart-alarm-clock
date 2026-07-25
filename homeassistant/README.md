@@ -28,14 +28,17 @@ One device, **Smart Alarm Clock**, with:
 | Entity | Type | What it does |
 | --- | --- | --- |
 | Phase | sensor | `syncing` / `idle` / `armed` / `ringing` / `snoozed` |
-| Armed | switch | arm / disarm |
-| Snooze, Dismiss | button | while ringing |
-| Alarm *&lt;name&gt;* | switch | enable/disable each preset |
-| *&lt;name&gt;* time | time | edit each preset's time |
+| Time | sensor | the device's own wall clock |
+| Snooze, Dismiss | button | while ringing (Dismiss disables the fired alarm) |
+| Alarm *N* | switch | enable/disable each slot — enabling arms the clock |
+| Alarm *N* time | time | edit each slot's time |
+
+There's no explicit Armed switch: the clock is armed whenever any alarm is
+enabled, and dismissing a ringing alarm turns that slot off (one-shot).
 
 ## How it works
 
-- **Commands** → `POST /api/command`, `/api/preset/enabled`, `/api/preset/time`.
+- **Commands** → `POST /api/command`, `/api/alarm/enabled`, `/api/alarm/time`.
 - **State** → `GET /api/state` (60 s polling fallback).
 - **Realtime** → the device streams changes over SSE on `:81/api/events`, so
   entities update instantly (`iot_class: local_push`).

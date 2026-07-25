@@ -1,4 +1,4 @@
-"""Per-preset alarm time (editable from HA)."""
+"""Per-slot alarm time (editable from HA)."""
 
 from __future__ import annotations
 
@@ -18,23 +18,23 @@ async def async_setup_entry(
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities(
-        PresetTime(coordinator, entry.entry_id, p["idx"], p["label"])
-        for p in (coordinator.data or {}).get("presets", [])
+        PresetTime(coordinator, entry.entry_id, p["idx"])
+        for p in (coordinator.data or {}).get("alarms", [])
     )
 
 
 class PresetTime(SmartAlarmEntity, TimeEntity):
     _attr_icon = "mdi:clock-outline"
 
-    def __init__(self, coordinator, entry_id: str, idx: int, label: str) -> None:
+    def __init__(self, coordinator, entry_id: str, idx: int) -> None:
         super().__init__(coordinator, entry_id)
         self._idx = idx
-        self._attr_name = f"{label} time"
+        self._attr_name = f"Alarm {idx + 1} time"
         self._attr_unique_id = f"{entry_id}_preset{idx}_time"
 
     @property
     def native_value(self) -> dt_time | None:
-        for preset in (self.coordinator.data or {}).get("presets", []):
+        for preset in (self.coordinator.data or {}).get("alarms", []):
             if preset["idx"] == self._idx:
                 try:
                     h, m, s = (int(x) for x in preset["time"].split(":"))

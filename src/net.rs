@@ -10,8 +10,8 @@
 //! The alarm REST API is available in both modes:
 //!   curl http://<ip>/api/state
 //!   curl -X POST http://<ip>/api/command        -d '{"cmd":"snooze"}'
-//!   curl -X POST http://<ip>/api/preset/enabled -d '{"idx":1,"enabled":true}'
-//!   curl -X POST http://<ip>/api/preset/time    -d '{"idx":0,"hour":7,"minute":30}'
+//!   curl -X POST http://<ip>/api/alarm/enabled -d '{"idx":1,"enabled":true}'
+//!   curl -X POST http://<ip>/api/alarm/time    -d '{"idx":0,"hour":7,"minute":30}'
 
 use core::convert::TryInto;
 
@@ -34,7 +34,9 @@ use esp_idf_svc::wifi::{BlockingWifi, EspWifi};
 
 use serde::Deserialize;
 
-use crate::state::{fmt_hms, phase_str, submit, Command, CommandBus, SharedState};
+use crate::state::{
+    fmt_hms, phase_str, submit, version_advanced, Command, CommandBus, SharedState,
+};
 
 const AP_SSID: &str = "smart-alarm-clock";
 const AP_CHANNEL: u8 = 1;
@@ -126,8 +128,6 @@ static STATUS_HTML: &str = r##"<!doctype html><html lang="en"><head>
 <div class="phase" id="phase">&mdash;</div>
 <div class="clock" id="now">--:--:--</div>
 <div class="btns">
-<button onclick="cmd('arm')">Arm</button>
-<button onclick="cmd('disarm')">Disarm</button>
 <button onclick="cmd('snooze')">Snooze</button>
 <button class="primary" onclick="cmd('dismiss')">Dismiss</button>
 </div>
@@ -151,17 +151,17 @@ async function refresh(){try{const s=await(await fetch('/api/state')).json();
  phase.textContent=s.phase;now.textContent=s.now;
  // Rebuild preset rows only when they change AND you aren't editing one,
  // so the 1s poll never steals focus or clobbers typing.
- const key=JSON.stringify(s.presets);
+ const key=JSON.stringify(s.alarms);
  if(key!==lastPresets && !presets.contains(document.activeElement)){lastPresets=key;
-  presets.innerHTML=s.presets.map(p=>`<div class="preset">
+  presets.innerHTML=s.alarms.map(p=>`<div class="preset">
    <label class="sw"><input type="checkbox" ${p.enabled?'checked':''} onchange="tog(${p.idx},this.checked)"><span></span></label>
-   <span class="name">${p.label}</span>
+   <span class="name">Alarm ${p.idx+1}</span>
    <input type="time" value="${p.time.slice(0,5)}" onchange="settime(${p.idx},this.value)"></div>`).join('');
  }}catch(e){}}
 async function post(u,b){await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}
 async function cmd(c){await post('/api/command',{cmd:c});refresh();}
-async function tog(idx,enabled){await post('/api/preset/enabled',{idx,enabled});}
-async function settime(idx,v){const[h,m]=v.split(':').map(Number);await post('/api/preset/time',{idx,hour:h,minute:m});}
+async function tog(idx,enabled){await post('/api/alarm/enabled',{idx,enabled});}
+async function settime(idx,v){const[h,m]=v.split(':').map(Number);await post('/api/alarm/time',{idx,hour:h,minute:m});}
 async function savemqtt(){mout.textContent='Saving…';
  try{const r=await fetch('/api/mqtt',{method:'POST',headers:{'Content-Type':'application/json'},
   body:JSON.stringify({host:mh.value,port:Number(mp.value)||1883,username:mu.value,password:mpw.value})});
@@ -352,7 +352,10 @@ fn sse_server(shared: SharedState) {
         let thread_clients = clients.clone();
         let spawned = std::thread::Builder::new()
             .name("sse-client".into())
-            .stack_size(6 * 1024)
+            // serve_sse serializes the full state (serde_json + a second `data:`
+            // copy via format!) on this thread; give it the same headroom the
+            // HTTP handler gets for state_json (SERVER_STACK) so it can't overflow.
+            .stack_size(SERVER_STACK)
             .spawn(move || {
                 log::info!(target: "sse", "client connected");
                 let mut stream = stream;
@@ -380,11 +383,9 @@ fn serve_sse(stream: &mut std::net::TcpStream, shared: &SharedState) -> std::io:
     let mut last_version: Option<u64> = None;
     let mut ticks: u32 = 0;
     loop {
-        let version = shared.lock().unwrap().version;
-        if last_version != Some(version) {
+        if version_advanced(shared, &mut last_version) {
             let json = state_json(shared);
             stream.write_all(format!("data: {json}\n\n").as_bytes())?;
-            last_version = Some(version);
         } else if ticks % 20 == 0 {
             stream.write_all(b": ping\n\n")?; // keep-alive every ~10s
         }
@@ -577,11 +578,11 @@ fn register(
             .unwrap();
     }
 
-    // GET /api/presets
+    // GET /api/alarms
     {
         let shared = shared.clone();
         server
-            .fn_handler::<anyhow::Error, _>("/api/presets", Method::Get, move |req| {
+            .fn_handler::<anyhow::Error, _>("/api/alarms", Method::Get, move |req| {
                 req.into_ok_response()?.write_all(presets_json(&shared).as_bytes())?;
                 Ok(())
             })
@@ -599,8 +600,6 @@ fn register(
                 match serde_json::from_slice::<CmdReq>(&buf) {
                     Ok(r) => {
                         let cmd = match r.cmd.as_str() {
-                            "arm" => Some(Command::Arm),
-                            "disarm" => Some(Command::Disarm),
                             "snooze" => Some(Command::Snooze),
                             "dismiss" => Some(Command::Dismiss),
                             _ => None,
@@ -620,11 +619,11 @@ fn register(
             .unwrap();
     }
 
-    // POST /api/preset/enabled
+    // POST /api/alarm/enabled
     {
         let bus = bus.clone();
         server
-            .fn_handler::<anyhow::Error, _>("/api/preset/enabled", Method::Post, move |mut req| {
+            .fn_handler::<anyhow::Error, _>("/api/alarm/enabled", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
                     return bad_request(req, "bad body");
                 };
@@ -640,11 +639,11 @@ fn register(
             .unwrap();
     }
 
-    // POST /api/preset/time
+    // POST /api/alarm/time
     {
         let bus = bus.clone();
         server
-            .fn_handler::<anyhow::Error, _>("/api/preset/time", Method::Post, move |mut req| {
+            .fn_handler::<anyhow::Error, _>("/api/alarm/time", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
                     return bad_request(req, "bad body");
                 };
@@ -771,7 +770,7 @@ fn state_json(shared: &SharedState) -> String {
         "phase": phase_str(s.phase),
         "now": fmt_hms(s.now_secs),
         "snooze_secs": s.settings.snooze_secs,
-        "presets": preset_values(&s.settings.presets),
+        "alarms": preset_values(&s.settings.presets),
     })
     .to_string()
 }
@@ -786,7 +785,7 @@ fn preset_values(presets: &[crate::state::Preset]) -> Vec<serde_json::Value> {
         .iter()
         .enumerate()
         .map(|(i, p)| {
-            serde_json::json!({ "idx": i, "label": p.label, "time": fmt_hms(p.secs), "enabled": p.enabled })
+            serde_json::json!({ "idx": i, "time": fmt_hms(p.secs), "enabled": p.enabled })
         })
         .collect()
 }

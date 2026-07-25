@@ -18,6 +18,32 @@ with Home Assistant but fires alarms on-device so it works even if WiFi/HA is do
 
 ---
 
+## Amendments (supersede the body below where they conflict)
+
+### 2026-07-25 — alarm model + control simplification
+These decisions supersede the "Presets" and arm/disarm parts of the original design:
+
+- **Alarm model: a fixed pool of 8 slots** (`NUM_PRESETS` in `src/state.rs`), each just a
+  time-of-day + `enabled` flag. Replaces the earlier "several named premade presets
+  (Work/Weekend/Nap)" model. The slot index is its stable id. (Repeat-days / sound / sunrise
+  remain future per-slot fields.)
+- **No explicit arm/disarm — arming is implicit.** The clock is `Armed` whenever **any** slot is
+  enabled, else `Idle`. This removes the rear **Arm** button's toggle role and the HA "Armed"
+  switch. (The rear buttons free up; final mapping is open — see Open questions.)
+- **Dismiss is one-shot:** dismissing a ringing/snoozed alarm **disables the slot that fired**,
+  so it won't re-fire until re-enabled. Snooze still re-rings after the snooze interval.
+- **REST API renamed** `preset(s)` → `alarms`: `GET /api/alarms`, `POST /api/alarm/enabled`,
+  `POST /api/alarm/time`; the `/api/state` list key is `alarms`. Commands are `snooze` / `dismiss`
+  only (no `arm`/`disarm`). MQTT discovery drops the Armed switch; per-slot enable switches remain.
+- **Software simulator** (`tools/sim_device.py`, stdlib Python) reproduces the device's REST API +
+  SSE + state machine, so the HA integration can be developed/tested with no hardware. It is
+  deployed as a container on the homelab NAS and the custom HA integration runs against it live.
+- **HA integration ports are fixed at 80 (REST) / 81 (SSE)** — not configurable (the device always
+  uses these). A dashboard config card and a nightly "set an alarm?" actionable-notification
+  automation live in `homeassistant/dashboard/`.
+
+---
+
 ## Locked decisions
 
 ### Architecture & firmware

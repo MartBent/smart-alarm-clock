@@ -7,9 +7,8 @@
 //!
 //! Entities (all under one HA device):
 //!   * sensor  — Phase
-//!   * switch  — Armed            (arm/disarm)
 //!   * button  — Snooze, Dismiss
-//!   * switch  — one per preset   (enable/disable)
+//!   * switch  — one per alarm slot (enable/disable; enabling arms the clock)
 //!
 //! Broker is configured via `POST /api/mqtt` (stored in NVS); this worker is
 //! spawned by `net.rs` once WiFi is up and a broker is configured.
@@ -22,7 +21,7 @@ use esp_idf_svc::mqtt::client::{
     EspMqttClient, EventPayload, LwtConfiguration, MqttClientConfiguration, QoS,
 };
 
-use crate::state::{phase_str, submit, Command, CommandBus, Phase, SharedState};
+use crate::state::{phase_str, submit, version_advanced, Command, CommandBus, Phase, SharedState};
 
 const BASE: &str = "smart-alarm-clock";
 const DISC: &str = "homeassistant"; // HA default discovery prefix
@@ -102,15 +101,13 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
         if now_conn {
             // Only snapshot state when the core reports a material change; the
             // per-second `now` tick doesn't bump `version`.
-            let version = shared.lock().unwrap().version;
-            if last_version != Some(version) {
+            if version_advanced(&shared, &mut last_version) {
                 let (phase, enabled) = {
                     let s = shared.lock().unwrap();
                     (s.phase, s.settings.presets.iter().map(|p| p.enabled).collect::<Vec<_>>())
                 };
                 if last_phase != Some(phase) {
                     enq(&mut client, &format!("{BASE}/phase"), phase_str(phase).as_bytes());
-                    enq(&mut client, &format!("{BASE}/arm"), arm_str(phase).as_bytes());
                     last_phase = Some(phase);
                 }
                 if last_enabled != enabled {
@@ -119,19 +116,10 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
                     }
                     last_enabled = enabled;
                 }
-                last_version = Some(version);
             }
         }
 
         std::thread::sleep(Duration::from_millis(300));
-    }
-}
-
-/// "ON" while the alarm is active/armed, else "OFF".
-fn arm_str(p: Phase) -> &'static str {
-    match p {
-        Phase::Armed | Phase::Ringing | Phase::Snoozed => "ON",
-        Phase::Idle | Phase::Syncing => "OFF",
     }
 }
 
@@ -164,7 +152,6 @@ fn route(topic: &str, data: &[u8], bus: &CommandBus) {
         return;
     }
     match rest {
-        "arm/set" => submit(bus, if on { Command::Arm } else { Command::Disarm }),
         "snooze/set" => submit(bus, Command::Snooze),
         "dismiss/set" => submit(bus, Command::Dismiss),
         _ => {}
@@ -190,14 +177,6 @@ fn on_connect(client: &mut EspMqttClient<'static>, shared: &SharedState) {
         "state_topic": format!("{BASE}/phase"),
         "availability_topic": AVAIL, "device": dev,
     }));
-    // Armed switch.
-    disc(client, "switch", "arm", &serde_json::json!({
-        "name": "Armed", "unique_id": "sac_arm",
-        "command_topic": format!("{BASE}/arm/set"),
-        "state_topic": format!("{BASE}/arm"),
-        "payload_on": "ON", "payload_off": "OFF",
-        "availability_topic": AVAIL, "device": dev,
-    }));
     // Snooze / Dismiss buttons.
     disc(client, "button", "snooze", &serde_json::json!({
         "name": "Snooze", "unique_id": "sac_snooze",
@@ -211,9 +190,9 @@ fn on_connect(client: &mut EspMqttClient<'static>, shared: &SharedState) {
     }));
     // One enable switch per preset.
     let presets = { shared.lock().unwrap().settings.presets.clone() };
-    for (i, p) in presets.iter().enumerate() {
+    for (i, _p) in presets.iter().enumerate() {
         disc(client, "switch", &format!("preset{i}"), &serde_json::json!({
-            "name": format!("Alarm: {}", p.label), "unique_id": format!("sac_preset{i}"),
+            "name": format!("Alarm {}", i + 1), "unique_id": format!("sac_preset{i}"),
             "command_topic": format!("{BASE}/preset/{i}/enable/set"),
             "state_topic": format!("{BASE}/preset/{i}/enable"),
             "payload_on": "ON", "payload_off": "OFF",

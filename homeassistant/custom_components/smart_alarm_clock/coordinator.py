@@ -13,13 +13,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import SmartAlarmApi
-from .const import DOMAIN
+from .const import DOMAIN, SSE_PORT
 
 _LOGGER = logging.getLogger(__name__)
 
 # The device pushes over SSE, so polling is only a slow safety net.
 POLL_INTERVAL = timedelta(seconds=60)
-SSE_PORT = 81
 
 
 class SmartAlarmCoordinator(DataUpdateCoordinator[dict]):

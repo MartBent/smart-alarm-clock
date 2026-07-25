@@ -6,8 +6,12 @@
 //!
 //! Time comes from the system clock, which SNTP sets a few seconds after WiFi
 //! connects (see `net.rs`; timezone is set in `main.rs`). Until it's valid the
-//! core sits in [`Phase::Syncing`]. Firing is by edge crossing: while Armed,
-//! when local time crosses an enabled preset's time, it rings.
+//! core sits in [`Phase::Syncing`].
+//!
+//! There is no explicit arm/disarm: the clock is [`Phase::Armed`] whenever any
+//! slot is enabled, else [`Phase::Idle`]. Firing is by edge crossing — when
+//! local time crosses an enabled slot's time it rings. Dismiss disables the
+//! slot that fired, so alarms are one-shot until re-enabled.
 
 use std::time::{Duration, Instant};
 
@@ -29,10 +33,8 @@ pub fn run(bus: CommandBus, shared: SharedState) {
     let mut prev_secs: Option<u32> = None;
     let mut snooze_end = Instant::now();
     let mut ring_start = Instant::now();
-    // Whether the user wants the alarm armed. Applied when the clock syncs (so an
-    // arm/disarm issued during `Syncing` isn't lost); defaults to armed so a
-    // fresh boot arms itself once time is known.
-    let mut desired_armed = true;
+    // Which slot is currently ringing/snoozed, so Dismiss can disable that one.
+    let mut fired_idx: Option<usize> = None;
     // Last phase we published; a change bumps the shared `version`.
     let mut published_phase: Option<Phase> = None;
 
@@ -41,61 +43,34 @@ pub fn run(bus: CommandBus, shared: SharedState) {
         // Set when a command mutates settings, so we bump `version` this tick.
         let mut settings_changed = false;
 
-        // Apply queued commands.
+        // Apply queued commands. There's no explicit arm/disarm: the clock is
+        // "armed" whenever any slot is enabled (derived below). Dismiss turns the
+        // fired slot off, so an alarm is naturally one-shot.
         let cmds: Vec<Command> = bus.lock().unwrap().drain(..).collect();
         for cmd in cmds {
             let in_grace = phase == Phase::Ringing && ring_start.elapsed() < GRACE;
             log::debug!(target: "alarm", "command {cmd:?} in phase {phase:?}");
             match cmd {
-                Command::Snooze | Command::ButtonShort if phase == Phase::Ringing => {
-                    if !in_grace {
+                Command::Snooze | Command::ButtonShort => {
+                    if phase == Phase::Ringing && !in_grace {
                         phase = Phase::Snoozed;
                         snooze_end = Instant::now() + Duration::from_secs(snooze_secs as u64);
                         log::info!(target: "alarm", "-> snoozed {}s", snooze_secs);
                     }
                 }
-                Command::Dismiss => {
-                    if matches!(phase, Phase::Ringing | Phase::Snoozed) {
-                        desired_armed = true;
-                        phase = Phase::Armed;
-                        log::info!(target: "alarm", "-> armed (dismissed)");
-                    }
-                }
-                Command::ButtonLong => {
-                    if matches!(phase, Phase::Ringing | Phase::Snoozed) {
-                        if !in_grace {
-                            desired_armed = true;
-                            phase = Phase::Armed;
-                            log::info!(target: "alarm", "-> armed (dismissed)");
+                Command::Dismiss | Command::ButtonLong => {
+                    if matches!(phase, Phase::Ringing | Phase::Snoozed) && !in_grace {
+                        if let Some(idx) = fired_idx.take() {
+                            let mut s = shared.lock().unwrap();
+                            if let Some(p) = s.settings.presets.get_mut(idx) {
+                                p.enabled = false;
+                                settings_changed = true;
+                            }
+                            log::info!(target: "alarm", "dismissed; disabled alarm {idx}");
                         }
-                    } else if phase == Phase::Idle {
-                        desired_armed = true;
-                        phase = Phase::Armed;
-                        log::info!(target: "alarm", "-> armed");
-                    } else if phase == Phase::Armed {
-                        desired_armed = false;
+                        // Base phase (armed/idle) is recomputed below from what's
+                        // still enabled.
                         phase = Phase::Idle;
-                        log::info!(target: "alarm", "-> idle");
-                    }
-                }
-                // Arm/Disarm record the user's intent even while `Syncing` (applied
-                // on sync) so the request is never silently dropped.
-                Command::Arm => {
-                    desired_armed = true;
-                    if phase != Phase::Syncing {
-                        phase = Phase::Armed;
-                        log::info!(target: "alarm", "-> armed");
-                    } else {
-                        log::info!(target: "alarm", "arm requested; will arm on time sync");
-                    }
-                }
-                Command::Disarm => {
-                    desired_armed = false;
-                    if phase != Phase::Syncing {
-                        phase = Phase::Idle;
-                        log::info!(target: "alarm", "-> idle");
-                    } else {
-                        log::info!(target: "alarm", "disarm requested; will stay idle on time sync");
                     }
                 }
                 Command::SetPresetEnabled { idx, enabled } => {
@@ -103,7 +78,7 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                     if let Some(p) = s.settings.presets.get_mut(idx) {
                         p.enabled = enabled;
                         settings_changed = true;
-                        log::info!(target: "alarm", "preset {idx} ({}) enabled={enabled}", p.label);
+                        log::info!(target: "alarm", "alarm {idx} enabled={enabled}");
                     }
                 }
                 Command::SetPresetTime { idx, secs } => {
@@ -112,10 +87,9 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                     if let Some(p) = s.settings.presets.get_mut(idx) {
                         p.secs = secs;
                         settings_changed = true;
-                        log::info!(target: "alarm", "preset {idx} ({}) time={}", p.label, fmt_hms(secs));
+                        log::info!(target: "alarm", "alarm {idx} time={}", fmt_hms(secs));
                     }
                 }
-                _ => {}
             }
         }
 
@@ -128,28 +102,38 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                 }
             }
             Some(secs) => {
-                if phase == Phase::Syncing {
-                    phase = if desired_armed { Phase::Armed } else { Phase::Idle };
-                    log::info!(target: "alarm", "time synced ({}) -> {}",
-                        fmt_hms(secs), if desired_armed { "armed" } else { "idle" });
-                }
-                if phase == Phase::Armed {
-                    let hit = {
-                        let s = shared.lock().unwrap();
-                        s.settings
-                            .presets
-                            .iter()
-                            .any(|p| p.enabled && crossed(prev_secs.unwrap_or(secs), secs, p.secs))
-                    };
-                    if hit {
-                        phase = Phase::Ringing;
-                        ring_start = Instant::now();
-                        log::warn!(target: "alarm", "*** RINGING *** ({})", fmt_hms(secs));
+                let any_enabled = { shared.lock().unwrap().settings.presets.iter().any(|p| p.enabled) };
+                match phase {
+                    // Quiet phases: derive armed/idle from what's enabled, and ring
+                    // when the clock crosses an enabled slot.
+                    Phase::Syncing | Phase::Idle | Phase::Armed => {
+                        let hit = {
+                            let s = shared.lock().unwrap();
+                            s.settings.presets.iter().enumerate().find_map(|(i, p)| {
+                                (p.enabled && crossed(prev_secs.unwrap_or(secs), secs, p.secs))
+                                    .then_some(i)
+                            })
+                        };
+                        if phase == Phase::Syncing {
+                            log::info!(target: "alarm", "time synced ({})", fmt_hms(secs));
+                        }
+                        if let Some(idx) = hit {
+                            phase = Phase::Ringing;
+                            ring_start = Instant::now();
+                            fired_idx = Some(idx);
+                            log::warn!(target: "alarm", "*** RINGING *** alarm {idx} ({})", fmt_hms(secs));
+                        } else {
+                            phase = if any_enabled { Phase::Armed } else { Phase::Idle };
+                        }
                     }
-                } else if phase == Phase::Snoozed && Instant::now() >= snooze_end {
-                    phase = Phase::Ringing;
-                    ring_start = Instant::now();
-                    log::warn!(target: "alarm", "*** RINGING (after snooze) ***");
+                    Phase::Snoozed => {
+                        if Instant::now() >= snooze_end {
+                            phase = Phase::Ringing;
+                            ring_start = Instant::now();
+                            log::warn!(target: "alarm", "*** RINGING (after snooze) ***");
+                        }
+                    }
+                    Phase::Ringing => {}
                 }
                 prev_secs = Some(secs);
             }

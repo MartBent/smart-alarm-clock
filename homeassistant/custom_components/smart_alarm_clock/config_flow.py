@@ -72,6 +72,18 @@ class SmartAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
         """Use the device's stable id as unique_id so the entry survives DHCP
         address changes; fall back to the host for older firmware without one."""
         unique_id = state.get("id") or host
+        if unique_id != host:
+            # An entry added before the firmware reported a stable id was keyed by
+            # its host. Re-key it to the stable id now (typically on the first
+            # rediscovery after a firmware upgrade, while the host still matches)
+            # so _abort_if_unique_id_configured updates it instead of creating a
+            # duplicate.
+            for entry in self._async_current_entries():
+                if entry.unique_id == host:
+                    self.hass.config_entries.async_update_entry(
+                        entry, unique_id=unique_id
+                    )
+                    break
         await self.async_set_unique_id(unique_id)
         self._abort_if_unique_id_configured(updates={CONF_HOST: host})
 

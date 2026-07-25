@@ -3,5 +3,6 @@
 DOMAIN = "smart_alarm_clock"
 DEFAULT_NAME = "Smart Alarm Clock"
 
-# Phases the device reports as "active" (Armed switch is on for these).
-ACTIVE_PHASES = {"armed", "ringing", "snoozed"}
+# The device always serves its REST API on :80 (the api client's default) and
+# the realtime SSE stream on :81.
+SSE_PORT = 81

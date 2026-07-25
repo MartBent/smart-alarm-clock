@@ -1,0 +1,60 @@
+# Smart Alarm Clock — nightly "set an alarm?" reminder.
+#
+# Two automations:
+#   1. At 21:00 every night, send an actionable notification with the first 3
+#      alarms as buttons (only if no alarm is currently enabled — remove the
+#      condition if you always want the nudge).
+#   2. When a button is tapped, enable that alarm.
+#
+# Paste into Settings → Automations → ⋮ → "Edit in YAML" (one automation each),
+# or append to automations.yaml. Adjust the notify service if needed
+# (Developer Tools → Actions → search "notify." to find your device).
+
+- alias: "Alarm clock: nightly reminder"
+  id: sac_nightly_reminder
+  triggers:
+    - trigger: time
+      at: "21:00:00"
+  conditions:
+    # Only nudge when nothing is set. Delete this block to always ask.
+    - condition: state
+      entity_id: sensor.smart_alarm_clock_phase
+      state: "idle"
+  actions:
+    - action: notify.mobile_app_mobiel_mart
+      data:
+        title: "Set an alarm for tomorrow?"
+        message: "Tap an alarm to enable it."
+        data:
+          tag: sac_reminder
+          actions:
+            - action: SAC_ENABLE_1
+              title: "Alarm 1 · {{ states('time.smart_alarm_clock_alarm_1_time')[:5] }}"
+            - action: SAC_ENABLE_2
+              title: "Alarm 2 · {{ states('time.smart_alarm_clock_alarm_2_time')[:5] }}"
+            - action: SAC_ENABLE_3
+              title: "Alarm 3 · {{ states('time.smart_alarm_clock_alarm_3_time')[:5] }}"
+
+- alias: "Alarm clock: enable from reminder"
+  id: sac_reminder_response
+  triggers:
+    - trigger: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: SAC_ENABLE_1
+      id: "1"
+    - trigger: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: SAC_ENABLE_2
+      id: "2"
+    - trigger: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: SAC_ENABLE_3
+      id: "3"
+  actions:
+    - action: switch.turn_on
+      target:
+        # trigger.id is "1" / "2" / "3" -> the matching alarm slot.
+        entity_id: "switch.smart_alarm_clock_alarm_{{ trigger.id }}"

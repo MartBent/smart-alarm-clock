@@ -33,7 +33,7 @@ channels. Not yet created — this is the roadmap to implement:
 | Network | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
 | Interaction | VCNL4040 gesture + lux, rear buttons, brightness. |
 | Display | Renders time / alarm / preset / armed / dismiss-progress; fades. |
-| Shared state | Preset model + state machine + settings (NVS-backed). |
+| Shared state | Alarm model (fixed pool of 8 slots) + state machine + settings (NVS-backed). |
 
 See `docs/handoff.md` for the full locked design behind this.
 

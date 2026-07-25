@@ -15,9 +15,9 @@ use std::sync::{Arc, Mutex};
 pub enum Phase {
     /// Waiting for the clock to sync (SNTP) before any alarm can be trusted.
     Syncing,
-    /// Disarmed and quiet.
+    /// No alarm enabled; quiet.
     Idle,
-    /// Armed, watching enabled presets.
+    /// At least one alarm enabled; watching for its time.
     Armed,
     /// Alarm firing.
     Ringing,
@@ -25,29 +25,29 @@ pub enum Phase {
     Snoozed,
 }
 
-/// One alarm preset. Repeat-days / sound / sunrise come later.
+/// Number of alarm slots in the fixed pool. "Customizable" = enable the ones
+/// you want and set their times; a disabled slot is effectively "no alarm".
+pub const NUM_PRESETS: usize = 8;
+
+/// One alarm slot. Repeat-days / sound / sunrise come later. The slot's index in
+/// [`Settings::presets`] is its stable id (front-ends address it by index).
 #[derive(Debug, Clone)]
 pub struct Preset {
-    pub label: String,
     /// Fire time, seconds since midnight.
     pub secs: u32,
     pub enabled: bool,
 }
 
 impl Preset {
-    fn new(label: &str, secs: u32, enabled: bool) -> Self {
-        Self {
-            label: label.into(),
-            secs,
-            enabled,
-        }
+    fn new(secs: u32, enabled: bool) -> Self {
+        Self { secs, enabled }
     }
 }
 
 /// User-configurable settings. Later persisted in NVS + editable from web/HA.
 #[derive(Debug, Clone)]
 pub struct Settings {
-    /// Alarm presets (mutated by all front-ends; never diverge).
+    /// Fixed pool of alarm slots (mutated by all front-ends; never diverge).
     pub presets: Vec<Preset>,
     /// Snooze length, seconds.
     pub snooze_secs: u32,
@@ -55,12 +55,11 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
+        // A fixed pool of NUM_PRESETS slots: slot 0 on at 07:00, the rest off.
+        let mut presets = vec![Preset::new(0, false); NUM_PRESETS];
+        presets[0] = Preset::new(7 * 3600, true);
         Self {
-            presets: vec![
-                Preset::new("Wake", 7 * 3600, true),        // 07:00, on
-                Preset::new("Weekend", 9 * 3600, false),    // 09:00, off
-                Preset::new("Nap", 13 * 3600, false),       // 13:00, off
-            ],
+            presets,
             snooze_secs: 10, // short, for bench testing
         }
     }
@@ -97,18 +96,31 @@ pub fn new_shared() -> SharedState {
     Arc::new(Mutex::new(Shared::default()))
 }
 
+/// Returns `true` (and records the new value in `last`) when the shared
+/// [`Shared::version`] has advanced since `last` was last recorded. Push
+/// transports (SSE, MQTT) call this to gate work so they only re-serialize on a
+/// material change, not on every poll. The cheap version read is one brief lock;
+/// callers snapshot the fuller state under their own lock only when this is true.
+pub fn version_advanced(shared: &SharedState, last: &mut Option<u64>) -> bool {
+    let version = shared.lock().unwrap().version;
+    if *last != Some(version) {
+        *last = Some(version);
+        true
+    } else {
+        false
+    }
+}
+
 /// Commands submitted into the alarm core by any input transport.
 ///
 /// `Button*` are raw physical input (the core interprets them by phase); the
 /// rest are semantic intents the REST API / MQTT send directly.
 #[derive(Debug, Clone, Copy)]
 pub enum Command {
-    /// Quick BOOT-button press.
+    /// Quick BOOT-button press (snooze while ringing).
     ButtonShort,
-    /// Sustained BOOT-button hold.
+    /// Sustained BOOT-button hold (dismiss while ringing/snoozed).
     ButtonLong,
-    Arm,
-    Disarm,
     Snooze,
     Dismiss,
     SetPresetEnabled { idx: usize, enabled: bool },
