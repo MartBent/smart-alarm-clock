@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Simulate the Smart Alarm Clock's on-device HTTP API + SSE stream.
 
-Stands in for the real ESP32 firmware (src/net.rs) so the Home Assistant
+Stands in for the real ESP32 firmware (software/firmware/src/net.rs) so the Home Assistant
 integration — or a browser / curl — can be exercised with no hardware and no
 WiFi provisioning. Pure stdlib; no pip installs.
 
@@ -19,8 +19,8 @@ The device serves the API on :80 and SSE on :81. Here they default to 8080 /
 8081 so it runs without root; override with --api-port / --sse-port.
 
 Usage:
-    python3 tools/sim_device.py                 # 0.0.0.0:8080 (API) + :8081 (SSE)
-    python3 tools/sim_device.py --api-port 80 --sse-port 81   # device-accurate (needs root)
+    python3 software/tools/sim_device.py                 # 0.0.0.0:8080 (API) + :8081 (SSE)
+    python3 software/tools/sim_device.py --api-port 80 --sse-port 81   # device-accurate (needs root)
     curl localhost:8080/api/state
     curl -N localhost:8081/api/events
 """
@@ -39,7 +39,7 @@ _PHASES_ACTIVE = {"armed", "ringing", "snoozed"}
 
 # Fixed pool of alarm slots. "Customizable" = enable the ones you want and set
 # their times; a disabled slot is effectively "no alarm". Mirrors NUM_PRESETS in
-# the firmware (src/state.rs).
+# the firmware (software/firmware/src/state.rs).
 NUM_PRESETS = 8
 
 
