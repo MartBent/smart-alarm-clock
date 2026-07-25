@@ -36,6 +36,13 @@ One device, **Smart Alarm Clock**, with:
 There's no explicit Armed switch: the clock is armed whenever any alarm is
 enabled, and dismissing a ringing alarm turns that slot off (one-shot).
 
+## Dashboard & theme
+
+The alarm **dashboards**, **automations**, and the household **theme** ("Mart's
+Theme") are not part of this repo — they're HA *configuration* and live in the
+homelab repo: [`MartBent/home-lab`](https://github.com/MartBent/home-lab) under
+`homeassistant/`. This repo owns only the custom **integration** above.
+
 ## How it works
 
 - **Commands** → `POST /api/command`, `/api/alarm/enabled`, `/api/alarm/time`.
