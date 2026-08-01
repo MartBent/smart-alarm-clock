@@ -1,6 +1,6 @@
 # Bench Wiring (high-level)
 
-Breadboard wiring for the bench-validation phase (see [README → Bench validation](../README.md#bench-validation)).
+Breadboard wiring for the bench-validation phase (see [Hardware → Bench validation](README.md#bench-validation)).
 Board: **YD-ESP32-S3** (VCC-GND Studio). Every signal below lands on the **power-side header**
 (the row with `5Vin` / `3V3` / `RST`), so a single soldered header covers the whole bench.
 
