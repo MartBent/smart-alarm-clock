@@ -79,8 +79,7 @@ Every input transport (button, REST, MQTT) pushes the same `Command`s onto one b
 **Not yet wired (bench tasks):** DS3231 RTC read (SNTP works; RTC boot-fallback scaffolded), MAX7219
 time render, capacitive-touch input + tuning, NVS persistence of slots/settings.
 
-**Toolchain:** `espup` (Xtensa S3 fork) → from `software/firmware/`, `cargo run` builds + flashes over
-USB-C. Also runnable on a TTGO T-Display (`cargo run-ttgo`).
+**Toolchain:** `espup` (Xtensa S3 fork) → from `software/firmware/`, `cargo run` builds + flashes over USB-C.
 
 ---
 

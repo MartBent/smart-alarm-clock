@@ -47,9 +47,6 @@ and flashes. In **RustRover**, the **Flash + monitor** run config (`.run/`) does
 esp-idf build config (`.cargo/config.toml`, `rust-toolchain.toml`, `sdkconfig.defaults`, `build.rs`)
 is already included; the first build downloads ESP-IDF `v5.2.3` (slow once, then fast).
 
-**TTGO T-Display (classic ESP32) test board:** `cargo build-ttgo` / `cargo run-ttgo`
-(= `cargo run --target xtensa-esp32-espidf`). The default `cargo run` stays on the ESP32-S3 target.
-
 > **Flashing won't connect?** (`espflash`: "Error while connecting to device") — almost always a
 > **charge-only USB cable**; use a data cable. Sanity-check with `espflash board-info --port <PORT>`
 > (this board reports **ESP32-S3**).
