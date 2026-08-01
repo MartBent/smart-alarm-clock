@@ -1,0 +1,3459 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid a1b2c3d4-0000-4000-8000-000000000001)
+	(paper "A3")
+	(lib_symbols
+(symbol "Connector_Generic:Conn_01x10"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 12.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x10"
+			(at 0 -15.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x10, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x10_1_1"
+			(rectangle
+				(start -1.27 11.43)
+				(end 1.27 -13.97)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 10.287)
+				(end 0 10.033)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 7.747)
+				(end 0 7.493)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 5.207)
+				(end 0 4.953)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -4.953)
+				(end 0 -5.207)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -7.493)
+				(end 0 -7.747)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -10.033)
+				(end 0 -10.287)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -12.573)
+				(end 0 -12.827)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 10.16 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 7.62 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 5.08 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 3.81)
+				(name "Pin_7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -7.62 0)
+				(length 3.81)
+				(name "Pin_8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -10.16 0)
+				(length 3.81)
+				(name "Pin_9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -12.7 0)
+				(length 3.81)
+				(name "Pin_10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Connector_Generic:Conn_01x05"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05"
+			(at 0 -7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x05_1_1"
+			(rectangle
+				(start -1.27 6.35)
+				(end 1.27 -6.35)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 5.207)
+				(end 0 4.953)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -4.953)
+				(end 0 -5.207)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 5.08 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 3.81)
+				(name "Pin_5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Connector_Generic:Conn_01x01"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 0 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x01_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -1.27)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Timer_RTC:DS3231MZ"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "U"
+			(at -7.62 8.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "DS3231MZ"
+			(at 11.43 8.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at 0 -12.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://datasheets.maximintegrated.com/en/ds/DS3231M.pdf"
+			(at 0 -15.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "±5ppm, I2C Real-Time Clock SOIC-8"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "RTC TCXO Realtime Time Clock MEMS I2C"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "DS3231MZ_0_1"
+			(rectangle
+				(start -10.16 7.62)
+				(end 10.16 -7.62)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+		)
+		(symbol "DS3231MZ_1_1"
+			(pin open_collector line
+				(at 12.7 5.08 180)
+				(length 2.54)
+				(name "32KHZ"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 10.16 270)
+				(length 2.54)
+				(name "VCC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 12.7 -2.54 180)
+				(length 2.54)
+				(name "~{INT}/SQW"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -12.7 -5.08 0)
+				(length 2.54)
+				(name "~{RST}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -10.16 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -2.54 10.16 270)
+				(length 2.54)
+				(name "VBAT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -12.7 2.54 0)
+				(length 2.54)
+				(name "SDA"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -12.7 5.08 0)
+				(length 2.54)
+				(name "SCL"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:D_Schottky"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "D"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "D_Schottky"
+			(at 0 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Schottky diode"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "diode Schottky"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "D_Schottky_0_1"
+			(polyline
+				(pts
+					(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.27 0) (xy -1.27 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "D_Schottky_1_1"
+			(pin passive line
+				(at -3.81 0 0)
+				(length 2.54)
+				(name "K"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 3.81 0 180)
+				(length 2.54)
+				(name "A"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:C_Polarized"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C_Polarized"
+			(at 0.635 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "CP_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "C_Polarized_0_1"
+			(rectangle
+				(start -2.286 0.508)
+				(end 2.286 1.016)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -1.778 2.286) (xy -0.762 2.286)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -1.27 2.794) (xy -1.27 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start 2.286 -0.508)
+				(end -2.286 -1.016)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+		)
+		(symbol "C_Polarized_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Transistor_FET:BSS138"
+  (pin_names
+			(offset 0)
+			(hide yes)
+		)
+  (exclude_from_sim no)
+  (in_bom yes)
+  (on_board yes)
+  (property "Reference" "Q"
+			(at 5.08 1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Value" "BSS138"
+			(at 5.08 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 5.08 -1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+			)
+		)
+  (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
+			(at 5.08 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (property "ki_keywords" "N-Channel MOSFET"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (property "ki_fp_filters" "SOT?23*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (symbol "BSS138_0_1"
+			(polyline
+				(pts
+					(xy 0.254 1.905) (xy 0.254 -1.905)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.254 0) (xy -2.54 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 2.286) (xy 0.762 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 0.508) (xy 0.762 -0.508)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.27) (xy 0.762 -2.286)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 1.651 0)
+				(radius 2.794)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 2.54) (xy 2.54 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.921 0.381) (xy 3.683 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+  (symbol "BSS138_1_1"
+			(pin input line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+)
+(symbol "Transistor_FET:BS170"
+  (pin_names
+			(hide yes)
+		)
+  (exclude_from_sim no)
+  (in_bom yes)
+  (on_board yes)
+  (property "Reference" "Q"
+			(at 5.08 1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Value" "BS170"
+			(at 5.08 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 5.08 -1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+			)
+		)
+  (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BS170-D.PDF"
+			(at 5.08 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+  (property "Description" "0.5A Id, 60V Vds, N-Channel MOSFET, TO-92"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (property "ki_keywords" "N-Channel MOSFET"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (property "ki_fp_filters" "TO?92*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+  (symbol "BS170_0_1"
+			(polyline
+				(pts
+					(xy 0.254 1.905) (xy 0.254 -1.905)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.254 0) (xy -2.54 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 2.286) (xy 0.762 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 0.508) (xy 0.762 -0.508)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.27) (xy 0.762 -2.286)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 1.651 0)
+				(radius 2.794)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 2.54) (xy 2.54 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.794 0.508) (xy 2.921 0.381) (xy 3.683 0.381) (xy 3.81 0.254)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+  (symbol "BS170_1_1"
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+)
+(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:Buzzer"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "BZ"
+			(at 3.81 1.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Buzzer"
+			(at 3.81 -1.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at -0.635 2.54 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -0.635 2.54 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Buzzer, polarized"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "quartz resonator ceramic"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Buzzer*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Buzzer_0_1"
+			(polyline
+				(pts
+					(xy -1.651 1.905) (xy -1.143 1.905)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -1.397 2.159) (xy -1.397 1.651)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(arc
+				(start 0 3.175)
+				(mid 3.1612 0)
+				(end 0 -3.175)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 3.175) (xy 0 -3.175)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Buzzer_1_1"
+			(pin passive line
+				(at -2.54 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -2.54 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "power:PWR_FLAG"
+		(power global)
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "#FLG"
+			(at 0 1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 0 3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "flag power"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_0"
+			(pin power_out line
+				(at 0 0 90)
+				(length 0)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_1"
+			(polyline
+				(pts
+					(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	)
+  (text "Smart Alarm Clock - DISCRETE carrier-PCB schematic" (at 40.00 40.00 0)
+    (effects (font (size 3.0 3.0)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000001"))
+  (text "Carrier board: dev board (J1) and MAX7219 matrix (J2) plug in via headers." (at 40.00 46.00 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000002"))
+  (text "On-board discretes: DS3231 RTC + supercap backup, BSS138 x3 level shifter (+10k pull-ups)," (at 40.00 50.00 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000003"))
+  (text "BS170 buzzer driver, touch pad. 3V3 (dev) <-> 5V (matrix) per BSS138 app-note." (at 40.00 54.00 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000004"))
+  (text "RTC backup: supercap on VBAT, trickle-charged VCC->R9(1k)->D1(Schottky)->cap. No coin cell." (at 40.00 58.00 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000005"))
+  (symbol
+    (lib_id "Connector_Generic:Conn_01x10")
+    (at 116.84 149.86 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000006")
+    (property "Reference" "J1" (at 116.84 134.62 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "YD-ESP32-S3 dev board" (at 116.84 165.10 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000007"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000008"))
+    (pin "3" (uuid "00000000-0000-4000-8000-000000000009"))
+    (pin "4" (uuid "00000000-0000-4000-8000-00000000000a"))
+    (pin "5" (uuid "00000000-0000-4000-8000-00000000000b"))
+    (pin "6" (uuid "00000000-0000-4000-8000-00000000000c"))
+    (pin "7" (uuid "00000000-0000-4000-8000-00000000000d"))
+    (pin "8" (uuid "00000000-0000-4000-8000-00000000000e"))
+    (pin "9" (uuid "00000000-0000-4000-8000-00000000000f"))
+    (pin "10" (uuid "00000000-0000-4000-8000-000000000010"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "J1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector_Generic:Conn_01x05")
+    (at 345.44 149.86 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000001c")
+    (property "Reference" "J2" (at 345.44 142.24 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "MAX7219 32x8 module" (at 345.44 157.48 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000001d"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000001e"))
+    (pin "3" (uuid "00000000-0000-4000-8000-00000000001f"))
+    (pin "4" (uuid "00000000-0000-4000-8000-000000000020"))
+    (pin "5" (uuid "00000000-0000-4000-8000-000000000021"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "J2") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector_Generic:Conn_01x01")
+    (at 116.84 210.82 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000028")
+    (property "Reference" "J3" (at 116.84 208.28 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "Touch electrode" (at 116.84 213.36 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000029"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "J3") (unit 1))))
+  )
+  (symbol
+    (lib_id "Timer_RTC:DS3231MZ")
+    (at 314.96 104.14 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000002c")
+    (property "Reference" "U1" (at 314.96 91.44 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "DS3231MZ" (at 314.96 116.84 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000002d"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000002e"))
+    (pin "3" (uuid "00000000-0000-4000-8000-00000000002f"))
+    (pin "4" (uuid "00000000-0000-4000-8000-000000000030"))
+    (pin "5" (uuid "00000000-0000-4000-8000-000000000031"))
+    (pin "6" (uuid "00000000-0000-4000-8000-000000000032"))
+    (pin "7" (uuid "00000000-0000-4000-8000-000000000033"))
+    (pin "8" (uuid "00000000-0000-4000-8000-000000000034"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "U1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 289.56 88.90 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000003e")
+    (property "Reference" "C4" (at 289.56 82.55 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 289.56 95.25 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000003f"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000040"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "C4") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 284.48 129.54 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000044")
+    (property "Reference" "R7" (at 284.48 123.19 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "4k7" (at 284.48 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000045"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000046"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R7") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 276.86 129.54 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000049")
+    (property "Reference" "R8" (at 276.86 123.19 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "4k7" (at 276.86 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000004a"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000004b"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R8") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 345.44 83.82 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000004f")
+    (property "Reference" "R9" (at 345.44 77.47 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "1k" (at 345.44 90.17 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000050"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000051"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R9") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:D_Schottky")
+    (at 360.68 93.98 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000055")
+    (property "Reference" "D1" (at 360.68 91.44 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "BAT54" (at 360.68 96.52 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000056"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000057"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "D1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C_Polarized")
+    (at 375.92 109.22 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000005b")
+    (property "Reference" "CS1" (at 375.92 102.87 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "0.1F 5.5V" (at 375.92 115.57 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000005c"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000005d"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "CS1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Transistor_FET:BSS138")
+    (at 195.58 157.48 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000061")
+    (property "Reference" "Q1" (at 195.58 149.86 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "BSS138" (at 195.58 165.10 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000062"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000063"))
+    (pin "3" (uuid "00000000-0000-4000-8000-000000000064"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "Q1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 182.88 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000069")
+    (property "Reference" "R1" (at 182.88 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 182.88 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000006a"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000006b"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 205.74 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000006e")
+    (property "Reference" "R2" (at 205.74 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 205.74 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000006f"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000070"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R2") (unit 1))))
+  )
+  (symbol
+    (lib_id "Transistor_FET:BSS138")
+    (at 238.76 157.48 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000073")
+    (property "Reference" "Q2" (at 238.76 149.86 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "BSS138" (at 238.76 165.10 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000074"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000075"))
+    (pin "3" (uuid "00000000-0000-4000-8000-000000000076"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "Q2") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 228.60 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000007b")
+    (property "Reference" "R3" (at 228.60 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 228.60 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000007c"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000007d"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R3") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 251.46 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000080")
+    (property "Reference" "R4" (at 251.46 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 251.46 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000081"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000082"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R4") (unit 1))))
+  )
+  (symbol
+    (lib_id "Transistor_FET:BSS138")
+    (at 284.48 157.48 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000085")
+    (property "Reference" "Q3" (at 284.48 149.86 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "BSS138" (at 284.48 165.10 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000086"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000087"))
+    (pin "3" (uuid "00000000-0000-4000-8000-000000000088"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "Q3") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 271.78 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000008d")
+    (property "Reference" "R5" (at 271.78 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 271.78 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-00000000008e"))
+    (pin "2" (uuid "00000000-0000-4000-8000-00000000008f"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R5") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 297.18 142.24 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000092")
+    (property "Reference" "R6" (at 297.18 135.89 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 297.18 148.59 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000093"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000094"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "R6") (unit 1))))
+  )
+  (symbol
+    (lib_id "Transistor_FET:BS170")
+    (at 175.26 205.74 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-000000000097")
+    (property "Reference" "Q4" (at 175.26 198.12 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "BS170" (at 175.26 213.36 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-000000000098"))
+    (pin "2" (uuid "00000000-0000-4000-8000-000000000099"))
+    (pin "3" (uuid "00000000-0000-4000-8000-00000000009a"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "Q4") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:Buzzer")
+    (at 215.90 205.74 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-00000000009f")
+    (property "Reference" "LS1" (at 215.90 200.66 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "Passive buzzer" (at 215.90 210.82 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000a0"))
+    (pin "2" (uuid "00000000-0000-4000-8000-0000000000a1"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "LS1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 71.12 99.06 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000a4")
+    (property "Reference" "C1" (at 71.12 92.71 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 71.12 105.41 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000a5"))
+    (pin "2" (uuid "00000000-0000-4000-8000-0000000000a6"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "C1") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 83.82 99.06 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000a9")
+    (property "Reference" "C2" (at 83.82 92.71 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 83.82 105.41 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000aa"))
+    (pin "2" (uuid "00000000-0000-4000-8000-0000000000ab"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "C2") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 299.72 195.58 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000af")
+    (property "Reference" "C3" (at 299.72 189.23 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 299.72 201.93 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000b0"))
+    (pin "2" (uuid "00000000-0000-4000-8000-0000000000b1"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "C3") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 60.96 78.74 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000b5")
+    (property "Reference" "#FLG1" (at 60.96 76.20 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "PWR_FLAG" (at 60.96 81.28 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000b6"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "#FLG1") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 299.72 60.96 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000b8")
+    (property "Reference" "#FLG2" (at 299.72 58.42 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "PWR_FLAG" (at 299.72 63.50 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000b9"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "#FLG2") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 78.74 78.74 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000bb")
+    (property "Reference" "#FLG3" (at 78.74 76.20 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "PWR_FLAG" (at 78.74 81.28 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000bc"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "#FLG3") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 391.16 104.14 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "00000000-0000-4000-8000-0000000000be")
+    (property "Reference" "#FLG4" (at 391.16 101.60 0)
+      (effects (font (size 1.27 1.27))))
+    (property "Value" "PWR_FLAG" (at 391.16 106.68 0)
+      (effects (font (size 1.27 1.27))))
+    (pin "1" (uuid "00000000-0000-4000-8000-0000000000bf"))
+    (instances (project "SmartAlarmClock_discrete"
+      (path "/" (reference "#FLG4") (unit 1))))
+  )
+  (global_label "+5V" (shape bidirectional) (at 111.76 139.70 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000011")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 111.76 142.24 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000012")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 111.76 144.78 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000013")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "BUZZER_GATE" (shape bidirectional) (at 111.76 147.32 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000014")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SDA" (shape bidirectional) (at 111.76 149.86 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000015")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SCL" (shape bidirectional) (at 111.76 152.40 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000016")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_LV" (shape bidirectional) (at 111.76 154.94 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000017")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_LV" (shape bidirectional) (at 111.76 157.48 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000018")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_LV" (shape bidirectional) (at 111.76 160.02 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000019")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "TOUCH" (shape bidirectional) (at 111.76 162.56 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-00000000001a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "Dev board plugs in here (power-side header)" (at 111.76 168.10 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000001b"))
+  (global_label "+5V" (shape bidirectional) (at 340.36 144.78 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000022")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 340.36 147.32 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000023")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_HV" (shape bidirectional) (at 340.36 149.86 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000024")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_HV" (shape bidirectional) (at 340.36 152.40 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000025")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_HV" (shape bidirectional) (at 340.36 154.94 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000026")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "Matrix module plugs in (5V)" (at 340.36 160.48 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000027"))
+  (global_label "TOUCH" (shape bidirectional) (at 111.76 210.82 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-00000000002a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "foil/copper pad behind veneer" (at 111.76 216.36 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000002b"))
+  (global_label "+3V3" (shape bidirectional) (at 314.96 93.98 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000035")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 314.96 114.30 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000036")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SDA" (shape bidirectional) (at 302.26 101.60 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000037")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SCL" (shape bidirectional) (at 302.26 99.06 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000038")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "VBAT" (shape bidirectional) (at 312.42 93.98 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000039")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "RTC (integrated crystal), I2C @ 3V3" (at 309.88 119.84 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000003d"))
+  (no_connect (at 327.66 99.06) (uuid "00000000-0000-4000-8000-00000000003a"))
+  (no_connect (at 327.66 106.68) (uuid "00000000-0000-4000-8000-00000000003b"))
+  (no_connect (at 302.26 109.22) (uuid "00000000-0000-4000-8000-00000000003c"))
+  (global_label "+3V3" (shape bidirectional) (at 289.56 85.09 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000041")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 289.56 92.71 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000042")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "RTC decouple" (at 284.48 98.25 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000043"))
+  (global_label "+3V3" (shape bidirectional) (at 284.48 125.73 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000047")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SDA" (shape bidirectional) (at 284.48 133.35 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000048")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 276.86 125.73 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000004c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "SCL" (shape bidirectional) (at 276.86 133.35 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000004d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "I2C pull-ups" (at 271.78 138.89 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000004e"))
+  (global_label "+3V3" (shape bidirectional) (at 345.44 80.01 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000052")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "TRICKLE" (shape bidirectional) (at 345.44 87.63 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000053")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "trickle" (at 340.36 93.17 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000054"))
+  (global_label "TRICKLE" (shape bidirectional) (at 364.49 93.98 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000058")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "VBAT" (shape bidirectional) (at 356.87 93.98 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000059")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "blocks backfeed" (at 355.60 99.52 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000005a"))
+  (global_label "VBAT" (shape bidirectional) (at 375.92 105.41 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000005e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 375.92 113.03 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000005f")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "supercap (replaces coin cell)" (at 370.84 118.57 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000060"))
+  (global_label "+3V3" (shape bidirectional) (at 190.50 157.48 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000065")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_LV" (shape bidirectional) (at 198.12 162.56 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000066")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_HV" (shape bidirectional) (at 198.12 152.40 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000067")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "CS: 3V3<->5V" (at 190.50 168.10 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000068"))
+  (global_label "+3V3" (shape bidirectional) (at 182.88 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000006c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_LV" (shape bidirectional) (at 182.88 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000006d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+5V" (shape bidirectional) (at 205.74 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000071")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CS_HV" (shape bidirectional) (at 205.74 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000072")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 233.68 157.48 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000077")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_LV" (shape bidirectional) (at 241.30 162.56 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000078")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_HV" (shape bidirectional) (at 241.30 152.40 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000079")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "DIN: 3V3<->5V" (at 233.68 168.10 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000007a"))
+  (global_label "+3V3" (shape bidirectional) (at 228.60 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000007e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_LV" (shape bidirectional) (at 228.60 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000007f")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+5V" (shape bidirectional) (at 251.46 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000083")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "DIN_HV" (shape bidirectional) (at 251.46 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000084")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 279.40 157.48 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-000000000089")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_LV" (shape bidirectional) (at 287.02 162.56 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000008a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_HV" (shape bidirectional) (at 287.02 152.40 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000008b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "CLK: 3V3<->5V" (at 279.40 168.10 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000008c"))
+  (global_label "+3V3" (shape bidirectional) (at 271.78 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000090")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_LV" (shape bidirectional) (at 271.78 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000091")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+5V" (shape bidirectional) (at 297.18 138.43 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000095")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "CLK_HV" (shape bidirectional) (at 297.18 146.05 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-000000000096")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "BUZZER_GATE" (shape bidirectional) (at 170.18 205.74 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-00000000009b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "BUZZER_DRAIN" (shape bidirectional) (at 177.80 200.66 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000009c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 177.80 210.82 0)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000009d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "switches 5V buzzer from GPIO4" (at 170.18 216.36 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-00000000009e"))
+  (global_label "+5V" (shape bidirectional) (at 213.36 203.20 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-0000000000a2")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "BUZZER_DRAIN" (shape bidirectional) (at 213.36 208.28 180)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "00000000-0000-4000-8000-0000000000a3")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 71.12 95.25 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000a7")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 71.12 102.87 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000a8")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+3V3" (shape bidirectional) (at 83.82 95.25 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000ac")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 83.82 102.87 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000ad")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "decoupling 3V3" (at 78.74 108.41 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000ae"))
+  (global_label "+5V" (shape bidirectional) (at 299.72 191.77 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000b2")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 299.72 199.39 270)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000b3")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (text "decoupling 5V" (at 294.64 204.93 0)
+    (effects (font (size 1.4 1.4)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000b4"))
+  (global_label "+3V3" (shape bidirectional) (at 60.96 78.74 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000b7")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "+5V" (shape bidirectional) (at 299.72 60.96 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000ba")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "GND" (shape bidirectional) (at 78.74 78.74 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000bd")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+  (global_label "VBAT" (shape bidirectional) (at 391.16 104.14 90)
+    (fields_autoplaced yes)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "00000000-0000-4000-8000-0000000000c0")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))))
+	(sheet_instances
+		(path "/" (page "1"))
+	)
+	(embedded_fonts no)
+)

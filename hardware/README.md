@@ -98,6 +98,17 @@ Rust path is a large firmware lift, ESPHome provides it natively but would repla
 - 2-layer KiCad schematic → ERC → layout → DRC → Gerbers → fab (JLCPCB vs Aisler EU). 0805 passives, module antenna, hand-soldered v1.
 - Wood-veneer bar enclosure: matrix glows through the veneer; concealed USB-C; hidden fasteners.
 
+### Discrete carrier-PCB schematic (draft)
+
+A first-draft [discrete schematic](KiCad/SmartAlarmClock_discrete/) for the custom board — a
+**carrier**: the YD-ESP32-S3 dev board (J1) and the MAX7219 matrix module (J2) plug in via headers,
+while the board itself carries the discrete glue: a **DS3231 RTC with supercap backup** (trickle-
+charged `+3V3 → R9 → Schottky → supercap` on VBAT — no coin cell), a **BSS138 3-channel level
+shifter** (+10k pull-ups) for the 3.3↔5 V matrix lines, the **BS170 buzzer driver**, a
+touch-electrode pad, and decoupling. ERC-clean (0 errors/warnings).
+
+![Discrete carrier-PCB schematic](KiCad/SmartAlarmClock_discrete/SmartAlarmClock_discrete.png)
+
 ## Open questions
 
 - Warm display-emitter sourcing (bench uses red).
