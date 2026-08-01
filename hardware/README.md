@@ -1,7 +1,7 @@
 # Hardware
 
 PCB and enclosure for the smart alarm clock. Empty for now — the current phase is
-**bench validation on a breadboard** (see [`../docs/bench-bom.md`](../docs/bench-bom.md)),
+**bench validation on a breadboard** (see [README → Bench validation](../README.md#bench-validation)),
 which gates committing to a PCB.
 
 Planned contents once bench validation passes:

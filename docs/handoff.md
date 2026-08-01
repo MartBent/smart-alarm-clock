@@ -41,7 +41,7 @@ it works with WiFi/HA down.
 - v1: **passive buzzer** via LEDC/PWM on GPIO4, switched by a **BS170** low-side MOSFET off 5 V.
 - Future: real audio — default tone on device + user-uploadable files + registering as an HA
   `media_player` — needs a PSRAM board (N16R8) + MAX98357A + speaker. Open: WAV vs MP3, Rust vs
-  ESPHome. See [`bench-bom.md`](bench-bom.md#future-option--real-audio--ha-media-player).
+  ESPHome. See [the README](../README.md#future-option--real-audio--ha-media-player).
 
 ### Alarm model
 - **Fixed pool of 8 slots** (`NUM_PRESETS` in `../software/firmware/src/state.rs`), each a time-of-day
@@ -85,7 +85,7 @@ USB-C. Also runnable on a TTGO T-Display (`cargo run-ttgo`).
 ---
 
 ## Bench validation (gates the PCB)
-Parts + rationale: [`bench-bom.md`](bench-bom.md). Wiring: [`../hardware/bench-wiring.md`](../hardware/bench-wiring.md).
+Parts + rationale: [README → Bench validation](../README.md#bench-validation). Wiring: [`../hardware/bench-wiring.md`](../hardware/bench-wiring.md).
 
 1. **Bench-validate on a breadboard (~€30–55, ordered):** existing dev-kit + MAX7219 32×8 (time) +
    DS3231 + buzzer/BS170 + level converter + foil touch electrode + wood veneer samples. Prove the
