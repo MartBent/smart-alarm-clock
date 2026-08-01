@@ -7,6 +7,7 @@
 //!   alarm  — source of truth: state machine + presets (drains the command bus)
 //!   button — BOOT button -> commands
 //!   led    — renders the current phase on the onboard WS2812
+//!   buzzer — passive buzzer (LEDC/PWM on GPIO4): beeps while ringing
 //!   net    — SoftAP + HTTP REST API -> commands + state
 //!
 //! Every input transport (button + REST now; MQTT/HA later) submits the same
@@ -14,6 +15,7 @@
 
 mod alarm;
 mod button;
+mod buzzer;
 mod dns;
 mod led;
 mod mqtt;
@@ -74,6 +76,19 @@ fn main() {
             .stack_size(8 * 1024)
             .spawn(move || led::run(channel, pin, shared))
             .expect("spawn led worker");
+    }
+
+    // Buzzer worker — passive buzzer via LEDC/PWM on GPIO4 (beeps while ringing).
+    {
+        let shared = shared.clone();
+        let timer = peripherals.ledc.timer0;
+        let channel = peripherals.ledc.channel0;
+        let pin = peripherals.pins.gpio4;
+        Builder::new()
+            .name("buzzer".into())
+            .stack_size(4 * 1024)
+            .spawn(move || buzzer::run(timer, channel, pin, shared))
+            .expect("spawn buzzer worker");
     }
 
     // Network worker — SoftAP + HTTP REST API.
