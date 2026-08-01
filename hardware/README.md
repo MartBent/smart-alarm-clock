@@ -50,39 +50,13 @@ Every signal lands on the YD-ESP32-S3 **power-side header** (the `5Vin` / `3V3` 
 single soldered header covers the whole bench. This is a *logical* what-connects-to-what diagram,
 not a physical breadboard layout.
 
-```mermaid
-flowchart LR
-  subgraph BOARD["YD-ESP32-S3 · power-side header"]
-    P5V[5Vin]; P33[3V3]; GND[GND]
-    G4[GPIO4]; G8[GPIO8]; G9[GPIO9]
-    G10[GPIO10]; G11[GPIO11]; G12[GPIO12]; G14[GPIO14]
-  end
+![Smart alarm clock schematic](KiCad/SmartAlarmClock/SmartAlarmClock.png)
 
-  %% Buzzer via BS170 low-side switch
-  G4 -->|gate| Q[BS170 N-MOSFET]
-  GND -->|source| Q
-  Q -->|drain| BZ[Passive buzzer]
-  P5V --> BZ
-
-  %% RTC (I2C, powered at 3.3V)
-  P33 --> RTC[DS3231 RTC]
-  GND --> RTC
-  G8 -->|SDA| RTC
-  G9 -->|SCL| RTC
-
-  %% Time matrix via 3.3-5V level shifter
-  G10 -->|CS| LS[Level shifter 3.3-5V]
-  G11 -->|DIN| LS
-  G12 -->|CLK| LS
-  P33 -->|LV| LS
-  P5V -->|HV| LS
-  LS --> MX[MAX7219 32x8]
-  P5V --> MX
-  GND --> MX
-
-  %% Capacitive touch
-  G14 --> EL[Foil electrode]
-```
+Hybrid [KiCad schematic](KiCad/SmartAlarmClock/): the ESP32-S3-WROOM-1, BS170, buzzer and
+decoupling caps are real library symbols; the RTC, MAX7219 matrix and level-shifter breakouts are
+drawn as module blocks (the stock libraries only carry their bare chips). Nets are joined by
+matching global-label names. `+5V` is the devkit `5Vin` rail (USB VBUS) — the WROOM module has no
+5 V pin of its own.
 
 | Function | Pin | Notes |
 |---|---|---|

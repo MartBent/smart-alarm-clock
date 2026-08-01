@@ -1,0 +1,8 @@
+# KiCad transient / per-user / editor files (keep .kicad_sch/.kicad_pcb/.kicad_pro)
+~*.lck
+*.lck
+*.kicad_prl
+*-backups/
+_autosave-*
+fp-info-cache
+.history/
