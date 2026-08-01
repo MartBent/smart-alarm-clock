@@ -18,7 +18,7 @@ enclosure come after bench validation passes. Design rationale: [`../docs/handof
 Get the device working end-to-end on a breadboard before committing to a PCB. Every part below has a
 firmware hook that already exists (scaffolded) or is the immediate next thing to wire. Uses the
 **existing dev board** and **on-hand buttons**. EU sourcing (Tinytronics / Antratek / AliExpress);
-prices are rough guides. Wiring diagram + pin plan: **[bench-wiring.md](bench-wiring.md)**.
+prices are rough guides.
 
 ### Parts
 
@@ -44,12 +44,59 @@ dwarfs the part cost.
 **Status (2026-07-27):** parts ordered + arrived (electronics); wood veneer still to source. Buzzer
 firmware written; breadboard bring-up is waiting on a soldering iron to attach the dev-board header.
 
-### Wiring notes
+### Wiring
 
-- **DS3231 at 3.3 V, not 5 V** — its onboard I²C pull-ups reference VCC; 5 V would over-volt the S3's pins. It keeps perfect time at 3.3 V. I²C scan should ACK at `0x68`.
-- **MAX7219 is 5 V logic** — drive DIN/CLK/CS through the level shifter; power the matrix from `5Vin`, keep brightness modest on USB.
-- **Buzzer** — `GPIO4` → BS170 gate (low-side switch), drain → buzzer → `5Vin`. Gate held low by the ESP32-S3's internal pulldown; no external resistor.
-- **Capacitive touch** — foil electrode on `GPIO14`; **no pull resistor** (it interferes with sensing). Fallback if touch feels wrong: a GY-APDS-9900 IR-reflective proximity module (I²C, ~€3.50), which reintroduces the IR-through-veneer test.
+Every signal lands on the YD-ESP32-S3 **power-side header** (the `5Vin` / `3V3` / `RST` row), so a
+single soldered header covers the whole bench. This is a *logical* what-connects-to-what diagram,
+not a physical breadboard layout.
+
+```mermaid
+flowchart LR
+  subgraph BOARD["YD-ESP32-S3 · power-side header"]
+    P5V[5Vin]; P33[3V3]; GND[GND]
+    G4[GPIO4]; G8[GPIO8]; G9[GPIO9]
+    G10[GPIO10]; G11[GPIO11]; G12[GPIO12]; G14[GPIO14]
+  end
+
+  %% Buzzer via BS170 low-side switch
+  G4 -->|gate| Q[BS170 N-MOSFET]
+  GND -->|source| Q
+  Q -->|drain| BZ[Passive buzzer]
+  P5V --> BZ
+
+  %% RTC (I2C, powered at 3.3V)
+  P33 --> RTC[DS3231 RTC]
+  GND --> RTC
+  G8 -->|SDA| RTC
+  G9 -->|SCL| RTC
+
+  %% Time matrix via 3.3-5V level shifter
+  G10 -->|CS| LS[Level shifter 3.3-5V]
+  G11 -->|DIN| LS
+  G12 -->|CLK| LS
+  P33 -->|LV| LS
+  P5V -->|HV| LS
+  LS --> MX[MAX7219 32x8]
+  P5V --> MX
+  GND --> MX
+
+  %% Capacitive touch
+  G14 --> EL[Foil electrode]
+```
+
+| Function | Pin | Notes |
+|---|---|---|
+| Buzzer | `GPIO4` | LEDC PWM → BS170 gate (low-side switch); internal pulldown, no external resistor |
+| RTC SDA / SCL | `GPIO8` / `GPIO9` | I²C; **power the DS3231 at 3.3 V** (pull-ups reference VCC); scan should ACK at `0x68` |
+| Matrix CS / DIN / CLK | `GPIO10` / `GPIO11` / `GPIO12` | native FSPI pins; **5 V logic** → drive through the level shifter |
+| Cap touch | `GPIO14` | foil electrode; **no pull resistor** (interferes with sensing) |
+| Power | `5Vin` / `3V3` / `GND` | `5Vin` = USB VBUS (5 V out when USB-powered); matrix VCC on `5Vin`, keep brightness modest |
+
+- **Verify BS170 Drain vs Source** against your part's datasheet — the pinout is manufacturer-dependent (BS170 ↔ 2N7000 are mirror images), and swapping D/S is the classic "won't switch" bug.
+- **Avoid** `GPIO46` (LOG) and `GPIO3` (JTAG) on that header — both are strapping pins.
+- Onboard WS2812 status LED is `GPIO48` (opposite header) — left free for the phase-color LED.
+- **Zero loose resistors:** module-onboard pull-ups + the BS170's internal gate pulldown cover it.
+- Fallback if capacitive touch feels wrong: a **GY-APDS-9900** IR-reflective proximity module (I²C, ~€3.50), which reintroduces the IR-through-veneer test.
 
 ### Bring-up sequence
 

@@ -85,7 +85,7 @@ USB-C. Also runnable on a TTGO T-Display (`cargo run-ttgo`).
 ---
 
 ## Bench validation (gates the PCB)
-Parts + rationale: [Hardware → Bench validation](../hardware/README.md#bench-validation). Wiring: [`../hardware/bench-wiring.md`](../hardware/bench-wiring.md).
+Parts, wiring, and rationale: [Hardware → Bench validation](../hardware/README.md#bench-validation).
 
 1. **Bench-validate on a breadboard (~€30–55, ordered):** existing dev-kit + MAX7219 32×8 (time) +
    DS3231 + buzzer/BS170 + level converter + foil touch electrode + wood veneer samples. Prove the
