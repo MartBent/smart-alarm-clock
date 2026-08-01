@@ -1,205 +1,110 @@
-# Smart Alarm Clock — Project Handoff
+# Smart Alarm Clock — Handoff
 
-A context document for continuing this project in a code session. It captures the locked
-design, the reasoning behind key decisions, what's still open, and the immediate next steps.
-A companion file (`smart-alarm-clock-design-options.md`) holds the full options-and-trade-offs
-reference; this file is the executive summary + build-readiness notes.
+Context for continuing this project: the locked design, key reasoning, what's built, and what's open.
 
----
-
-## Project in one paragraph
-
-A custom-hardware, custom-firmware, Home-Assistant-oriented **smart alarm clock**, built as a
-hobby project with two explicit learning goals: **PCB design** (beginner) and **embedded Rust**
-(experienced in embedded software generally). The defining aesthetic is **"dark & silent until
-summoned"** — a minimal, non-technical bedside object (a landscape **wood-veneer bar**) that
-shows nothing until a proximity gesture reveals the time through the veneer. It integrates fully
-with Home Assistant but fires alarms on-device so it works even if WiFi/HA is down.
-
----
-
-## Amendments (supersede the body below where they conflict)
-
-### 2026-07-25 — alarm model + control simplification
-These decisions supersede the "Presets" and arm/disarm parts of the original design:
-
-- **Alarm model: a fixed pool of 8 slots** (`NUM_PRESETS` in `software/firmware/src/state.rs`), each just a
-  time-of-day + `enabled` flag. Replaces the earlier "several named premade presets
-  (Work/Weekend/Nap)" model. The slot index is its stable id. (Repeat-days / sound / sunrise
-  remain future per-slot fields.)
-- **No explicit arm/disarm — arming is implicit.** The clock is `Armed` whenever **any** slot is
-  enabled, else `Idle`. This removes the rear **Arm** button's toggle role and the HA "Armed"
-  switch. (The rear buttons free up; final mapping is open — see Open questions.)
-- **Dismiss is one-shot:** dismissing a ringing/snoozed alarm **disables the slot that fired**,
-  so it won't re-fire until re-enabled. Snooze still re-rings after the snooze interval.
-- **REST API renamed** `preset(s)` → `alarms`: `GET /api/alarms`, `POST /api/alarm/enabled`,
-  `POST /api/alarm/time`; the `/api/state` list key is `alarms`. Commands are `snooze` / `dismiss`
-  only (no `arm`/`disarm`). MQTT discovery drops the Armed switch; per-slot enable switches remain.
-- **Software simulator** (`software/tools/sim_device.py`, stdlib Python) reproduces the device's REST API +
-  SSE + state machine, so the HA integration can be developed/tested with no hardware. It is
-  deployed as a container on the homelab NAS and the custom HA integration runs against it live.
-- **HA integration ports are fixed at 80 (REST) / 81 (SSE)** — not configurable (the device always
-  uses these). A dashboard config card and a nightly "set an alarm?" actionable-notification
-  automation live in `homeassistant/dashboard/`.
+## In one paragraph
+A custom-hardware, embedded-Rust, Home-Assistant-aware bedside **smart alarm clock**. Aesthetic:
+**"dark & silent until summoned"** — a wood-veneer bar that shows nothing until a touch reveals the
+time glowing *through* the veneer. Integrates with Home Assistant, but fires alarms **on-device** so
+it works with WiFi/HA down.
 
 ---
 
 ## Locked decisions
 
 ### Architecture & firmware
-- **Architecture:** smart device, **HA-aware but offline-capable**. Alarm firing logic lives
-  on-device; HA configures/observes and runs side automations. Device is the **source of truth**.
-- **Language/framework:** **Rust, `std` path** — `esp-idf-hal` + `esp-idf-svc` (built on ESP-IDF).
-- **Runtime model:** **RTOS** (FreeRTOS via ESP-IDF), exposed to Rust as `std::thread` / mutexes /
-  channels.
-- **Why `std` over `no_std`:** mature WiFi/lwIP/mbedTLS/MQTT stack is the deciding factor — the
-  hard networking is solved on this path; `no_std`/esp-hal WiFi is younger and would be a fight.
+- HA-aware but **offline-capable**; alarm firing lives on-device; the device is the **source of truth**.
+- **Rust, `std` path** (`esp-idf-hal` + `esp-idf-svc`), FreeRTOS via ESP-IDF exposed as `std::thread`.
+  Chosen for the mature WiFi/TLS/MQTT stack (`no_std` WiFi would be a fight).
 
-### MCU & hardware
-- **MCU:** **ESP32-S3-WROOM-1** (native USB-JTAG for program+debug; audio headroom for v2 I²S).
-  Accepts the Xtensa Rust toolchain fork (`espup`).
-- **Timekeeping:** **NTP (SNTP) primary** + **DS3231 RTC** + **supercapacitor** backup
-  (no battery). Boot validity check: if RTC time valid → use immediately + NTP corrects drift;
-  if invalid (week+ outage) → brief "syncing" state, wait for NTP, then set clock + RTC.
-- **Power:** **USB-C mains only**, 5V → 3.3V **buck**. **No device battery** / charge / protection
-  circuitry. Supercap backs the RTC only.
-  - Accepted limitation: a power outage spanning the alarm time = that alarm missed (no power to
-    fire). Supercap guarantees time is never lost (no blinking 12:00); phone is the backstop.
-    Rechargeable-battery option was considered and rejected for v1 (charge/protection/power-path
-    complexity + LiPo-on-nightstand safety). If revisited, do it as v2 with LiFePO4, or use an
-    external UPS power bank (no board changes).
-- **Display:** **diffused warm dot-matrix LED panel behind thin wood veneer**, monochrome,
-  **driven off when idle** (true dark — no veneer trade-off for darkness). Shows current time +
-  alarm time + option fields (dismiss-progress, "AP MODE", "ARMED", preset names).
-  - LED type preference: **APA102 / SK9822 (SPI)** over WS2812 (far easier to drive reliably in
-    Rust `std`; true per-pixel brightness for fades + dismiss-progress fill). Or a pre-made panel
-    (its native driver dictates the crate).
-- **Interaction sensor:** single **VCNL4040** (proximity + ambient light, I²C). Does the gesture
-  AND the night-dimming lux — replaces a separate LDR. No presence sensor. No NFC.
-- **Input — proximity gesture grammar:**
-  - Idle → **quick reach reveals time** (fade up, hold ~5s, fade out).
-  - Ringing → **quick reach = snooze**; **sustained hold ~2.5s = dismiss** (progressive fill
-    animation during the hold; **visual-only** completion confirmation — no haptic in v1).
-  - Guards: fire-time grace window (ignore proximity 1–2s after fire); pull-away hysteresis;
-    sub-threshold reach = snooze, threshold = dismiss.
-- **Input — rear buttons (3):** **Select** (cycle presets), **Arm** (toggle; long-press disarm
-  all), **Adjust** (±5 min nudge). **Both outer buttons held ~3–5s = enter setup AP mode.**
-- **Audio:** **passive piezo + RTTTL** as the primary v1 wake sound (one PWM/LEDC GPIO). Reserve
-  PCB pads for an **I²S DAC + speaker** so v2 can add real audio without a respin.
-- **Sensors:** VCNL4040 (proximity + lux) + DS3231 internal temp. (BME280 optional v2.)
-- **Programming/debug:** native USB-C (USB-JTAG) + a few test points / UART header.
-- **PCB:** 2-layer KiCad, 0805 passives, module's onboard antenna, hand-soldered v1. Fab TBD
-  (JLCPCB cheap vs Aisler EU/fast).
-- **Enclosure:** bedside landscape **wood-veneer bar**; dot-matrix glows through veneer; recessed
-  rear buttons; concealed USB-C; hidden fasteners; **possible hidden IR window** if veneer blocks
-  the proximity sensor's IR (see open questions).
+### MCU & power
+- **ESP32-S3-WROOM-1** (native USB-JTAG for program+debug). Bench board: **YD-ESP32-S3** devkit.
+- **Time:** SNTP primary + **DS3231 RTC** + **supercap** backup (no battery) — RTC gives correct time
+  on boot / when offline; SNTP corrects drift.
+- **Power:** USB-C mains only, 5V→3.3V buck. No device battery. Accepted limit: a power cut spanning
+  the alarm time misses it (phone is the backstop); the supercap keeps time so there's no blinking 12:00.
 
-### Configuration & HA integration
-- **Config access:** **(a)** hold both rear buttons ~3–5s → **WiFi AP + captive portal** (first
-  boot / WiFi change / recovery; self-contained, no network dependency; auto-exits on save or
-  timeout). **(b)** everyday: **mDNS `.local`** web UI in a browser. **No NFC.**
-- **Web UI** (self-hosted via `esp-idf-svc` HTTP server): WiFi creds, **define/edit presets**,
-  proximity sensitivity, brightness curve, reveal duration, MQTT/HA details. Persisted in **NVS**.
-- **HA transport:** **MQTT + auto-discovery + LWT availability.** Chosen over REST/webhook and
-  over broker-free native-API/HomeKit (those require reimplementing ESPHome's protobuf API or
-  HomeKit in Rust — a v3-scale detour). Broker creds entered once via the captive portal.
-- **Full parity:** everything doable locally (gesture, buttons, web UI) is also doable from HA —
-  set/edit/enable presets, arm/disarm, snooze, dismiss, read all state. Device auto-appears in HA
-  once pointed at the broker.
-- **Source-of-truth rule:** device owns state; local actions and HA commands are both just inputs
-  into the same on-device state machine; publish state on every change (retained); HA never holds
-  authoritative state; offline → local control unaffected, resync on reconnect.
+### Display
+- Monochrome **dot-matrix showing time only**, behind warm wood veneer, **OFF when idle** (true dark).
+  Bench: **red MAX7219 32×8** (validates the `HH:MM` layout + glow); final: a **warm/amber** emitter (PCB-stage).
+- **Status (armed / ringing / AP / syncing) via a single RGB LED** — already driven on the onboard
+  WS2812 with phase colors, so it costs no display space.
 
-### Presets
-- Several premade alarms (e.g. Work / Weekend / Nap), defined in the web UI, stored in **NVS**,
-  selected via the rear Select button, **fired on-device**. One preset data model mutated by all
-  three front-ends (buttons, web UI, MQTT) so they never diverge.
+### Interaction — native capacitive touch
+- **ESP32-S3 native capacitive touch** on a copper/foil electrode behind the veneer. Grammar:
+  **tap = reveal/snooze, ~2.5 s hold = dismiss**. Rear buttons available.
+- *Why:* capacitive senses **through wood**, which removes the biggest PCB-blocking unknown
+  (IR-through-veneer). *(Pivot 2026-07-25 from a VCNL4040 proximity sensor.)* Fallback if touch feels
+  wrong: a GY-APDS-9900 IR-reflective proximity module (reintroduces the IR test).
+
+### Audio
+- v1: **passive buzzer** via LEDC/PWM on GPIO4, switched by a **BS170** low-side MOSFET off 5 V.
+- Future: real audio — default tone on device + user-uploadable files + registering as an HA
+  `media_player` — needs a PSRAM board (N16R8) + MAX98357A + speaker. Open: WAV vs MP3, Rust vs
+  ESPHome. See [`bench-bom.md`](bench-bom.md#future-option--real-audio--ha-media-player).
+
+### Alarm model
+- **Fixed pool of 8 slots** (`NUM_PRESETS` in `../software/firmware/src/state.rs`), each a time-of-day
+  + `enabled`. (Repeat-days / sound / sunrise are future per-slot fields.)
+- **Implicit arming:** `Armed` whenever any slot is enabled, else `Idle` — no arm/disarm control.
+- **Dismiss is one-shot:** dismissing disables the slot that fired. Snooze re-rings after the interval.
+
+### Config & HA integration
+- **Setup:** first boot / WiFi change / recovery → WiFi **AP + captive portal** (self-contained).
+  Everyday: **mDNS `.local`** web UI. Settings persisted in **NVS**.
+- **HA — two paths, both wired:** (1) **MQTT discovery + LWT**; (2) a **custom integration** (REST +
+  **SSE** realtime, **ports 80/81**, mDNS discovery, no broker required). Dashboards / automations /
+  theme live in the `home-lab` repo; this repo owns only the integration.
+- **Source-of-truth rule:** the device owns state; local actions and HA commands are both inputs to
+  one on-device state machine; offline → local control unaffected, resync on reconnect.
+
+### PCB & enclosure
+- 2-layer KiCad, 0805 passives, module's onboard antenna, hand-soldered v1. Fab TBD (JLCPCB vs Aisler EU).
+- Bedside landscape **wood-veneer bar**; matrix glows through the veneer; concealed USB-C; hidden fasteners.
 
 ---
 
-## Firmware structure (target)
+## Firmware (current)
+Real firmware + a working HA integration exist (past the scaffold stage). Code: `../software/firmware/`.
+Worker threads (each a `std::thread`; the alarm core never blocks on the network):
 
-**Crates:** `esp-idf-hal`, `esp-idf-svc` (WiFi STA+AP, HTTP server, mDNS, MQTT, SNTP, NVS),
-`esp-idf-sys`, `embedded-hal`, a dot-matrix/`smart-leds` driver (APA102/SK9822) + `embedded-graphics`,
-`ds323x` (DS3231), a VCNL4040 driver.
+- **alarm** — source of truth: 8-slot model + state machine + command bus; SNTP wall-clock firing.
+- **net** — SoftAP + captive portal, HTTP REST API + web UI, SSE push (:81), mDNS, MQTT discovery/LWT.
+- **button** — BOOT button → commands.
+- **buzzer** — passive buzzer via LEDC (beeps while ringing).
+- **led** — onboard WS2812 phase colors (status LED).
 
-**FreeRTOS tasks (Rust threads):**
-- **Network thread** — MQTT client (discovery, state publish, command subscribe, LWT), HTTP/web UI,
-  mDNS, AP/captive-portal when in setup mode, SNTP. Reconnects without blocking anything else.
-- **Alarm/time thread** — *source of truth*. Reads DS3231, evaluates the armed preset, fires the
-  alarm, runs the snooze/dismiss state machine. Independent of the network (offline reliability).
-- **Interaction thread** — reads VCNL4040 (gesture classification + lux), reads rear buttons,
-  drives reveal/snooze/dismiss + brightness.
-- **Display thread** — renders time / alarm time / preset name / armed / dismiss-progress / "SETUP"
-  at fixed refresh; handles fades.
+Every input transport (button, REST, MQTT) pushes the same `Command`s onto one bus.
 
-Shared state via `Arc<Mutex<…>>` or channels. **The alarm thread never blocks on the network
-thread.** Presets + settings in NVS.
+**Not yet wired (bench tasks):** DS3231 RTC read (SNTP works; RTC boot-fallback scaffolded), MAX7219
+time render, capacitive-touch input + tuning, NVS persistence of slots/settings.
 
-**Toolchain:** `espup` (Xtensa S3 fork) → `cargo`; scaffold with `esp-idf-template`
-(cargo-generate); `espflash`/`cargo-espflash` to flash; `probe-rs` or IDF monitor over native USB.
-Reference: Espressif "Embedded Rust on ESP" book (covers WiFi + MQTT).
+**Toolchain:** `espup` (Xtensa S3 fork) → from `software/firmware/`, `cargo run` builds + flashes over
+USB-C. Also runnable on a TTGO T-Display (`cargo run-ttgo`).
 
 ---
 
-## Open questions (to resolve)
+## Bench validation (gates the PCB)
+Parts + rationale: [`bench-bom.md`](bench-bom.md). Wiring: [`../hardware/bench-wiring.md`](../hardware/bench-wiring.md).
 
-1. **Display panel sourcing** — pre-made diffused matrix module (easier, recommended v1) vs custom
-   LED grid on the PCB (more analog freedom, v2-scale soldering). Plus grid size / field layout.
-2. **Veneer IR passthrough** — BENCH TEST: does the VCNL4040 read reliably through the chosen wood
-   veneer? If not → hidden IR window, or fall back to felt/frosted-acrylic front. (Darkness is NOT
-   the issue — LEDs are simply off; IR transmission is.)
-3. **Preset model specifics** — how many presets; per-preset fields (repeat days, sound, sunrise
-   on/off). Drives the HA entity set + NVS schema. (Best next paper decision — feeds firmware.)
-4. **Rough dimensions** of the bedside bar (drives panel size + enclosure).
-5. **Budget + fab** — JLCPCB (cheap) vs Aisler (EU/fast); cost ceiling for BOM.
+1. **Bench-validate on a breadboard (~€30–55, ordered):** existing dev-kit + MAX7219 32×8 (time) +
+   DS3231 + buzzer/BS170 + level converter + foil touch electrode + wood veneer samples. Prove the
+   `HH:MM` glow, capacitive-touch-through-veneer, and the warm look before a PCB.
+2. Flesh out firmware on the breadboard: RTC read, matrix render, touch input + tuning, NVS.
+3. KiCad schematic → ERC → 2-layer layout → DRC → Gerbers → order.
+4. Bring up the bare board incrementally; iterate the veneer enclosure.
 
----
-
-## Build sequence
-
-1. **Bench validation first (~€30–55).** Concrete parts list in [`bench-bom.md`](bench-bom.md):
-   existing dev-kit ESP32-S3 + VCNL4040 + DS3231(supercap) + **two display candidates** (APA102
-   RGB + amber HT16K33 mono, compared through veneer) + piezo + on-hand buttons + **wood veneer
-   samples** + breadboard. Goal: prove **IR-through-veneer**, the proximity gesture, and the warm
-   glow before committing to a PCB. (Piezo only — defer I²S audio.)
-2. Write/validate firmware on the breadboard: gesture classification + guards, presets in NVS,
-   web UI + captive portal + mDNS, on-device firing, MQTT discovery + parity + LWT, RTC boot
-   validity + NTP resync, offline behaviour.
-3. Capture the proven circuit as a KiCad schematic; ERC.
-4. Lay out the 2-layer PCB; DRC; export Gerbers; order.
-5. Bring up the bare board incrementally: power rail → MCU enumerates → peripherals one by one.
-6. Iterate the wood-veneer enclosure around the populated board.
+**Status (2026-07-27):** parts arrived (veneer pending); buzzer firmware written; waiting on a
+soldering iron to attach the dev-board header before breadboard bring-up.
 
 ---
 
-## v2 / stretch (leave design hooks on v1)
+## Open questions
+- Warm display-emitter sourcing (bench uses red).
+- Capacitive-touch-through-veneer tuning (electrode size, thresholds, groundless USB supply).
+- Per-slot fields (repeat days / sound / sunrise) → drives the HA entity set + NVS schema.
+- Enclosure dimensions; budget + fab (JLCPCB vs Aisler).
 
-- I²S DAC + speaker pads → **real audio / HA media player**: default tone stored on device
-  (offline wake sound), user-uploadable sound files, and registering as an HA `media_player`
-  (TTS/chime/radio push). Needs a PSRAM board (N16R8) + MAX98357A + speaker. Open decisions:
-  upload format (WAV vs MP3) and Rust vs ESPHome for the media_player. See
-  [`bench-bom.md`](bench-bom.md#future-option--real-audio--ha-media-player).
-- Haptic motor (LRA + DRV2605L) for silent dismiss confirmation
-- Light-ramp / sunrise wake before the piezo
-- RGB ambient status backlight
-- BME280 climate logging
-- Active NFC reader (PN532) for token-based preset selection
-- ESPHome-native-API or HomeKit in Rust for broker-free discovery
-
----
-
-## Working preferences (from this project's collaborator)
-
-- Wants to do the design/learning themselves; **minimal heavy AI usage** — use AI for sanity-checks,
-  error explanations, and "review what I built," not for writing the core firmware/schematic/layout.
-  Struggle through the thing being learned first; reach for help when genuinely stuck.
-- Decision-oriented, prefers structured options with clear trade-offs.
-- Based in the Netherlands (EU sourcing: Tinytronics / Antratek / AliExpress).
-
-## Immediate next step for a code session
-
-Scaffold the Rust project with `esp-idf-template` for the ESP32-S3, set up the `espup` toolchain,
-and stub the four-thread structure above — but keep the collaborator driving (they're learning Rust
-embedded + want to write the core themselves). The bench validation (step 1) gates real hardware
-work, so early firmware can be developed against a dev-kit board in parallel.
+## v2 / stretch (leave hooks on v1)
+Real audio / HA `media_player` (above); haptic dismiss (LRA + DRV2605L); sunrise light-ramp; BME280
+climate (or the on-hand DS18B20); NFC preset tokens; broker-free HA (ESPHome-native / HomeKit).

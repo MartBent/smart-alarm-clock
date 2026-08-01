@@ -111,5 +111,4 @@ Deferred; **piezo covers v1**. Captured here so the intent isn't lost. Expands t
 2. **Rust vs ESPHome for the `media_player`** — an HA-integrated streaming media player is a large
    firmware lift in Rust (HTTP stream client + audio decode + I²S DMA + the media_player entity &
    command protocol). ESPHome provides `i2s_audio` + `media_player` → native HA entity essentially
-   for free, which sits in tension with the project's "learning Rust, minimal scaffolding"
-   principle. Make this call consciously before sinking weeks into the Rust path.
+   for free, but would replace the current Rust firmware. Decide before building the Rust path.

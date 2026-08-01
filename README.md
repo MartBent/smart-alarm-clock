@@ -5,9 +5,8 @@ Aesthetic: **"dark & silent until summoned"** — a minimal wood-veneer bar that
 nothing until a proximity gesture reveals the time through the veneer. Fully integrated
 with Home Assistant, but fires alarms **on-device** so it works even if WiFi/HA is down.
 
-> This is a **light scaffold** to start the firmware. The core logic is intentionally
-> left as `TODO`s — the project owner is learning embedded Rust and wants to write it.
-> See `docs/` for the locked design and the options/trade-offs reference.
+> Firmware + a Home Assistant integration already work; the current phase is **breadboard
+> bench validation** before committing to a PCB. See `docs/handoff.md` for the locked design.
 
 ## Repository layout
 
@@ -24,12 +23,12 @@ Firmware commands below run from `software/firmware/`.
 
 ## Hardware (v1)
 
-- **MCU:** ESP32-S3-WROOM-1 (native USB-JTAG for program + debug)
-- **Time:** NTP (SNTP) primary + DS3231 RTC + supercap backup (no battery)
+- **MCU:** ESP32-S3-WROOM-1 (native USB-JTAG). Bench board: YD-ESP32-S3 devkit.
+- **Time:** SNTP + DS3231 RTC + supercap backup (no battery)
 - **Power:** USB-C mains only, 5V → 3.3V buck (supercap backs the RTC only)
-- **Display:** diffused warm dot-matrix LED panel behind thin wood veneer (APA102/SK9822 SPI preferred), driven OFF when idle
-- **Interaction:** single VCNL4040 (proximity gesture + ambient lux) over I²C; 3 rear buttons
-- **Audio:** passive piezo + RTTTL (one LEDC/PWM GPIO); I²S DAC pads reserved for v2
+- **Display:** monochrome dot-matrix showing **time only** behind warm wood veneer, OFF when idle. Bench: red MAX7219 32×8; final: a warm/amber emitter (PCB-stage). Status (armed/ringing/…) via a single RGB LED (onboard WS2812).
+- **Interaction:** native ESP32-S3 **capacitive touch** (foil/copper electrode behind the veneer, tap/hold) — senses through wood, so no IR-passthrough problem. Rear buttons available.
+- **Audio:** passive buzzer via LEDC/PWM (BS170 low-side switch). Real audio (I²S + HA `media_player`) is a future option.
 
 ## Bench wiring
 
@@ -72,21 +71,22 @@ flowchart LR
 
 ## Firmware structure
 
-The firmware lives in `software/firmware/` (entry point `software/firmware/src/main.rs`).
+Lives in `software/firmware/` (entry point `src/main.rs`). `std` path (`esp-idf-hal` +
+`esp-idf-svc`), FreeRTOS exposed as `std::thread` — worker threads over shared state behind
+`Arc<Mutex<…>>`. Every input (button, REST, MQTT) pushes the same `Command`s onto one bus;
+the alarm core is the sole writer.
 
-Planned target design (`std` path: `esp-idf-hal` + `esp-idf-svc`, FreeRTOS underneath
-exposed as `std::thread`): four threads with shared state behind `Arc<Mutex<…>>` /
-channels. Not yet created — this is the roadmap to implement:
-
-| Thread | Role |
+| Worker | Role |
 | --- | --- |
-| Alarm / time | **Source of truth.** RTC, preset eval, firing, snooze/dismiss. Never blocks on network. |
-| Network | MQTT (HA discovery + LWT), HTTP web UI, mDNS, AP/captive portal, SNTP. |
-| Interaction | VCNL4040 gesture + lux, rear buttons, brightness. |
-| Display | Renders time / alarm / preset / armed / dismiss-progress; fades. |
-| Shared state | Alarm model (fixed pool of 8 slots) + state machine + settings (NVS-backed). |
+| alarm | **Source of truth** — 8-slot model, state machine, firing, snooze/dismiss. Never blocks on network. |
+| net | SoftAP + captive portal, HTTP REST API + web UI, SSE push (:81), mDNS, MQTT discovery/LWT. |
+| button | BOOT button → commands. |
+| buzzer | Passive buzzer via LEDC — beeps while ringing. |
+| led | Onboard WS2812 phase colors (status LED). |
 
-See `docs/handoff.md` for the full locked design behind this.
+Working: alarm core, SNTP wall-clock firing, web UI + captive portal, MQTT + custom HA integration.
+Bench TODOs: DS3231 RTC read, MAX7219 time render, capacitive-touch input, NVS persistence. See
+`docs/handoff.md` for the full design.
 
 ## Toolchain setup
 
@@ -106,9 +106,8 @@ cargo run                     # builds for esp32s3 and flashes (see software/fir
 
 `software/firmware/rust-toolchain.toml` pins the `esp` channel and `software/firmware/.cargo/config.toml` sets the
 `xtensa-esp32s3-espidf` target + `espflash flash --monitor` runner, so a plain
-`cargo run` builds and flashes. The scaffold depends directly on `esp-idf-sys`;
-add `esp-idf-hal` / `esp-idf-svc` when you start wiring peripherals and services.
-In **RustRover**, the **Flash + monitor** run configuration (`.run/`) does the same.
+`cargo run` builds and flashes. In **RustRover**, the **Flash + monitor** run configuration
+(`.run/`) does the same.
 
 > **If flashing can't connect** (`espflash`: "Error while connecting to device"):
 > it's almost always a **charge-only USB cable** — it enumerates the serial port but
