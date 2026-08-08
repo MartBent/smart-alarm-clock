@@ -3,7 +3,7 @@ target = "xtensa-esp32s3-espidf"
 
 [target.xtensa-esp32s3-espidf]
 linker = "ldproxy"
-runner = "espflash flash --monitor" # `cargo run` builds, flashes over USB-C, and opens the monitor
+runner = "espflash flash --monitor --partition-table partitions.csv" # `cargo run` builds, flashes over USB-C, opens the monitor (custom 3 MB app partition — the debug build exceeds the default 1 MB)
 rustflags = ["--cfg", "espidf_time64"] # esp-idf uses 64-bit time_t
 
 [unstable]

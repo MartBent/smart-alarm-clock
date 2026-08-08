@@ -1,0 +1,7 @@
+# ESP-IDF partition table — larger app partition for the Rust `std` debug build,
+# which is ~1.6 MB (the default 1 MB factory partition is too small).
+# Fits within 4 MB flash; this board actually has 16 MB, so there's ample room.
+# Name,     Type, SubType, Offset,   Size,      Flags
+nvs,        data, nvs,     0x9000,   0x6000,
+phy_init,   data, phy,     0xf000,   0x1000,
+factory,    app,  factory, 0x10000,  0x300000,
