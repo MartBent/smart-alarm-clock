@@ -14,7 +14,7 @@ use std::time::Duration;
 use esp_idf_hal::delay::BLOCK;
 use esp_idf_hal::gpio::AnyIOPin;
 use esp_idf_hal::i2c::{I2cConfig, I2cDriver};
-use esp_idf_hal::ledc::{config::TimerConfig, LedcDriver, LedcTimerDriver};
+use esp_idf_hal::ledc::{config::{Resolution, TimerConfig}, LedcDriver, LedcTimerDriver};
 use esp_idf_hal::peripherals::Peripherals;
 use esp_idf_hal::spi::config::{Config as SpiConfig, DriverConfig};
 use esp_idf_hal::spi::SpiDeviceDriver;
@@ -65,21 +65,47 @@ fn main() {
         log::info!(target: T, "  PASS if you saw red → green → blue");
     }
 
-    // 2) Buzzer (LEDC PWM on GPIO4 → BS170 → buzzer) — audible: two 2 kHz beeps.
-    banner("2. buzzer (GPIO4)");
+    // 2) Buzzer melody (LEDC → BS170 → buzzer). Plays a tune by retuning the LEDC
+    //    timer frequency per note. Fixed 10-bit resolution keeps duty ~50% across
+    //    the pitch range.
+    banner("2. buzzer melody (GPIO4)");
     {
-        let timer =
-            LedcTimerDriver::new(p.ledc.timer0, &TimerConfig::new().frequency(2u32.kHz().into()))
-                .expect("ledc timer");
+        let timer = LedcTimerDriver::new(
+            p.ledc.timer0,
+            &TimerConfig::new()
+                .resolution(Resolution::Bits10)
+                .frequency(1u32.kHz().into()),
+        )
+        .expect("ledc timer");
         let mut buz = LedcDriver::new(p.ledc.channel0, &timer, p.pins.gpio4).expect("ledc channel");
         let half = buz.get_max_duty() / 2;
-        for _ in 0..2 {
-            buz.set_duty(half).ok();
-            sleep(Duration::from_millis(200));
-            buz.set_duty(0).ok();
-            sleep(Duration::from_millis(200));
+
+        // "Twinkle Twinkle Little Star" — (frequency Hz, duration ms); 0 = rest.
+        const MELODY: &[(u32, u64)] = &[
+            (523, 350), (523, 350), (784, 350), (784, 350), (880, 350), (880, 350), (784, 700),
+            (698, 350), (698, 350), (659, 350), (659, 350), (587, 350), (587, 350), (523, 700),
+        ];
+        for &(freq, ms) in MELODY {
+            if freq == 0 {
+                buz.set_duty(0).ok();
+            } else {
+                // SAFETY: retune timer0 (low-speed) to this note's pitch. The
+                // LedcDriver holds the timer immutably, so set the frequency here.
+                unsafe {
+                    esp_idf_sys::ledc_set_freq(
+                        esp_idf_sys::ledc_mode_t_LEDC_LOW_SPEED_MODE,
+                        esp_idf_sys::ledc_timer_t_LEDC_TIMER_0,
+                        freq,
+                    );
+                }
+                buz.set_duty(half).ok();
+            }
+            sleep(Duration::from_millis(ms - 40));
+            buz.set_duty(0).ok(); // brief gap so repeated notes separate
+            sleep(Duration::from_millis(40));
         }
-        log::info!(target: T, "  PASS if you heard two beeps (needs the BS170 + buzzer wired)");
+        buz.set_duty(0).ok();
+        log::info!(target: T, "  PASS if you heard the melody");
     }
 
     // 3) I2C bus scan (SDA=GPIO8, SCL=GPIO9) — expect the DS3231 @ 0x68.
