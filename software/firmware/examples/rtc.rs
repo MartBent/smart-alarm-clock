@@ -7,6 +7,10 @@
 //! Run:
 //!   RTC_SET='2026-08-15 14:40:00' cargo build --example rtc   # write, then tick
 //!   cargo build --example rtc                                 # read-only
+//!
+//! RTC_SET is written verbatim (timezone-naive). The main firmware stores/reads
+//! the RTC as UTC, so pass a UTC time here if you want it to agree with the
+//! firmware before its first SNTP sync.
 //! then flash the built example and watch it with `espflash monitor`.
 
 use std::thread::sleep;

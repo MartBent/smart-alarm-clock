@@ -9,6 +9,7 @@
 //!   led     — renders the current phase on the onboard WS2812
 //!   display — draws the time as HH:MM on the MAX7219 32x8 matrix (SPI)
 //!   buzzer  — passive buzzer (LEDC/PWM on GPIO4): plays the melody while ringing
+//!   rtc     — DS3231 (I2C): seeds the clock at boot, persists SNTP time back
 //!   net     — SoftAP + HTTP REST API -> commands + state
 //!
 //! Every input transport (button + REST now; MQTT/HA later) submits the same
@@ -22,6 +23,7 @@ mod dns;
 mod led;
 mod mqtt;
 mod net;
+mod rtc;
 mod state;
 
 use std::thread::Builder;
@@ -45,6 +47,19 @@ fn main() {
     let peripherals = Peripherals::take().expect("take peripherals");
     let shared = state::new_shared();
     let bus = state::new_bus();
+
+    // RTC worker (DS3231 over I2C: SDA=GPIO8, SCL=GPIO9). Spawned first so it can
+    // seed the system clock from the RTC before the other workers read the time.
+    {
+        let i2c0 = peripherals.i2c0;
+        let sda = peripherals.pins.gpio8;
+        let scl = peripherals.pins.gpio9;
+        Builder::new()
+            .name("rtc".into())
+            .stack_size(4 * 1024)
+            .spawn(move || rtc::run(i2c0, sda, scl))
+            .expect("spawn rtc worker");
+    }
 
     // Alarm core (source of truth) — drains the command bus.
     {
