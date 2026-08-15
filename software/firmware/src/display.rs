@@ -89,6 +89,12 @@ impl Matrix {
         Self { spi, fb: [[false; W]; H] }
     }
 
+    /// Power the panel on (normal operation) or off (shutdown — LEDs dark, no
+    /// current). Send only on a state change to avoid needless traffic.
+    pub fn set_power(&mut self, on: bool) {
+        self.spi.write(&broadcast(0x0C, if on { 0x01 } else { 0x00 })).ok();
+    }
+
     fn clear(&mut self) {
         self.fb = [[false; W]; H];
     }
@@ -174,19 +180,28 @@ pub fn run(spi: SPI2, sclk: Gpio12, din: Gpio11, cs: Gpio10, shared: SharedState
     log::info!(target: "display", "worker started");
 
     let mut frame: u32 = 0;
+    let mut lit = true; // panel starts in normal operation (see Matrix::new)
     loop {
-        let (phase, now) = {
+        let (phase, now, display_on) = {
             let s = shared.lock().unwrap();
-            (s.phase, s.now_secs)
+            (s.phase, s.now_secs, s.display_on)
         };
-        if phase == Phase::Syncing {
-            // Blink the placeholder ~1.25 Hz (on 400 ms / off 400 ms).
-            matrix.render_syncing((frame / 2) % 2 == 0);
-        } else {
-            let colon = now % 2 == 0; // ~0.5 Hz colon off the wall clock
-            matrix.render_time(now / 3600, (now % 3600) / 60, colon);
+        // Dark mode blanks the panel, but a firing alarm always lights up.
+        let want_lit = display_on || phase == Phase::Ringing;
+        if want_lit != lit {
+            matrix.set_power(want_lit); // shutdown / wake only on transition
+            lit = want_lit;
         }
-        matrix.flush();
+        if lit {
+            if phase == Phase::Syncing {
+                // Blink the placeholder ~1.25 Hz (on 400 ms / off 400 ms).
+                matrix.render_syncing((frame / 2) % 2 == 0);
+            } else {
+                let colon = now % 2 == 0; // ~0.5 Hz colon off the wall clock
+                matrix.render_time(now / 3600, (now % 3600) / 60, colon);
+            }
+            matrix.flush();
+        }
         frame = frame.wrapping_add(1);
         std::thread::sleep(FRAME);
     }

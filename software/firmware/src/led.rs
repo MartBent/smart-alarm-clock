@@ -24,7 +24,18 @@ pub fn run(channel: CHANNEL0, pin: Gpio48, shared: SharedState) {
     let mut hue: u8 = 0; // animates the idle rainbow
     let mut frame: u32 = 0;
     loop {
-        let phase = shared.lock().unwrap().phase;
+        let (phase, display_on) = {
+            let s = shared.lock().unwrap();
+            (s.phase, s.display_on)
+        };
+        // Dark mode blanks the LED, but a firing alarm always lights up.
+        if !display_on && phase != Phase::Ringing {
+            led.write([OFF]).expect("write LED");
+            hue = hue.wrapping_add(1);
+            frame = frame.wrapping_add(1);
+            std::thread::sleep(FRAME);
+            continue;
+        }
         let color = match phase {
             // Syncing: dim blue while waiting for SNTP.
             Phase::Syncing => RGB8 { r: 0, g: 4, b: 18 },

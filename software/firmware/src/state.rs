@@ -71,6 +71,10 @@ impl Default for Settings {
 pub struct Shared {
     pub phase: Phase,
     pub settings: Settings,
+    /// Master switch for all light-emitting components (matrix + status LED). When
+    /// `false` the clock is dark ("dark & silent until summoned"); a firing alarm
+    /// still lights up regardless. Toggled from the API and capacitive touch.
+    pub display_on: bool,
     /// Time of day (seconds since midnight) as the core currently sees it.
     pub now_secs: u32,
     /// Bumped by the alarm core on every *material* change (phase or settings),
@@ -84,6 +88,7 @@ impl Default for Shared {
         Self {
             phase: Phase::Idle,
             settings: Settings::default(),
+            display_on: true,
             now_secs: 0,
             version: 0,
         }
@@ -125,6 +130,10 @@ pub enum Command {
     Dismiss,
     SetPresetEnabled { idx: usize, enabled: bool },
     SetPresetTime { idx: usize, secs: u32 },
+    /// Turn all light-emitting components on/off (API sets an explicit state).
+    SetDisplay { on: bool },
+    /// Flip the display on/off (capacitive touch).
+    ToggleDisplay,
 }
 
 /// Shared FIFO of pending commands (Send + Sync, so HTTP handlers can push).

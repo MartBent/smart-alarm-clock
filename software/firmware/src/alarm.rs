@@ -90,6 +90,20 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                         log::info!(target: "alarm", "alarm {idx} time={}", fmt_hms(secs));
                     }
                 }
+                Command::SetDisplay { on } => {
+                    let mut s = shared.lock().unwrap();
+                    if s.display_on != on {
+                        s.display_on = on;
+                        settings_changed = true;
+                        log::info!(target: "alarm", "display {}", if on { "on" } else { "off" });
+                    }
+                }
+                Command::ToggleDisplay => {
+                    let mut s = shared.lock().unwrap();
+                    s.display_on = !s.display_on;
+                    settings_changed = true;
+                    log::info!(target: "alarm", "display toggled {}", if s.display_on { "on" } else { "off" });
+                }
             }
         }
 

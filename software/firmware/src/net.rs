@@ -10,6 +10,7 @@
 //! The alarm REST API is available in both modes:
 //!   curl http://<ip>/api/state
 //!   curl -X POST http://<ip>/api/command        -d '{"cmd":"snooze"}'
+//!   curl -X POST http://<ip>/api/command        -d '{"cmd":"display_off"}'
 //!   curl -X POST http://<ip>/api/alarm/enabled -d '{"idx":1,"enabled":true}'
 //!   curl -X POST http://<ip>/api/alarm/time    -d '{"idx":0,"hour":7,"minute":30}'
 
@@ -131,6 +132,9 @@ static STATUS_HTML: &str = r##"<!doctype html><html lang="en"><head>
 <button onclick="cmd('snooze')">Snooze</button>
 <button class="primary" onclick="cmd('dismiss')">Dismiss</button>
 </div>
+<div class="btns" style="grid-template-columns:1fr;margin-top:.6rem">
+<button id="dispbtn" onclick="cmd('display_toggle')">Display</button>
+</div>
 <h2>Alarms</h2><div id="presets"></div>
 <h2>Home Assistant (MQTT)</h2>
 <label for="mh">Broker host</label>
@@ -149,6 +153,7 @@ static STATUS_HTML: &str = r##"<!doctype html><html lang="en"><head>
 let lastPresets="";
 async function refresh(){try{const s=await(await fetch('/api/state')).json();
  phase.textContent=s.phase;now.textContent=s.now;
+ dispbtn.textContent=s.display_on?'Display: On':'Display: Off';
  // Rebuild preset rows only when they change AND you aren't editing one,
  // so the 1s poll never steals focus or clobbers typing.
  const key=JSON.stringify(s.alarms);
@@ -602,6 +607,9 @@ fn register(
                         let cmd = match r.cmd.as_str() {
                             "snooze" => Some(Command::Snooze),
                             "dismiss" => Some(Command::Dismiss),
+                            "display_on" => Some(Command::SetDisplay { on: true }),
+                            "display_off" => Some(Command::SetDisplay { on: false }),
+                            "display_toggle" => Some(Command::ToggleDisplay),
                             _ => None,
                         };
                         match cmd {
@@ -769,6 +777,7 @@ fn state_json(shared: &SharedState) -> String {
         "id": device_id(),
         "phase": phase_str(s.phase),
         "now": fmt_hms(s.now_secs),
+        "display_on": s.display_on,
         "snooze_secs": s.settings.snooze_secs,
         "alarms": preset_values(&s.settings.presets),
     })
