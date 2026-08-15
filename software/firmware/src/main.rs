@@ -4,11 +4,12 @@
 //! task). `main` takes the peripherals, builds the shared state + command bus,
 //! spawns the workers, and supervises.
 //!
-//!   alarm  — source of truth: state machine + presets (drains the command bus)
-//!   button — BOOT button -> commands
-//!   led    — renders the current phase on the onboard WS2812
-//!   buzzer — passive buzzer (LEDC/PWM on GPIO4): beeps while ringing
-//!   net    — SoftAP + HTTP REST API -> commands + state
+//!   alarm   — source of truth: state machine + presets (drains the command bus)
+//!   button  — BOOT button -> commands
+//!   led     — renders the current phase on the onboard WS2812
+//!   display — draws the time as HH:MM on the MAX7219 32x8 matrix (SPI)
+//!   buzzer  — passive buzzer (LEDC/PWM on GPIO4): plays the melody while ringing
+//!   net     — SoftAP + HTTP REST API -> commands + state
 //!
 //! Every input transport (button + REST now; MQTT/HA later) submits the same
 //! `Command`s onto the bus. See docs/handoff.md for the design.
@@ -16,6 +17,7 @@
 mod alarm;
 mod button;
 mod buzzer;
+mod display;
 mod dns;
 mod led;
 mod mqtt;
@@ -78,7 +80,22 @@ fn main() {
             .expect("spawn led worker");
     }
 
-    // Buzzer worker — passive buzzer via LEDC/PWM on GPIO4 (beeps while ringing).
+    // Matrix display worker — draws the time as HH:MM on the MAX7219 32x8 panel
+    // (SPI2: SCLK=GPIO12, DIN=GPIO11, CS=GPIO10, via the level shifter).
+    {
+        let shared = shared.clone();
+        let spi = peripherals.spi2;
+        let sclk = peripherals.pins.gpio12;
+        let din = peripherals.pins.gpio11;
+        let cs = peripherals.pins.gpio10;
+        Builder::new()
+            .name("display".into())
+            .stack_size(8 * 1024)
+            .spawn(move || display::run(spi, sclk, din, cs, shared))
+            .expect("spawn display worker");
+    }
+
+    // Buzzer worker — passive buzzer via LEDC/PWM on GPIO4 (plays melody while ringing).
     {
         let shared = shared.clone();
         let timer = peripherals.ledc.timer0;

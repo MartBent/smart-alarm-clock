@@ -48,8 +48,42 @@ fn main() {
     log::info!(target: T, "==== SMART ALARM CLOCK — HARDWARE SELF-TEST ====");
     sleep(Duration::from_millis(500));
 
-    // 1) Onboard WS2812 status LED (GPIO48) — visual: red → green → blue → off.
-    banner("1. onboard RGB LED (GPIO48)");
+    // 1) MAX7219 matrix (SPI: SCLK=GPIO12, DIN=GPIO11, CS=GPIO10, via level shifter).
+    //    All LEDs on at low brightness, then clear. Raw wiring check, not the renderer.
+    banner("1. MAX7219 all-on test (SCLK=12, DIN=11, CS=10)");
+    {
+        let mut spi = SpiDeviceDriver::new_single(
+            p.spi2,
+            p.pins.gpio12,            // SCLK
+            p.pins.gpio11,            // SDO / DIN
+            Option::<AnyIOPin>::None, // SDI / MISO — unused
+            Some(p.pins.gpio10),      // CS
+            &DriverConfig::new(),
+            &SpiConfig::new().baudrate(1u32.MHz().into()),
+        )
+        .expect("spi init");
+
+        spi.write(&max7219_frame(0x0F, 0x00)).ok(); // display-test off
+        spi.write(&max7219_frame(0x09, 0x00)).ok(); // no BCD decode (raw segments)
+        spi.write(&max7219_frame(0x0B, 0x07)).ok(); // scan all 8 rows
+        spi.write(&max7219_frame(0x0A, 0x02)).ok(); // dim but visible (5/32); 0x00 is ~invisible
+        spi.write(&max7219_frame(0x0C, 0x01)).ok(); // shutdown reg → normal operation
+        // All LEDs on = write 0xFF to each of the 8 row registers (0x01..=0x08),
+        // broadcast to all 4 chips. Low brightness keeps current modest — a full
+        // display-test lamp test can exceed a small 5V supply and light only part.
+        for reg in 1u8..=8 {
+            spi.write(&max7219_frame(reg, 0xFF)).ok();
+        }
+        log::info!(target: T, "  all LEDs should be ON (low brightness)");
+        sleep(Duration::from_millis(1500));
+        for reg in 1u8..=8 {
+            spi.write(&max7219_frame(reg, 0x00)).ok(); // clear
+        }
+        log::info!(target: T, "  PASS if the matrix lit fully, then cleared");
+    }
+
+    // 2) Onboard WS2812 status LED (GPIO48) — visual: red → green → blue → off.
+    banner("2. onboard RGB LED (GPIO48)");
     {
         let mut led = Ws2812Esp32Rmt::new(p.rmt.channel0, p.pins.gpio48).expect("ws2812 init");
         for (name, c) in [
@@ -65,10 +99,10 @@ fn main() {
         log::info!(target: T, "  PASS if you saw red → green → blue");
     }
 
-    // 2) Buzzer melody (LEDC → BS170 → buzzer). Plays a tune by retuning the LEDC
+    // 3) Buzzer melody (LEDC → BS170 → buzzer). Plays a tune by retuning the LEDC
     //    timer frequency per note. Fixed 10-bit resolution keeps duty ~50% across
     //    the pitch range.
-    banner("2. buzzer melody (GPIO4)");
+    banner("3. buzzer melody (GPIO4)");
     {
         let timer = LedcTimerDriver::new(
             p.ledc.timer0,
@@ -108,8 +142,8 @@ fn main() {
         log::info!(target: T, "  PASS if you heard the melody");
     }
 
-    // 3) I2C bus scan (SDA=GPIO8, SCL=GPIO9) — expect the DS3231 @ 0x68.
-    banner("3. I2C scan (SDA=GPIO8, SCL=GPIO9)");
+    // 4) I2C bus scan (SDA=GPIO8, SCL=GPIO9) — expect the DS3231 @ 0x68.
+    banner("4. I2C scan (SDA=GPIO8, SCL=GPIO9)");
     {
         let mut i2c = I2cDriver::new(
             p.i2c0,
@@ -138,33 +172,6 @@ fn main() {
         } else {
             log::info!(target: T, "  PASS if 0x68 (DS3231) is listed above");
         }
-    }
-
-    // 4) MAX7219 matrix (SPI: SCLK=GPIO12, DIN=GPIO11, CS=GPIO10, via level shifter).
-    //    Lamp test = light every LED, then clear. Raw wiring check, not the renderer.
-    banner("4. MAX7219 lamp test (SCLK=12, DIN=11, CS=10)");
-    {
-        let mut spi = SpiDeviceDriver::new_single(
-            p.spi2,
-            p.pins.gpio12,            // SCLK
-            p.pins.gpio11,            // SDO / DIN
-            Option::<AnyIOPin>::None, // SDI / MISO — unused
-            Some(p.pins.gpio10),      // CS
-            &DriverConfig::new(),
-            &SpiConfig::new().baudrate(1u32.MHz().into()),
-        )
-        .expect("spi init");
-
-        spi.write(&max7219_frame(0x0F, 0x00)).ok(); // display-test off
-        spi.write(&max7219_frame(0x09, 0x00)).ok(); // no BCD decode (raw segments)
-        spi.write(&max7219_frame(0x0A, 0x04)).ok(); // medium brightness
-        spi.write(&max7219_frame(0x0B, 0x07)).ok(); // scan all 8 digits/rows
-        spi.write(&max7219_frame(0x0C, 0x01)).ok(); // shutdown reg → normal operation
-        spi.write(&max7219_frame(0x0F, 0x01)).ok(); // display-test ON → all LEDs on
-        log::info!(target: T, "  all LEDs should be ON now (needs the level shifter wired)");
-        sleep(Duration::from_millis(1500));
-        spi.write(&max7219_frame(0x0F, 0x00)).ok(); // display-test off → clear
-        log::info!(target: T, "  PASS if the matrix lit fully, then cleared");
     }
 
     // 5) Capacitive touch (GPIO14) — left as a stub: raw touch read + threshold
