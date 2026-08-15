@@ -1,41 +1,48 @@
 # Smart Alarm Clock
 
-A custom-hardware, embedded-Rust, Home-Assistant-aware bedside **smart alarm clock**.
-Aesthetic: **"dark & silent until summoned"** — a minimal wood-veneer bar that shows
-nothing until a touch reveals the time through the veneer. Fully integrated with Home
-Assistant, but fires alarms **on-device** so it works even if WiFi/HA is down.
+A bedside alarm clock built from scratch: custom hardware, firmware in Rust on an
+ESP32-S3, and a Home Assistant integration. The idea is a plain wood-veneer bar that
+stays dark until you touch it, then shows the time glowing through the veneer. It sits
+on the network and works with Home Assistant, but it keeps its own time and fires
+alarms itself, so it still rings if WiFi or HA goes down.
 
-> Firmware + a Home Assistant integration already work; the current phase is **breadboard
-> bench validation** before committing to a PCB.
+Right now it runs on a breadboard. The firmware and the HA integration work; the
+custom PCB and the veneer enclosure are still ahead.
 
-## Repository layout
+## Layout
 
-| Path | What | Details |
-|---|---|---|
-| `software/firmware/` | Rust (esp-idf) firmware — the device itself | [software/README.md](software/README.md) |
-| `software/homeassistant/` | Home Assistant integration — HACS repo pointer | [README](software/homeassistant/README.md) |
-| `software/tools/` | `sim_device.py` — device simulator (REST + SSE) | — |
-| `hardware/` | PCB + enclosure + bench BOM & wiring | [hardware/README.md](hardware/README.md) |
-| `docs/` | Locked design + reasoning | [handoff.md](docs/handoff.md) |
+| Path | What it is |
+|---|---|
+| `software/firmware/` | Rust (esp-idf) firmware for the device. See [software/README.md](software/README.md). |
+| `software/homeassistant/` | Home Assistant integration. It now lives in its own HACS repo; this folder is a pointer. See [README](software/homeassistant/README.md). |
+| `software/tools/` | `sim_device.py`, a stand-in for the device over REST + SSE. |
+| `hardware/` | PCB, enclosure, and the bench parts list + wiring. See [hardware/README.md](hardware/README.md). |
+| `docs/` | Design decisions and the reasoning behind them. See [handoff.md](docs/handoff.md). |
 
 ## Hardware
 
-ESP32-S3 driving a monochrome dot-matrix (time only) behind wood veneer, with **native capacitive
-touch through the veneer**, a **DS3231 RTC + supercap**, and a **passive buzzer** — USB-C mains
-powered, no battery. Currently in **breadboard bench validation**; a custom PCB + wood-veneer
-enclosure come next.
+An ESP32-S3 drives a monochrome dot-matrix that shows the time behind wood veneer.
+Touch is the ESP32-S3's built-in capacitive sensing through a foil pad, which reads
+fine through wood. A DS3231 keeps time while the network is down; on the PCB a
+supercap backs it up, so there's no coin cell. Sound is a passive buzzer for now. The
+whole thing runs off USB-C, no battery.
 
-→ Components, bench BOM, wiring, and PCB plan: **[hardware/README.md](hardware/README.md)**
+It's on a breadboard at the moment. The parts list, wiring, and PCB plan are in
+[hardware/README.md](hardware/README.md).
 
 ## Software
 
-Rust (`esp-idf`) firmware built from worker threads over a shared state machine — the **alarm core
-is the on-device source of truth** (8 alarm slots, fires on the real clock), with an on-device
-**web UI + WiFi captive portal** and **two Home Assistant paths** (MQTT discovery + a broker-free
-REST/SSE custom integration). A Python **simulator** lets the HA side be developed with no hardware.
+The firmware is a handful of worker threads around one shared state machine. The
+alarm core owns the clock and the eight alarm slots and decides when to ring; nothing
+about firing depends on the network. There's an on-device web UI with a WiFi captive
+portal for first-time setup, and two ways into Home Assistant: MQTT discovery, and a
+broker-free integration that uses the REST API with SSE for live updates. A small
+Python simulator stands in for the hardware so the HA side can be worked on without a
+device.
 
-→ Architecture, build/flash, and HA integration: **[software/README.md](software/README.md)**
+Build and flash steps, the thread layout, and the HA details are in
+[software/README.md](software/README.md).
 
 ## Design
 
-Locked decisions and the reasoning behind them: **[docs/handoff.md](docs/handoff.md)**.
+The locked decisions and why they were made are in [docs/handoff.md](docs/handoff.md).
