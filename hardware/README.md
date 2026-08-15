@@ -1,28 +1,35 @@
 # Hardware
 
-PCB and enclosure for the smart alarm clock, plus the breadboard **bench validation** that gates
-the PCB. Bench board so far: **YD-ESP32-S3** devkit (ESP32-S3-WROOM-1). The custom PCB + wood-veneer
-enclosure come after bench validation passes. Design rationale: [`../docs/handoff.md`](../docs/handoff.md).
+The custom PCB and enclosure, plus the breadboard bench validation that has to pass
+before either gets built. The bench board so far is a YD-ESP32-S3 devkit
+(ESP32-S3-WROOM-1). The reasoning behind the design choices is in
+[`../docs/handoff.md`](../docs/handoff.md).
 
 ## Components (v1)
 
-- **MCU:** ESP32-S3-WROOM-1 (native USB-JTAG). Bench: YD-ESP32-S3 devkit.
-- **Time:** SNTP + DS3231 RTC + supercap backup (no battery).
-- **Power:** USB-C mains only, 5V → 3.3V buck (supercap backs the RTC only).
-- **Display:** monochrome dot-matrix, **time only**, behind warm wood veneer, OFF when idle. Bench: red MAX7219 32×8; final: a warm/amber emitter (PCB-stage). Status (armed/ringing/…) via a single RGB LED (onboard WS2812).
-- **Interaction:** native ESP32-S3 **capacitive touch** (foil/copper electrode behind the veneer, tap/hold) — senses through wood, so no IR-passthrough problem. Rear buttons available.
-- **Audio:** passive buzzer via LEDC/PWM (BS170 low-side switch). Real audio is a future option (below).
+- MCU: ESP32-S3-WROOM-1 with native USB-JTAG. Bench board is a YD-ESP32-S3 devkit.
+- Time: SNTP, with a DS3231 RTC and a supercap for backup. No coin cell.
+- Power: USB-C mains, 5 V stepped down to 3.3 V. The supercap only backs the RTC.
+- Display: a monochrome dot-matrix showing the time, behind wood veneer, dark when
+  idle. The bench uses a red MAX7219 32×8; the final panel will be a warm/amber
+  emitter picked at the PCB stage. Status (armed, ringing, and so on) shows on the
+  onboard WS2812 RGB LED.
+- Interaction: the ESP32-S3's built-in capacitive touch, a foil or copper pad behind
+  the veneer with a tap/hold grammar. It reads through wood, which sidesteps the
+  IR-through-veneer problem. Rear buttons are available too.
+- Audio: a passive buzzer driven by LEDC/PWM through a BS170 low-side switch. Real
+  audio is a possible later addition (see below).
 
 ## Bench validation
 
-Get the device working end-to-end on a breadboard before committing to a PCB. Every part below has a
-firmware hook that already exists (scaffolded) or is the immediate next thing to wire. Uses the
-**existing dev board** and **on-hand buttons**. EU sourcing (Tinytronics / Antratek / AliExpress);
-prices are rough guides.
+The point of this stage is to get the whole device working on a breadboard before
+committing to a PCB. Each part below already has a firmware hook, or is the next
+thing to wire. It uses the dev board and buttons already on hand. Sourcing is EU
+(Tinytronics, Antratek, AliExpress); the prices are rough guides.
 
 ### Parts
 
-Single-sourced at **Tinytronics** except the veneer (and, later, copper tape).
+Everything came from Tinytronics except the veneer (and, later, the copper tape).
 
 | Part | Serves | Firmware hook | ~€ |
 |---|---|---|---|
@@ -36,27 +43,28 @@ Single-sourced at **Tinytronics** except the veneer (and, later, copper tape).
 | *Optional:* single **SK6812 / WS2812** discrete pixel | final placement of the RGB status LED (onboard WS2812 covers the bench) | already driven in `led.rs` | 1–2 |
 | *Optional:* **Logic Analyzer 8-channel USB** | SPI/I²C bring-up debugging (sigrok/PulseView) | — | 9.75 |
 
-**Core subtotal: ~€12.50** (matrix + RTC + buzzer + level converter), + ~€10 optional logic analyzer.
-**Spares:** order **2× MAX7219 matrix** and **2× level converter** (1 spare each, +€7.50) — these
-parts don't wear out, but a wiring slip in the mixed 3.3/5 V path plus a reorder's shipping/wait
-dwarfs the part cost.
+The core is about €12.50 (matrix, RTC, buzzer, level converter), plus roughly €10 for
+the optional logic analyzer. It's worth ordering a spare matrix and a spare level
+converter. They don't wear out, but a wiring slip in the mixed 3.3/5 V path is easy to
+make, and a reorder's shipping and wait cost more than the part does.
 
-**Status (2026-07-27):** parts ordered + arrived (electronics); wood veneer still to source. Buzzer
-firmware written; breadboard bring-up is waiting on a soldering iron to attach the dev-board header.
+Status (2026-07-27): the electronics arrived; the veneer still needs sourcing. The
+buzzer firmware is written. Breadboard bring-up was waiting on a soldering iron to
+attach the dev-board header.
 
 ### Wiring
 
-Every signal lands on the YD-ESP32-S3 **power-side header** (the `5Vin` / `3V3` / `RST` row), so a
-single soldered header covers the whole bench. This is a *logical* what-connects-to-what diagram,
-not a physical breadboard layout.
+Every signal lands on the YD-ESP32-S3 power-side header (the `5Vin` / `3V3` / `RST`
+row), so one soldered header covers the whole bench. The diagram below is logical
+(what connects to what), not a physical breadboard layout.
 
 ![Smart alarm clock schematic](KiCad/SmartAlarmClock/SmartAlarmClock.png)
 
-Hybrid [KiCad schematic](KiCad/SmartAlarmClock/): the ESP32-S3-WROOM-1, BS170, buzzer and
-decoupling caps are real library symbols; the RTC, MAX7219 matrix and level-shifter breakouts are
-drawn as module blocks (the stock libraries only carry their bare chips). Nets are joined by
-matching global-label names. `+5V` is the devkit `5Vin` rail (USB VBUS) — the WROOM module has no
-5 V pin of its own.
+It's a hybrid [KiCad schematic](KiCad/SmartAlarmClock/): the ESP32-S3-WROOM-1, BS170,
+buzzer, and decoupling caps are real library symbols, while the RTC, matrix, and
+level-shifter breakouts are drawn as blocks (the stock libraries only carry their bare
+chips). Nets join by matching global-label names. `+5V` is the devkit's `5Vin` rail
+(USB VBUS); the WROOM module has no 5 V pin of its own.
 
 | Function | Pin | Notes |
 |---|---|---|
@@ -66,52 +74,74 @@ matching global-label names. `+5V` is the devkit `5Vin` rail (USB VBUS) — the 
 | Cap touch | `GPIO14` | foil electrode; **no pull resistor** (interferes with sensing) |
 | Power | `5Vin` / `3V3` / `GND` | `5Vin` = USB VBUS (5 V out when USB-powered); matrix VCC on `5Vin`, keep brightness modest |
 
-- **Verify BS170 Drain vs Source** against your part's datasheet — the pinout is manufacturer-dependent (BS170 ↔ 2N7000 are mirror images), and swapping D/S is the classic "won't switch" bug.
-- **Avoid** `GPIO46` (LOG) and `GPIO3` (JTAG) on that header — both are strapping pins.
-- Onboard WS2812 status LED is `GPIO48` (opposite header) — left free for the phase-color LED.
-- **Zero loose resistors:** module-onboard pull-ups + the BS170's internal gate pulldown cover it.
-- Fallback if capacitive touch feels wrong: a **GY-APDS-9900** IR-reflective proximity module (I²C, ~€3.50), which reintroduces the IR-through-veneer test.
+A few things worth watching:
+
+- Check the BS170's Drain and Source against your part's datasheet. The pinout is
+  manufacturer-dependent (BS170 and 2N7000 are mirror images), and swapping D/S is the
+  classic "won't switch" bug.
+- Avoid `GPIO46` (LOG) and `GPIO3` (JTAG) on that header; both are strapping pins.
+- The onboard WS2812 status LED is `GPIO48`, on the opposite header, left free for the
+  phase-color LED.
+- No loose resistors are needed: the module pull-ups and the BS170's internal gate
+  pulldown cover it.
+- If capacitive touch feels wrong, the fallback is a GY-APDS-9900 IR-reflective
+  proximity module (I²C, about €3.50), which brings the IR-through-veneer test back.
 
 ### Bring-up sequence
 
-1. Solder the dev-board header, then bring up peripherals **one at a time**: RTC (I²C scan → `0x68`) → buzzer → MAX7219 `HH:MM` render → capacitive touch. Prove the `HH:MM` glow, capacitive-touch-through-veneer, and the warm look before a PCB.
-2. Flesh out firmware on the breadboard: RTC read, matrix render, touch input + tuning, NVS persistence.
+1. Solder the dev-board header, then bring up the peripherals one at a time: RTC (I²C
+   scan → `0x68`), buzzer, MAX7219 `HH:MM` render, capacitive touch. Prove the `HH:MM`
+   glow, touch-through-veneer, and the warm look before a PCB.
+2. Flesh out the firmware on the breadboard: RTC read, matrix render, touch input and
+   tuning, NVS persistence.
 3. KiCad schematic → ERC → 2-layer layout → DRC → Gerbers → order.
 4. Bring up the bare board incrementally; iterate the veneer enclosure.
 
-### Deferred to PCB stage (bench uses the simpler thing)
+### Deferred to the PCB stage (the bench uses the simpler thing)
 
-- **RTC backup: supercap instead of the coin cell.** Wire the supercap on the DS3231 **VBAT** pin (across the coin-cell pads), *not* VCC — VBAT is the low-power (~1 µA) backup input. The DS3231 does **not** charge VBAT, so add a trickle path from VCC: `VCC → R (few hundΩ–1k) → Schottky → supercap → GND`, cap rated ≥ VCC (VBAT max 5.5 V). For the bench, just use the CR1220.
-- **Warm display emitter.** The bench matrix is red; source a warm/amber ~32×8 emitter once the veneer test confirms the geometry.
+- RTC backup with a supercap instead of a coin cell. The supercap goes on the DS3231
+  VBAT pin (across the coin-cell pads), not VCC — VBAT is the low-power (~1 µA) backup
+  input. The DS3231 doesn't charge VBAT, so add a trickle path from VCC:
+  `VCC → R (few hundred Ω–1k) → Schottky → supercap → GND`, with the cap rated at or
+  above VCC (VBAT tops out at 5.5 V). On the bench, just use the CR1220.
+- The warm display emitter. The bench matrix is red; source a warm/amber ~32×8 emitter
+  once the veneer test confirms the geometry.
 
-## Future option — real audio / HA media player
+## Future option: real audio / HA media player
 
-The v1 buzzer could later be replaced by real audio: a **default tone stored on device** (offline
-wake sound), **user-uploadable sound files**, and registering as an **HA `media_player`** (HA pushes
-TTS / chimes / radio). Parts to add (~€20): an **ESP32-S3-DevKitC-1 N16R8** (16 MB flash for uploads +
-8 MB PSRAM to buffer/decode streams — the current board has neither), a **MAX98357A** I²S amp, and a
-3–4 W speaker. Open decisions: WAV vs MP3 for uploads; Rust vs ESPHome for the `media_player` (the
-Rust path is a large firmware lift, ESPHome provides it natively but would replace the current firmware).
+The v1 buzzer could later give way to real audio: a default tone stored on the device
+for an offline wake sound, user-uploadable sound files, and registering as an HA
+`media_player` so HA can push TTS, chimes, or radio. That needs about €20 of extra
+parts: an ESP32-S3-DevKitC-1 N16R8 (16 MB flash for uploads and 8 MB PSRAM to
+buffer/decode streams, neither of which the current board has), a MAX98357A I²S amp,
+and a 3–4 W speaker. Two decisions are still open: WAV vs MP3 for uploads, and Rust vs
+ESPHome for the `media_player`. The Rust path is a large firmware lift; ESPHome
+provides it natively but would replace the current firmware.
 
-## PCB & enclosure (after bench validation)
+## PCB and enclosure (after bench validation)
 
-- 2-layer KiCad schematic → ERC → layout → DRC → Gerbers → fab (JLCPCB vs Aisler EU). 0805 passives, module antenna, hand-soldered v1.
-- Wood-veneer bar enclosure: matrix glows through the veneer; concealed USB-C; hidden fasteners.
+- A 2-layer KiCad design: schematic → ERC → layout → DRC → Gerbers → fab (JLCPCB vs
+  Aisler in the EU). 0805 passives, module antenna, hand-soldered for v1.
+- A wood-veneer bar enclosure: the matrix glows through the veneer, with a concealed
+  USB-C port and hidden fasteners.
 
 ### Discrete carrier-PCB schematic (draft)
 
-A first-draft [discrete schematic](KiCad/SmartAlarmClock_discrete/) for the custom board — a
-**carrier**: the YD-ESP32-S3 dev board (J1) and the MAX7219 matrix module (J2) plug in via headers,
-while the board itself carries the discrete glue: a **DS3231 RTC with supercap backup** (trickle-
-charged `+3V3 → R9 → Schottky → supercap` on VBAT — no coin cell), a **BSS138 3-channel level
-shifter** (+10k pull-ups) for the 3.3↔5 V matrix lines, the **BS170 buzzer driver**, a
-touch-electrode pad, and decoupling. ERC-clean (0 errors/warnings).
+There's a first-draft [discrete schematic](KiCad/SmartAlarmClock_discrete/) for the
+custom board. It's a carrier: the YD-ESP32-S3 dev board (J1) and the MAX7219 matrix
+module (J2) plug in via headers, while the board itself carries the discrete glue — a
+DS3231 RTC with supercap backup (trickle-charged `+3V3 → R9 → Schottky → supercap` on
+VBAT, no coin cell), a BSS138 3-channel level shifter (with 10k pull-ups) for the
+3.3↔5 V matrix lines, the BS170 buzzer driver, a touch-electrode pad, and decoupling.
+It's ERC-clean (0 errors, 0 warnings).
 
 ![Discrete carrier-PCB schematic](KiCad/SmartAlarmClock_discrete/SmartAlarmClock_discrete.png)
 
 ## Open questions
 
-- Warm display-emitter sourcing (bench uses red).
-- Capacitive-touch-through-veneer tuning (electrode size, thresholds, groundless USB supply).
-- Per-slot fields (repeat days / sound / sunrise) → drives the HA entity set + NVS schema.
-- Enclosure dimensions; budget + fab (JLCPCB vs Aisler).
+- Warm display-emitter sourcing (the bench uses red).
+- Capacitive-touch-through-veneer tuning: electrode size, thresholds, and behaviour on
+  a groundless USB supply.
+- Per-slot fields (repeat days, sound, sunrise), which drive the HA entity set and the
+  NVS schema.
+- Enclosure dimensions; budget and fab (JLCPCB vs Aisler).
