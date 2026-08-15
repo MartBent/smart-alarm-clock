@@ -119,32 +119,33 @@ provides it natively but would replace the current firmware.
 - A wood-veneer bar enclosure: the matrix glows through the veneer, with a concealed
   USB-C port and hidden fasteners.
 
-Two schematic variants exist. They differ only in how much stays a plug-in module
-versus a discrete part on the board — the deciding factor is the difficulty ladder
-RTC / level-shifter (easy) → matrix (medium, routing) → ESP32 (hard, RF).
+There are two schematic variants. They differ only in how much is a plug-in module
+versus a part on the board. Where to draw that line follows how hard each block is to
+make discrete: the RTC and the level shifter are easy, the MAX7219 is more work (a lot
+of routing), and the ESP32 is the hard one (its antenna needs careful RF layout).
 
-### Prototype carrier-PCB schematic (the decided first board)
+### Prototype carrier-PCB schematic (the first board to fab)
 
-The [prototype schematic](KiCad/SmartAlarmClock_prototype/) is the board to fab first.
-It's a carrier: the ESP32-S3 dev board (J1), the MAX7219 matrix (J2), and the DS3231
-RTC module (J3 — a ZS-042 with a rechargeable cell, so no disposable battery) all plug
-in via headers. The board carries only the easy, low-risk discrete glue: a BSS138
-3-channel level shifter (with 10k pull-ups) for the matrix's 3.3↔5 V lines, the BS170
-buzzer driver, a touch-electrode pad (J4), and decoupling. The two hard, high-risk
-blocks — the ESP32's RF/antenna layout and the MAX7219's routing — stay swappable
-modules for board #1. RTC and touch run natively at 3.3 V, so only CS/DIN/CLK cross the
-shifter. ERC-clean (0 errors, 0 warnings).
+The [prototype schematic](KiCad/SmartAlarmClock_prototype/) is the board to build first.
+It's a carrier. The ESP32-S3 dev board (J1), the MAX7219 matrix (J2), and the DS3231 RTC
+module (J3, a ZS-042 with a rechargeable cell, so no disposable battery) all plug in on
+headers. The board itself holds only the easy parts: a BSS138 3-channel level shifter
+with 10k pull-ups for the matrix's 3.3↔5 V lines, the BS170 buzzer driver, a touch pad
+(J4), and decoupling. The two awkward blocks stay as modules for now, the ESP32 and the
+MAX7219, because those are the ones worth getting right on a later board. The RTC and
+touch run at 3.3 V, so only CS/DIN/CLK cross the shifter. ERC passes with no errors or
+warnings.
 
 ![Prototype carrier-PCB schematic](KiCad/SmartAlarmClock_prototype/SmartAlarmClock_prototype.png)
 
-### Discrete carrier-PCB schematic (a v2 direction)
+### Discrete carrier-PCB schematic (a later v2)
 
-The [discrete schematic](KiCad/SmartAlarmClock_discrete/) goes a step further than the
-prototype: it also pulls the RTC onto the board as a bare DS3231 with supercap backup
-(trickle-charged `+3V3 → R9 → Schottky → supercap` on VBAT, no coin cell) and keeps the
-BSS138 level shifter discrete. The dev board (J1) and MAX7219 matrix (J2) still plug in
-via headers. It's ERC-clean (0 errors, 0 warnings), and it's where the board heads once
-board #1 is proven and hand-soldering an SO-8 RTC is comfortable.
+The [discrete schematic](KiCad/SmartAlarmClock_discrete/) goes one step further. It also
+puts the RTC on the board as a bare DS3231 with a supercap backup, trickle-charged from
+`+3V3` through a resistor and a Schottky onto VBAT (no coin cell), and it keeps the level
+shifter discrete. The dev board (J1) and MAX7219 matrix (J2) still plug in on headers.
+ERC is clean here too. This is where the board goes once the first one works and
+soldering an SO-8 RTC by hand feels fine.
 
 ![Discrete carrier-PCB schematic](KiCad/SmartAlarmClock_discrete/SmartAlarmClock_discrete.png)
 
