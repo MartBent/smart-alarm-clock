@@ -54,8 +54,10 @@ is already included; the first build downloads ESP-IDF `v5.2.3` (slow once, then
 ## Home Assistant integration
 
 A **broker-free** custom integration (REST + SSE realtime, mDNS discovery, ports 80/81) that adds
-the clock to Home Assistant. Install steps + entity list: **[homeassistant/README.md](homeassistant/README.md)**.
-MQTT discovery + LWT is also wired from the firmware as a second path.
+the clock to Home Assistant. It lives in its own HACS-installable repo,
+**[MartBent/homeassistant-smart-alarm-clock](https://github.com/MartBent/homeassistant-smart-alarm-clock)**
+(see [homeassistant/README.md](homeassistant/README.md)). MQTT discovery + LWT is also wired from the
+firmware as a second path.
 
 ## Simulator
 

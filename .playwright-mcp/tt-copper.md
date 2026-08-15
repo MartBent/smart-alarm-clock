@@ -1,0 +1,567 @@
+- generic [active] [ref=f2e1]:
+  - dialog "cookieconsent" [ref=f2e192]:
+    - generic [ref=f2e193]:
+      - text: This website uses cookies to ensure you get the best experience on our website.
+      - button "learn more about cookies" [ref=f2e194] [cursor=pointer]: Privacy Policy
+    - generic [ref=f2e195]:
+      - button "dismiss cookie message" [ref=f2e196] [cursor=pointer]
+      - button "settings cookies" [ref=f2e197] [cursor=pointer]: Preferences
+      - button "allow cookies" [ref=f2e198] [cursor=pointer]: Accept
+  - text:            
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - text:      
+      - generic [ref=f2e4]:
+        - generic [ref=f2e5]:
+          - list [ref=f2e8]:
+            - listitem [ref=f2e9]:
+              - link "" [ref=f2e10] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/index.php?route=account/login
+            - listitem [ref=f2e11]:
+              - link "" [ref=f2e12] [cursor=pointer]:
+                - /url: javascript:open_register_popup()
+            - listitem [ref=f2e13]:
+              - link "" [ref=f2e14] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/index.php?route=account/wishlist
+          - button [ref=f2e16] [cursor=pointer]:
+            - img "English" [ref=f2e19]
+        - generic [ref=f2e20]:
+          - link [ref=f2e23] [cursor=pointer]:
+            - /url: https://www.tinytronics.nl/en
+            - img "TinyTronics" [ref=f2e24]
+          - generic [ref=f2e25]:
+            - generic [ref=f2e26] [cursor=pointer]: 
+            - generic [ref=f2e28]:
+              - button "" [ref=f2e29] [cursor=pointer]
+              - text: 
+            - link "" [ref=f2e32] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/index.php?route=checkout/cart
+    - list [ref=f2e34]:
+      - listitem [ref=f2e35]:
+        - link "" [ref=f2e36] [cursor=pointer]:
+          - /url: https://www.tinytronics.nl/en
+      - listitem [ref=f2e38]:
+        - text: ">"
+        - link "Search":
+          - /url: https://www.tinytronics.nl/index.php?route=product/search&search=copper+tape
+    - heading "Search - copper tape" [level=1] [ref=f2e39]
+    - generic [ref=f2e43]:
+      - generic [ref=f2e44]:
+        - generic [ref=f2e45]:
+          - textbox "Keywords" [ref=f2e46]: copper tape
+          - combobox [ref=f2e47]:
+            - option "All Categories" [selected]
+            - option "3D Printing"
+            - option "Electronics"
+            - option "Accessories"
+            - option "Cables"
+            - option "Endstops"
+            - option "Fans"
+            - option "Motherboards"
+            - option "Stepper Motor Drivers"
+            - option "Stepper Motors"
+            - option "Extrusion"
+            - option "Hotends and Extruders"
+            - option "Nozzles"
+            - option "PTFE Tubes"
+            - option "Filament"
+            - option "1.75mm Filament"
+            - option "2.85mm Filament"
+            - option "Master spools"
+            - option "Mechanics"
+            - option "Audio"
+            - option "Accessories"
+            - option "Enclosures"
+            - option "Knobs"
+            - option "Measuring Modules"
+            - option "Others"
+            - option "Potentiometers"
+            - option "Power Supplies"
+            - option "SD Cards"
+            - option "Amplifiers"
+            - option "Audio Sources"
+            - option "Cables"
+            - option "Connectors"
+            - option "Speakers"
+            - option "Buzzers"
+            - option "Speakers"
+            - option "Cables and Connectors"
+            - option "Cables and Adapters"
+            - option "Alligator Clip"
+            - option "Audio"
+            - option "Cigarette Lighter"
+            - option "Display"
+            - option "Ethernet and Telephone"
+            - option "FFC"
+            - option "Flatcables"
+            - option "Grove Compatible"
+            - option "JST Compatible"
+            - option "Mains Voltage"
+            - option "Molex Compatible"
+            - option "Others"
+            - option "Prototyping Wires"
+            - option "USB"
+            - option "Connectors"
+            - option "Alligator Clips"
+            - option "Audio"
+            - option "Aviation style"
+            - option "Banana"
+            - option "Cable Lugs"
+            - option "DB9"
+            - option "DC Jack"
+            - option "DuPont Compatible"
+            - option "Grove Compatible"
+            - option "JST Compatible"
+            - option "Molex Compatible"
+            - option "Others"
+            - option "Pin Headers"
+            - option "Push-in Wire Connectors"
+            - option "Screw Terminals"
+            - option "Slip Rings"
+            - option "USB"
+            - option "Clearance"
+            - option "B-Stock"
+            - option "Last chance"
+            - option "Communication and Signals"
+            - option "Ethernet"
+            - option "Cables"
+            - option "Modules"
+            - option "IO Converters"
+            - option "Level Converters"
+            - option "Serial and USB"
+            - option "CAN Bus"
+            - option "RS232"
+            - option "RS485"
+            - option "USB"
+            - option "Signal Generators and DACs"
+            - option "Wireless"
+            - option "Antennas"
+            - option "Bluetooth"
+            - option "GPS"
+            - option "Infrared"
+            - option "LoRa"
+            - option "RF"
+            - option "RFID"
+            - option "Telecommunication"
+            - option "Wi-Fi"
+            - option "Zigbee"
+            - option "Components"
+            - option "Capacitors"
+            - option "Coils and Transformers"
+            - option "Connectors"
+            - option "Crystals"
+            - option "Diodes"
+            - option "Fuses"
+            - option "ICs and Microcontroller Chips"
+            - option "ICs"
+            - option "Microcontroller Chips"
+            - option "Knobs, Caps and Covers"
+            - option "LEDs"
+            - option "Accessories"
+            - option "LEDs"
+            - option "MOSFET-FET"
+            - option "Optocouplers"
+            - option "Resistors"
+            - option "Potentiometers"
+            - option "Resistors"
+            - option "Sockets"
+            - option "Switches"
+            - option "Transistors"
+            - option "Voltage Regulators"
+            - option "Computer Accessories"
+            - option "Ethernet Adapters"
+            - option "Mice and Keyboards"
+            - option "SD Cards"
+            - option "USB Hubs"
+            - option "USB Sticks"
+            - option "Wi-Fi Adapters"
+            - option "Data Storage"
+            - option "Hard disks"
+            - option "Modules"
+            - option "SD Cards"
+            - option "USB Sticks"
+            - option "Development Boards"
+            - option "3D Printing"
+            - option "Accessories"
+            - option "Adapter Boards"
+            - option "External Processing Units"
+            - option "Kits"
+            - option "Microcontroller Boards"
+            - option "Arduino Compatible"
+            - option "Others"
+            - option "Teensy"
+            - option "With Bluetooth"
+            - option "With GPS"
+            - option "With LoRa"
+            - option "With Telecommunication"
+            - option "With Wi-Fi"
+            - option "Single-Board Computers"
+            - option "Displays"
+            - option "E-Ink"
+            - option "Embedded"
+            - option "Nextion"
+            - option "LCD"
+            - option "Matrix"
+            - option "OLED"
+            - option "Segments"
+            - option "TFT"
+            - option "Home automation"
+            - option "Control panels"
+            - option "Lighting"
+            - option "Remote controls"
+            - option "Sensors"
+            - option "Climate"
+            - option "Door and window"
+            - option "Energy"
+            - option "Motion and presence"
+            - option "Water"
+            - option "Smart hubs and bridges"
+            - option "Switches and dimmers"
+            - option "Temperature control"
+            - option "Lighting"
+            - option "Individual LEDs"
+            - option "Lasers"
+            - option "LED Strips"
+            - option "Accessories"
+            - option "LED Strips"
+            - option "Matrix"
+            - option "Others"
+            - option "Rings and Modules"
+            - option "Mechanics and Actuators"
+            - option "Electromagnets"
+            - option "Fans"
+            - option "Float valves"
+            - option "Kits"
+            - option "Locks"
+            - option "Motor Controllers and Drivers"
+            - option "Adapter Boards"
+            - option "Brushless DC Motor Controls and Drivers"
+            - option "DC-Motor Controllers and Drivers"
+            - option "Servomotor Controllers"
+            - option "Stepper Motor Controllers and Drivers"
+            - option "Motors"
+            - option "Brushless DC (BLDC) motors"
+            - option "DC-Motors"
+            - option "Pumps"
+            - option "Servomotors"
+            - option "Stepper Motors"
+            - option "Vibration Motors"
+            - option "Others"
+            - option "Parts"
+            - option "Bearings"
+            - option "Brackets"
+            - option "Cooling Elements"
+            - option "Hoses"
+            - option "Lead screws"
+            - option "Motor Couplers"
+            - option "Mounting Material"
+            - option "Pulleys"
+            - option "Shock Absorbers"
+            - option "Springs"
+            - option "Timing Belts"
+            - option "Wheels"
+            - option "Solenoids"
+            - option "Solenoid Valves"
+            - option "Solenoids"
+            - option "Platforms and Systems"
+            - option "Bitcraze Crazyflie"
+            - option "M5Stack"
+            - option "Accessories"
+            - option "Atom"
+            - option "Camera"
+            - option "Chain"
+            - option "E-Paper"
+            - option "M5Core"
+            - option "M5Stamp"
+            - option "M5Station"
+            - option "M5Stick"
+            - option "Other controllers"
+            - option "Unit"
+            - option "RAKwireless"
+            - option "Accessories"
+            - option "Base"
+            - option "Core"
+            - option "Display and LED"
+            - option "Interface"
+            - option "Motor"
+            - option "Power"
+            - option "Sensor"
+            - option "Storage"
+            - option "Wireless"
+            - option "SenseCAP"
+            - option "Sonoff"
+            - option "Accessories"
+            - option "RF"
+            - option "Wi-Fi"
+            - option "Zigbee"
+            - option "Power"
+            - option "Batteries"
+            - option "14500"
+            - option "18650"
+            - option "21700"
+            - option "9V"
+            - option "AA"
+            - option "AAA"
+            - option "Button Cell"
+            - option "Lead Battery"
+            - option "Li-Po"
+            - option "Others"
+            - option "Battery Holders and Clips"
+            - option "18650"
+            - option "2032"
+            - option "21700"
+            - option "9V"
+            - option "AA"
+            - option "AAA"
+            - option "C"
+            - option "D"
+            - option "BMS and Chargers"
+            - option "BMS"
+            - option "Lead Battery"
+            - option "Li-ion and Li-Po"
+            - option "LiFePO4"
+            - option "NiMH"
+            - option "Solar Chargers"
+            - option "Cables and Connectors"
+            - option "Generators"
+            - option "Power Banks and Battery Modules"
+            - option "Power Supplies"
+            - option "USB PD"
+            - option "3.3V"
+            - option "5V"
+            - option "9V"
+            - option "12V"
+            - option "24V"
+            - option "36V"
+            - option "Accessories"
+            - option "Solar Energy"
+            - option "Modules"
+            - option "Solar Panels"
+            - option "Voltage Converters"
+            - option "Boost (Step-Up) Converters"
+            - option "Buck (Step-Down) Converters"
+            - option "Buck-Boost (Step-Up-Down) Converters"
+            - option "Isolated Voltage Converters"
+            - option "Voltage Regulators"
+            - option "Sensors"
+            - option "Acceleration-Rotation"
+            - option "Air"
+            - option "Dust"
+            - option "Gas"
+            - option "Humidity"
+            - option "Pressure"
+            - option "Body"
+            - option "Current-Voltage"
+            - option "Distance"
+            - option "Endstop"
+            - option "Liquid"
+            - option "Magnetic Field"
+            - option "Material"
+            - option "Measuring Modules"
+            - option "Motion"
+            - option "Optical"
+            - option "Cameras and Scanners"
+            - option "Infrared"
+            - option "Light and Color"
+            - option "Light slots"
+            - option "Sound"
+            - option "Temperature"
+            - option "Time"
+            - option "Touch"
+            - option "Weight-Pressure-Force"
+            - option "Load Cells"
+            - option "Membrane"
+            - option "Switches"
+            - option "Switches"
+            - option "AC Dimmers"
+            - option "Endstops"
+            - option "Magnetic Switches"
+            - option "Manual Switches"
+            - option "Accessories"
+            - option "DIP Switches"
+            - option "Joysticks"
+            - option "Keypads"
+            - option "Micro Switches"
+            - option "PCB Switches"
+            - option "Push Buttons and Switches"
+            - option "Rocker Switches"
+            - option "Rotary Encoders"
+            - option "Rotary Switches"
+            - option "Slide Switches"
+            - option "Toggle Switches"
+            - option "Touch"
+            - option "Optocouplers"
+            - option "Relays"
+            - option "Relay Modules"
+            - option "Relays"
+            - option "Transistors and MOSFETs"
+            - option "MOSFET Modules"
+            - option "MOSFETs-FETs"
+            - option "Transistors"
+            - option "Tools and Mounting"
+            - option "Consumables"
+            - option "Glue"
+            - option "Lubricants"
+            - option "Soldering"
+            - option "Tape"
+            - option "Thermal conductive paste"
+            - option "Enclosures"
+            - option "Accessories"
+            - option "Arduino Compatible"
+            - option "Others"
+            - option "Raspberry Pi Compatible"
+            - option "Universal"
+            - option "Installation and Mounting Material"
+            - option "Bolts"
+            - option "Brackets"
+            - option "Cable Clips"
+            - option "Cable Glands"
+            - option "Cable Ties - Zip Ties - Tyraps"
+            - option "Glue"
+            - option "Heat Shrink Tubing"
+            - option "Magnets"
+            - option "Mounting Plates"
+            - option "Nuts"
+            - option "Screws"
+            - option "Spacers"
+            - option "Tape"
+            - option "Threaded Inserts"
+            - option "Prototyping Supplies"
+            - option "Breadboards"
+            - option "Breakout Boards"
+            - option "Experiment PCBs"
+            - option "Soldering"
+            - option "Accessories"
+            - option "Consumables"
+            - option "DIY Soldering Kits"
+            - option "Soldering Irons and Stations"
+            - option "Soldering Tips"
+            - option "Storage"
+            - option "Storage Boxes"
+            - option "Testing and Measuring"
+            - option "Accessories"
+            - option "Measuring Modules"
+            - option "Multimeters"
+            - option "Oscilloscopes and Logic Analyzers"
+            - option "Tools"
+            - option "Pliers and Cutters"
+            - option "Screwdrivers and Keys"
+            - option "Tweezers"
+            - option "Others"
+        - generic [ref=f2e49] [cursor=pointer]:
+          - checkbox "Search in subcategories" [disabled] [ref=f2e50]
+          - text: Search in subcategories
+        - generic [ref=f2e52] [cursor=pointer]:
+          - checkbox "Search in product descriptions" [ref=f2e53]
+          - text: Search in product descriptions
+      - button "Search" [ref=f2e56] [cursor=pointer]
+      - heading "Products found" [level=2] [ref=f2e58]
+      - generic [ref=f2e59]:
+        - paragraph [ref=f2e60]: There is no product that matches the search criteria.
+        - link "Continue" [ref=f2e63] [cursor=pointer]:
+          - /url: ""
+    - contentinfo [ref=f2e67]:
+      - generic [ref=f2e68]:
+        - list [ref=f2e75]:
+          - listitem [ref=f2e76]:
+            - link "" [ref=f2e77] [cursor=pointer]:
+              - /url: https://www.facebook.com/tinytronics/
+          - listitem [ref=f2e78]:
+            - link "" [ref=f2e79] [cursor=pointer]:
+              - /url: https://www.instagram.com/tinytronics/
+          - listitem [ref=f2e80]:
+            - link "" [ref=f2e81] [cursor=pointer]:
+              - /url: https://nl.linkedin.com/company/tinytronicsnl
+        - generic [ref=f2e83]:
+          - generic [ref=f2e87]:
+            - heading "Customer support" [level=3] [ref=f2e88]
+            - list [ref=f2e89]:
+              - listitem [ref=f2e90]:
+                - link "Pickup location" [ref=f2e91] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/location
+              - listitem [ref=f2e93]:
+                - link "Order" [ref=f2e94] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/order
+              - listitem [ref=f2e96]:
+                - link "Payment" [ref=f2e97] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/payment
+              - listitem [ref=f2e99]:
+                - link "Delivery information" [ref=f2e100] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/delivery-information
+              - listitem [ref=f2e102]:
+                - link "Customer support" [ref=f2e103] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/customer-support
+              - listitem [ref=f2e105]:
+                - link "Old-for-new arrangement" [ref=f2e106] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/old-for-new-arrangement
+              - listitem [ref=f2e108]:
+                - link "Returns" [ref=f2e109] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/return
+              - listitem [ref=f2e111]:
+                - link "For business" [ref=f2e112] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/business
+          - generic [ref=f2e117]:
+            - heading "My account" [level=3] [ref=f2e118]
+            - list [ref=f2e119]:
+              - listitem [ref=f2e120]:
+                - link "My account" [ref=f2e121] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/index.php?route=account/account
+              - listitem [ref=f2e123]:
+                - link "My orders" [ref=f2e124] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/index.php?route=account/order
+          - generic [ref=f2e129]:
+            - heading "About us" [level=3] [ref=f2e130]
+            - list [ref=f2e131]:
+              - listitem [ref=f2e132]:
+                - link "Terms & conditions" [ref=f2e133] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/terms-and-conditions
+              - listitem [ref=f2e135]:
+                - link "GDPR tools" [ref=f2e136] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/gdpr-tools
+              - listitem [ref=f2e138]:
+                - link "Disclaimer" [ref=f2e139] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/disclaimer
+              - listitem [ref=f2e141]:
+                - link "About us" [ref=f2e142] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/about-us
+              - listitem [ref=f2e144]:
+                - link "Privacy Policy" [ref=f2e145] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/privacy-policy
+              - listitem [ref=f2e147]:
+                - link:
+                  - /url: https://www.tinytronics.nl/en/vacancies
+              - listitem [ref=f2e148]:
+                - link "Packaging material" [ref=f2e149] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/pm
+          - generic [ref=f2e154]:
+            - heading "Business information" [level=3] [ref=f2e155]
+            - list [ref=f2e156]:
+              - listitem [ref=f2e157]:
+                - generic [ref=f2e158]: "Chamber of Commerce number: 83192425"
+              - listitem [ref=f2e160]:
+                - generic [ref=f2e161]: "VAT-number: NL862763198B01"
+        - generic [ref=f2e164]:
+          - list [ref=f2e169]:
+            - listitem [ref=f2e170]:
+              - generic [ref=f2e171]: © TinyTronics B.V. 2014 - 2026
+          - list [ref=f2e177]:
+            - listitem [ref=f2e178]:
+              - link [ref=f2e179] [cursor=pointer]:
+                - /url: https://www.ideal.nl/
+            - listitem [ref=f2e180]
+            - listitem [ref=f2e182]:
+              - link [ref=f2e183] [cursor=pointer]:
+                - /url: https://www.bancontact.com/nl
+            - listitem [ref=f2e184]:
+              - link [ref=f2e185] [cursor=pointer]:
+                - /url: https://www.belfius.be/retail/nl/index.aspx
+            - listitem [ref=f2e186]:
+              - link [ref=f2e187] [cursor=pointer]:
+                - /url: https://epscards.com/
+            - listitem [ref=f2e188]:
+              - link [ref=f2e189] [cursor=pointer]:
+                - /url: https://www.paypal.com/nl/home/
+            - listitem [ref=f2e190]:
+              - link [ref=f2e191] [cursor=pointer]:
+                - /url: https://www.kbc.be/ondernemen/nl/product/online-ondernemen/betaalknop.html
+  - text: 

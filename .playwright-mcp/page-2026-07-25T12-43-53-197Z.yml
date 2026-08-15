@@ -1,0 +1,618 @@
+- generic [active] [ref=f15e1]:
+  - dialog "Wij respecteren uw privacy.":
+    - generic [ref=f15e2]:
+      - img "Cookie banner" [ref=f15e4]
+      - generic [ref=f15e5]: Wij respecteren uw privacy.
+      - generic [ref=f15e6]:
+        - text: Deze website gebruikt cookies om ervoor te zorgen dat u de beste ervaring krijgt.
+        - link "Leer meer" [ref=f15e7] [cursor=pointer]:
+          - /url: /pages/security-privacy
+      - generic [ref=f15e8]:
+        - button "Voorkeuren" [ref=f15e9] [cursor=pointer]
+        - button "Accepteren" [ref=f15e10] [cursor=pointer]
+        - button "Afwijzen" [ref=f15e11] [cursor=pointer]
+  - link "Ga naar inhoud" [ref=f15e12] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f15e15]:
+    - generic [ref=f15e17]:
+      - navigation [ref=f15e18]:
+        - button "Menu openen" [ref=f15e19] [cursor=pointer]
+      - link [ref=f15e23] [cursor=pointer]:
+        - /url: /nl
+        - img "RobotShopRobotics tot uw dienst maken" [ref=f15e24]
+      - search [ref=f15e26]:
+        - generic [ref=f15e28]:
+          - combobox "Indienen" [ref=f15e30]:
+            - search [ref=f15e31]:
+              - searchbox "Indienen" [ref=f15e33]
+          - button "Zoeken" [ref=f15e34] [cursor=pointer]
+      - generic [ref=f15e35]:
+        - text: 
+        - link "0" [ref=f15e37] [cursor=pointer]:
+          - /url: /nl/cart
+  - main [ref=f15e43]:
+    - generic [ref=f15e46]:
+      - navigation "broodkruimel" [ref=f15e48]:
+        - list [ref=f15e49]:
+          - listitem [ref=f15e50]:
+            - link "Startpagina" [ref=f15e51] [cursor=pointer]:
+              - /url: /nl
+          - listitem [ref=f15e52]: 24×8 LED Matrix (Rood) - FireBeetle C...
+      - generic [ref=f15e53]:
+        - generic [ref=f15e54]:
+          - generic [ref=f15e58]:
+            - generic [ref=f15e60]:
+              - group "1 / 4" [ref=f15e61]:
+                - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e64]
+              - group "2 / 4" [ref=f15e65]:
+                - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e68]
+              - group "3 / 4" [ref=f15e69]:
+                - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e72]
+              - group "4 / 4" [ref=f15e73]:
+                - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e76]
+            - generic [ref=f15e77]:
+              - generic [ref=f15e78]:
+                - group "1 / 4" [ref=f15e79] [cursor=pointer]:
+                  - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e80]
+                - group "2 / 4" [ref=f15e81] [cursor=pointer]:
+                  - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e82]
+                - group "3 / 4" [ref=f15e83] [cursor=pointer]:
+                  - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e84]
+                - group "4 / 4" [ref=f15e85] [cursor=pointer]:
+                  - img "24×8 LED Matrix (Red) - FireBeetle Covers" [ref=f15e86]
+              - text: prev next
+          - generic [ref=f15e90]:
+            - generic [ref=f15e91]:
+              - heading "24×8 LED Matrix (Rood) - FireBeetle Covers" [level=1] [ref=f15e92]
+              - generic [ref=f15e93]:
+                - link "DFRobot" [ref=f15e94] [cursor=pointer]:
+                  - /url: /nl/collections/dfrobot-en
+                - generic [ref=f15e95]: Artikelnummer:RB-Dfr-1451
+                - generic [ref=f15e96]: "Fabrikant #: DFR0488"
+              - text: 
+              - list [ref=f15e98]:
+                - listitem [ref=f15e99]:
+                  - link "Delen op Facebook" [ref=f15e100] [cursor=pointer]:
+                    - /url: https://www.facebook.com/sharer.php?u=https://eu.robotshop.com/nl/products/248-led-matrix-rood-firebeetle-covers
+                - listitem [ref=f15e101]:
+                  - link "Pin op Pinterest" [ref=f15e102] [cursor=pointer]:
+                    - /url: https://pinterest.com/pin/create/button/?url=https://eu.robotshop.com/nl/products/248-led-matrix-rood-firebeetle-covers&media=https://eu.robotshop.com/cdn/shop/files/248-led-matrix-red-firebeetle-covers-img01.webp?v=1764314941&width=1024&description=Description%2024%C3%978%20LED%20Matrix%20(Rood)%20-%20FireBeetle%20Covers%20Ontworpen%20voor%20de%20FireBeetle-serie%20met%20een%20laag...
+                - listitem [ref=f15e103]:
+                  - link "Tweeten op Twitter" [ref=f15e104] [cursor=pointer]:
+                    - /url: https://twitter.com/share?text=24%C3%978%20LED%20Matrix%20(Rood)%20-%20FireBeetle%20Covers&url=https://eu.robotshop.com/nl/products/248-led-matrix-rood-firebeetle-covers
+                - listitem [ref=f15e105]:
+                  - link "Delen via email" [ref=f15e106] [cursor=pointer]:
+                    - /url: mailto:?&subject=24×8 LED Matrix (Rood) - FireBeetle Covers&body=https://eu.robotshop.com/nl/products/248-led-matrix-rood-firebeetle-covers
+            - separator [ref=f15e107]
+            - generic [ref=f15e108]:
+              - generic [ref=f15e109]:
+                - generic [ref=f15e110]:
+                  - generic [ref=f15e111]: "Prijs :"
+                  - region [ref=f15e112]:
+                    - generic [ref=f15e114]:
+                      - generic [ref=f15e115]: Verkoopprijs
+                      - text: €16,50
+                    - paragraph [ref=f15e116]: Inclusief belasting
+                    - paragraph [ref=f15e117]:
+                      - link "Verzending berekend" [ref=f15e118] [cursor=pointer]:
+                        - /url: /nl/policies/shipping-policy
+                      - text: bij het afrekenen
+                    - paragraph
+                - generic [ref=f15e122]:
+                  - paragraph [ref=f15e123]:
+                    - generic [ref=f15e124]: 
+                    - generic [ref=f15e125]: Op aanvraag
+                    - generic [ref=f15e126] [cursor=pointer]: Zie vervaldatum
+                  - generic [ref=f15e128]: Dit is een On Demand-artikel en is normaal gesproken niet op voorraad. Wij bestellen het voor u mee bij onze volgende aankoop bij de leverancier.
+                  - paragraph [ref=f15e129]: "* Vertragingen zijn afhankelijk van de bestelfrequentie van elke leverancier en de geschatte aankomstdatum wordt aangegeven in de vervaldatum. Retourzendingen van On Demand- en Uitverkoopartikelen worden niet geaccepteerd, behalve wanneer deze defect blijken te zijn. In dat geval kan het product naar goeddunken van RobotShop worden gerepareerd of vervangen."
+                  - paragraph
+                - generic [ref=f15e130]:
+                  - generic [ref=f15e131]: "Hoeveelheid :"
+                  - generic [ref=f15e133]:
+                    - button "decrease" [ref=f15e134] [cursor=pointer]
+                    - textbox "Quantity" [ref=f15e135]: "1"
+                    - button "increase" [ref=f15e136] [cursor=pointer]
+              - button "In winkelwagen" [ref=f15e138] [cursor=pointer]
+        - generic [ref=f15e139]:
+          - generic [ref=f15e140]:
+            - generic [ref=f15e144]: Retourbeleid
+            - link "Meer info" [ref=f15e145] [cursor=pointer]:
+              - /url: /nl/policies/terms-of-service#Returns
+          - generic [ref=f15e146]:
+            - generic [ref=f15e151]: Garantie
+            - link "Meer info" [ref=f15e152] [cursor=pointer]:
+              - /url: /nl/policies/terms-of-service#Warranty
+          - generic [ref=f15e153]:
+            - generic [ref=f15e158]: Vragen?
+            - link "Stel hier" [ref=f15e159] [cursor=pointer]:
+              - /url: https://community.robotshop.com/forum/#support-center
+          - generic [ref=f15e160]:
+            - generic [ref=f15e171]: 250 €+ vrij
+            - link "Meer info" [ref=f15e172] [cursor=pointer]:
+              - /url: /nl/policies/shipping-policy
+        - generic [ref=f15e174]:
+          - heading "Description" [level=2] [ref=f15e176]
+          - generic [ref=f15e177]:
+            - generic [ref=f15e178]:
+              - list [ref=f15e179]:
+                - listitem [ref=f15e180]: 24×8 LED Matrix (Rood) - FireBeetle Covers
+                - listitem [ref=f15e181]: Ontworpen voor de FireBeetle-serie met een laag stroomverbruik
+                - listitem [ref=f15e182]: Kenmerkt de HT1632C krachtige LED-bestuurderchip
+                - listitem [ref=f15e183]: Ondersteunt 16-schaal PWM helderheidsaanpassing
+                - listitem [ref=f15e184]: Compatibel met Arduino UNO en andere microcontrollers
+                - listitem [ref=f15e185]: Integreert 256KHz RC-klok voor nauwkeurige timing
+              - paragraph [ref=f15e186]:
+                - text: De
+                - strong [ref=f15e187]: 24×8 LED Matrix (Rood) - FireBeetle Covers
+                - text: is ontworpen voor de FireBeetle-serie en ondersteunt een laag stroomverbruik en scrollend scherm. Het kenmerkt de HT1632C krachtige LED-bestuurderchip, waardoor elke LED onafhankelijk kan worden aangestuurd. De matrix integreert een 256KHz RC-klok en ondersteunt 16-schaal PWM helderheidsaanpassing. Het is ook compatibel met andere Arduino microcontrollers, zoals de Arduino UNO.
+              - paragraph [ref=f15e188]:
+                - img "24×8 LED Matrix (Rood) - FireBeetle Covers"
+            - button "Bekijk minder" [expanded] [ref=f15e189] [cursor=pointer]
+        - generic [ref=f15e192]:
+          - button "Wat is erbij inbegrepen" [expanded] [ref=f15e193] [cursor=pointer]
+          - list [ref=f15e199]:
+            - listitem [ref=f15e200]: 1x FireBeetle Covers-24x8 LED Matrix (Rood)
+            - listitem [ref=f15e201]: 2x 18pin-2.54mm Pin Header
+            - listitem [ref=f15e202]: 2x 18pin-2.54mm Female Pin Header
+        - generic [ref=f15e203]:
+          - button "Dimensies" [expanded] [ref=f15e204] [cursor=pointer]
+          - list [ref=f15e210]:
+            - listitem [ref=f15e211]: 24 x 58 mm (0.94 x 2.28 inches)
+        - generic [ref=f15e212]:
+          - button "Specificaties" [expanded] [ref=f15e213] [cursor=pointer]
+          - list [ref=f15e219]:
+            - listitem [ref=f15e220]: "Bedrijfsspanning: 3 tot 5V"
+            - listitem [ref=f15e221]: "LED-kleur: Rood"
+            - listitem [ref=f15e222]: "Bestuurderchip: HT1632C"
+            - listitem [ref=f15e223]: "Werkstroom: 6 tot 100mA"
+            - listitem [ref=f15e224]: "Laag stroomverbruik: 5uA"
+            - listitem [ref=f15e225]: "RC-klokfrequentie: 256kHz"
+            - listitem [ref=f15e226]: "Chip select (CS): Selecteerbaar tussen D2, D3, D4, D5"
+            - listitem [ref=f15e227]: Ondersteunt seriële gegevenscommunicatie
+            - listitem [ref=f15e228]: Compatibel met Arduino-bibliotheek
+            - listitem [ref=f15e229]: Ondersteunt scrollend scherm
+            - listitem [ref=f15e230]: Interface-modus compatibel met FireBeetle-serie
+            - listitem [ref=f15e231]: "Bedrijfstemperatuurbereik: -10°C tot +85°C"
+        - generic [ref=f15e236]:
+          - generic [ref=f15e237]:
+            - heading "Klantbeoordelingen" [level=2] [ref=f15e238]
+            - generic [ref=f15e239]:
+              - generic [ref=f15e241]:
+                - img "Average rating is 0.00 stars" [ref=f15e242]:
+                  - generic [ref=f15e243]: 
+                  - generic [ref=f15e244]: 
+                  - generic [ref=f15e245]: 
+                  - generic [ref=f15e246]: 
+                  - generic [ref=f15e247]: 
+                - generic [ref=f15e248]: Wees de eerste om een beoordeling te schrijven
+              - text:     
+          - text: 
+        - generic [ref=f15e250]:
+          - heading "Verzending schatten:" [level=2] [ref=f15e252]
+          - form [ref=f15e254]:
+            - generic [ref=f15e255]:
+              - generic [ref=f15e256]:
+                - generic [ref=f15e257]: Land
+                - combobox "Land" [ref=f15e259] [cursor=pointer]:
+                  - option "Duitsland" [selected]
+                  - option "Frankrijk"
+                  - option "Nederland"
+                  - option "België"
+                  - option "---"
+                  - option "België"
+                  - option "Bulgarije"
+                  - option "Cyprus"
+                  - option "Denemarken"
+                  - option "Duitsland"
+                  - option "Estland"
+                  - option "Finland"
+                  - option "Frankrijk"
+                  - option "Frans-Guyana"
+                  - option "Griekenland"
+                  - option "Guadeloupe"
+                  - option "Hongarije"
+                  - option "Ierland"
+                  - option "Italië"
+                  - option "Kroatië"
+                  - option "Letland"
+                  - option "Litouwen"
+                  - option "Luxemburg"
+                  - option "Malta"
+                  - option "Martinique"
+                  - option "Nederland"
+                  - option "Nieuw-Caledonië"
+                  - option "Noorwegen"
+                  - option "Oostenrijk"
+                  - option "Polen"
+                  - option "Portugal"
+                  - option "Réunion"
+                  - option "Roemenië"
+                  - option "Slovenië"
+                  - option "Slowakije"
+                  - option "Spanje"
+                  - option "Tsjechië"
+                  - option "Zweden"
+                  - option "Zwitserland"
+              - generic [ref=f15e260]:
+                - generic [ref=f15e261]: Postcode
+                - textbox "Postcode" [ref=f15e262]
+            - button "Schatting" [ref=f15e263] [cursor=pointer]
+          - button "Restitutiebeleid:" [ref=f15e265] [cursor=pointer]
+    - generic [ref=f15e268]:
+      - heading "Dit vind je misschien ook leuk" [level=2] [ref=f15e270]
+      - generic [ref=f15e274]:
+        - generic [ref=f15e275]:
+          - generic [ref=f15e276]:
+            - text: "1"
+            - generic [ref=f15e277]: Op aanvraag
+          - link [ref=f15e278] [cursor=pointer]:
+            - /url: /nl/products/248-led-matrix-geel-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555428180304&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "24×8 LED Matrix (Yellow) - FireBeetle Covers" [ref=f15e280]
+          - generic [ref=f15e281]:
+            - generic [ref=f15e282]:
+              - link "DFRobot" [ref=f15e283] [cursor=pointer]:
+                - /url: /nl/products/248-led-matrix-geel-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555428180304&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "24×8 LED Matrix (Geel) - FireBeetle Covers" [ref=f15e284] [cursor=pointer]:
+                - /url: /nl/products/248-led-matrix-geel-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555428180304&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e285]: "Artikelnummer: RB-Dfr-1450"
+              - generic [ref=f15e287]:
+                - generic [ref=f15e288]: Verkoopprijs
+                - text: €16,50
+              - generic [ref=f15e289]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e291] [cursor=pointer]
+        - generic [ref=f15e292]:
+          - generic [ref=f15e293]:
+            - text: "1"
+            - generic [ref=f15e294]: Op aanvraag
+          - link [ref=f15e295] [cursor=pointer]:
+            - /url: /nl/products/248-led-matrix-wit-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555615809872&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "24×8 LED Matrix (White) - FireBeetle Covers" [ref=f15e297]
+          - generic [ref=f15e298]:
+            - generic [ref=f15e299]:
+              - link "DFRobot" [ref=f15e300] [cursor=pointer]:
+                - /url: /nl/products/248-led-matrix-wit-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555615809872&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "24×8 LED Matrix (Wit) - FireBeetle Covers" [ref=f15e301] [cursor=pointer]:
+                - /url: /nl/products/248-led-matrix-wit-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555615809872&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e302]: "Artikelnummer: RB-Dfr-1449"
+              - generic [ref=f15e304]:
+                - generic [ref=f15e305]: Verkoopprijs
+                - text: €16,50
+              - generic [ref=f15e306]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e308] [cursor=pointer]
+        - generic [ref=f15e309]:
+          - generic: "1"
+          - link [ref=f15e310] [cursor=pointer]:
+            - /url: /nl/products/grove-rode-led-matrix-met-stuurprogramma?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531009605800&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "Grove Red LED Matrix w/Driver" [ref=f15e312]
+          - generic [ref=f15e313]:
+            - generic [ref=f15e314]:
+              - link "SeeedStudio" [ref=f15e315] [cursor=pointer]:
+                - /url: /nl/products/grove-rode-led-matrix-met-stuurprogramma?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531009605800&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "Grove Rode LED Matrix met Stuurprogramma" [ref=f15e316] [cursor=pointer]:
+                - /url: /nl/products/grove-rode-led-matrix-met-stuurprogramma?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531009605800&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e317]: "Artikelnummer: RB-See-693"
+              - generic [ref=f15e319]:
+                - generic [ref=f15e320]: Verkoopprijs
+                - text: €9,78
+              - generic [ref=f15e321]: Beoordelingen
+              - generic: 
+              - paragraph [ref=f15e322]:
+                - generic [ref=f15e323]: Binnenkort nieuwe voorraad
+                - generic [ref=f15e324] [cursor=pointer]: Zie vervaldatum
+              - generic [ref=f15e326] [cursor=pointer]: Breng mij op de hoogte
+            - button "Kopen" [ref=f15e328] [cursor=pointer]
+        - generic [ref=f15e329]:
+          - generic [ref=f15e330]:
+            - text: "1"
+            - generic [ref=f15e331]: Op aanvraag
+          - link [ref=f15e332] [cursor=pointer]:
+            - /url: /nl/products/rgb-8x8-64-i2c-24-bit-kleur-programmeerbaar-led-matrixpaneel-voor-raspberry-pi?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531398201512&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "RGB 8x8 64 I2C 24 bit Color Programmable LED Matrix Panel for Raspberry Pi" [ref=f15e334]
+          - generic [ref=f15e335]:
+            - generic [ref=f15e336]:
+              - link "Sunfounder" [ref=f15e337] [cursor=pointer]:
+                - /url: /nl/products/rgb-8x8-64-i2c-24-bit-kleur-programmeerbaar-led-matrixpaneel-voor-raspberry-pi?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531398201512&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "RGB 8x8 64 I2C 24-bit Kleur Programmeerbaar LED-matrixpaneel voor Raspberry Pi" [ref=f15e338] [cursor=pointer]:
+                - /url: /nl/products/rgb-8x8-64-i2c-24-bit-kleur-programmeerbaar-led-matrixpaneel-voor-raspberry-pi?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7531398201512&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e339]: "Artikelnummer: RB-Suf-191"
+              - generic [ref=f15e341]:
+                - generic [ref=f15e342]: Verkoopprijs
+                - text: €21,99
+              - generic [ref=f15e343]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e345] [cursor=pointer]
+        - generic [ref=f15e346]:
+          - generic [ref=f15e347]:
+            - text: "1"
+            - generic [ref=f15e348]: Op aanvraag
+          - link [ref=f15e349] [cursor=pointer]:
+            - /url: /nl/products/oled128x64-scherm-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555563839824&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "OLED128x64 Display - FireBeetle Covers" [ref=f15e351]
+          - generic [ref=f15e352]:
+            - generic [ref=f15e353]:
+              - link "DFRobot" [ref=f15e354] [cursor=pointer]:
+                - /url: /nl/products/oled128x64-scherm-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555563839824&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "OLED128x64 Scherm - FireBeetle Covers" [ref=f15e355] [cursor=pointer]:
+                - /url: /nl/products/oled128x64-scherm-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555563839824&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e356]: "Artikelnummer: RB-Dfr-1480"
+              - generic [ref=f15e358]:
+                - generic [ref=f15e359]: Verkoopprijs
+                - text: €14,19
+              - generic [ref=f15e360]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e362] [cursor=pointer]
+        - generic [ref=f15e363]:
+          - generic [ref=f15e364]:
+            - text: "1"
+            - generic [ref=f15e365]: Op aanvraag
+          - link [ref=f15e366] [cursor=pointer]:
+            - /url: /nl/products/gravity-flexibele-8x32-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555503546704&pr_ref_pid=9555570655568&pr_seq=uniform
+            - 'img "Gravity: Flexible 8x32 RGB LED Matrix" [ref=f15e368]'
+          - generic [ref=f15e369]:
+            - generic [ref=f15e370]:
+              - link "DFRobot" [ref=f15e371] [cursor=pointer]:
+                - /url: /nl/products/gravity-flexibele-8x32-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555503546704&pr_ref_pid=9555570655568&pr_seq=uniform
+              - 'link "Gravity: Flexibele 8x32 RGB LED Matrix" [ref=f15e372] [cursor=pointer]':
+                - /url: /nl/products/gravity-flexibele-8x32-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555503546704&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e373]: "Artikelnummer: RB-Dfr-1443"
+              - generic [ref=f15e375]:
+                - generic [ref=f15e376]: Verkoopprijs
+                - text: €57,20
+              - generic [ref=f15e377]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e379] [cursor=pointer]
+        - generic [ref=f15e380]:
+          - generic [ref=f15e381]:
+            - text: "1"
+            - generic [ref=f15e382]: Op aanvraag
+          - link [ref=f15e383] [cursor=pointer]:
+            - /url: /nl/products/proto-bord-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555497156944&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "Proto Board - FireBeetle Covers" [ref=f15e385]
+          - generic [ref=f15e386]:
+            - generic [ref=f15e387]:
+              - link "DFRobot" [ref=f15e388] [cursor=pointer]:
+                - /url: /nl/products/proto-bord-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555497156944&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "Proto Bord - FireBeetle Covers" [ref=f15e389] [cursor=pointer]:
+                - /url: /nl/products/proto-bord-firebeetle-covers?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9555497156944&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e390]: "Artikelnummer: RB-Dfr-1448"
+              - generic [ref=f15e392]:
+                - generic [ref=f15e393]: Verkoopprijs
+                - text: €3,85
+              - generic [ref=f15e394]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e396] [cursor=pointer]
+        - generic [ref=f15e397]:
+          - generic [ref=f15e398]:
+            - text: "1"
+            - generic [ref=f15e399]: Op aanvraag
+          - link [ref=f15e400] [cursor=pointer]:
+            - /url: /nl/products/gravity-flexibele-8x8-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9560318542160&pr_ref_pid=9555570655568&pr_seq=uniform
+            - 'img "Gravity: Flexible 8x8 RGB LED Matrix" [ref=f15e402]'
+          - generic [ref=f15e403]:
+            - generic [ref=f15e404]:
+              - link "DFRobot" [ref=f15e405] [cursor=pointer]:
+                - /url: /nl/products/gravity-flexibele-8x8-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9560318542160&pr_ref_pid=9555570655568&pr_seq=uniform
+              - 'link "Gravity: Flexibele 8x8 RGB LED Matrix" [ref=f15e406] [cursor=pointer]':
+                - /url: /nl/products/gravity-flexibele-8x8-rgb-led-matrix?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=9560318542160&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e407]: "Artikelnummer: RB-Dfr-1444"
+              - generic [ref=f15e409]:
+                - generic [ref=f15e410]: Verkoopprijs
+                - text: €38,50
+              - generic [ref=f15e411]: Beoordelingen
+              - generic: 
+            - button "Kopen" [ref=f15e413] [cursor=pointer]
+        - generic [ref=f15e414]:
+          - generic: "1"
+          - link [ref=f15e415] [cursor=pointer]:
+            - /url: /nl/products/firebeetle-328p-bord-met-ble-41?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7530620485800&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "FireBeetle 328P Board w/ BLE 4.1" [ref=f15e417]
+          - generic [ref=f15e418]:
+            - generic [ref=f15e419]:
+              - link "DFRobot" [ref=f15e420] [cursor=pointer]:
+                - /url: /nl/products/firebeetle-328p-bord-met-ble-41?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7530620485800&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "FireBeetle 328P Bord met BLE 4.1" [ref=f15e421] [cursor=pointer]:
+                - /url: /nl/products/firebeetle-328p-bord-met-ble-41?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7530620485800&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e422]: "Artikelnummer: RB-Dfr-775"
+              - generic [ref=f15e424]:
+                - generic [ref=f15e425]: Verkoopprijs
+                - text: €20,79
+              - generic [ref=f15e426]: Beoordelingen
+              - generic: 
+              - paragraph [ref=f15e427]:
+                - generic [ref=f15e428]: Binnenkort nieuwe voorraad
+                - generic [ref=f15e429] [cursor=pointer]: Zie vervaldatum
+              - generic [ref=f15e431] [cursor=pointer]: Breng mij op de hoogte
+            - button "Kopen" [ref=f15e433] [cursor=pointer]
+        - generic [ref=f15e434]:
+          - generic: "1"
+          - link [ref=f15e435] [cursor=pointer]:
+            - /url: /nl/products/rgb-full-color-led-matrixpaneel-2-mm-pitch-64x64-pixels-instelbare-helderheid?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7707538981032&pr_ref_pid=9555570655568&pr_seq=uniform
+            - img "RGB Full-Color LED Matrix Panel, 2mm Pitch, 64x64 pixels, Adjustable Brightness" [ref=f15e437]
+          - generic [ref=f15e438]:
+            - generic [ref=f15e439]:
+              - link "Waveshare" [ref=f15e440] [cursor=pointer]:
+                - /url: /nl/products/rgb-full-color-led-matrixpaneel-2-mm-pitch-64x64-pixels-instelbare-helderheid?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7707538981032&pr_ref_pid=9555570655568&pr_seq=uniform
+              - link "RGB Full-Color LED-matrixpaneel, 2 mm pitch, 64x64 pixels, Instelbare Helderheid" [ref=f15e441] [cursor=pointer]:
+                - /url: /nl/products/rgb-full-color-led-matrixpaneel-2-mm-pitch-64x64-pixels-instelbare-helderheid?pr_prod_strat=e5_desc&pr_rec_id=40ccd75a5&pr_rec_pid=7707538981032&pr_ref_pid=9555570655568&pr_seq=uniform
+              - paragraph [ref=f15e442]: "Artikelnummer: RB-Wav-610"
+              - generic [ref=f15e444]:
+                - generic [ref=f15e445]: Verkoopprijs
+                - text: €31,89
+              - generic [ref=f15e446]: Beoordelingen
+              - generic: 
+              - paragraph [ref=f15e447]:
+                - generic [ref=f15e448]: Binnenkort nieuwe voorraad
+                - generic [ref=f15e449] [cursor=pointer]: Zie vervaldatum
+              - generic [ref=f15e451] [cursor=pointer]: Breng mij op de hoogte
+            - button "Kopen" [ref=f15e453] [cursor=pointer]
+  - generic [ref=f15e457]:
+    - generic [ref=f15e484]:
+      - paragraph [ref=f15e485]: Gevestigde industriële leider
+      - generic [ref=f15e486]: Betrouwbare robotwinkel al 20 jaar lang
+    - generic [ref=f15e500]:
+      - paragraph [ref=f15e501]: Hoogste beoordeling van 4,5+ sterren
+      - generic [ref=f15e502]: Duizenden goederen voor alle interesses
+    - link "Top-Rated 4.5+ Stars Bewezen staat van klanttevredenheid" [ref=f15e503] [cursor=pointer]:
+      - /url: https://www.resellerratings.com/seal/landing/104685
+      - generic [ref=f15e518]:
+        - paragraph [ref=f15e519]: Top-Rated 4.5+ Stars
+        - generic [ref=f15e520]: Bewezen staat van klanttevredenheid
+    - link "Gratis verzending boven 250 €* Voor producten die door RobotShop naar geselecteerde locaties worden verzonden" [ref=f15e521] [cursor=pointer]:
+      - /url: /policies/shipping-policy
+      - generic [ref=f15e535]:
+        - paragraph [ref=f15e536]: Gratis verzending boven 250 €*
+        - generic [ref=f15e537]: Voor producten die door RobotShop naar geselecteerde locaties worden verzonden
+  - contentinfo [ref=f15e539]:
+    - generic [ref=f15e540]:
+      - generic [ref=f15e542]:
+        - generic [ref=f15e543]:
+          - button "LAAT ONS JE HELPEN" [disabled] [ref=f15e544]
+          - list [ref=f15e547]:
+            - listitem [ref=f15e548]:
+              - link "Uw account" [ref=f15e549] [cursor=pointer]:
+                - /url: /nl/account
+            - listitem [ref=f15e550]:
+              - link "Bestelgeschiedenis" [ref=f15e551] [cursor=pointer]:
+                - /url: /nl/account/?view=all-orders
+            - listitem [ref=f15e552]:
+              - link "Verzenden" [ref=f15e553] [cursor=pointer]:
+                - /url: /nl/policies/shipping-policy
+            - listitem [ref=f15e554]:
+              - link "Retourneren en ruilen" [ref=f15e555] [cursor=pointer]:
+                - /url: /nl/policies/terms-of-service#Returns
+            - listitem [ref=f15e556]:
+              - link "Een bestelling annuleren" [ref=f15e557] [cursor=pointer]:
+                - /url: /nl/policies/terms-of-service#CancellingAnOrder
+            - listitem [ref=f15e558]:
+              - link "Garantie" [ref=f15e559] [cursor=pointer]:
+                - /url: /nl/policies/terms-of-service#Warranty
+            - listitem [ref=f15e560]:
+              - link "Betalingsinformatie" [ref=f15e561] [cursor=pointer]:
+                - /url: /nl/policies/terms-of-service#PaymentMethods
+            - listitem [ref=f15e562]:
+              - link "Neem contact met ons op" [ref=f15e563] [cursor=pointer]:
+                - /url: /nl/pages/contact-us
+            - listitem [ref=f15e564]:
+              - link "Herroepingsrecht" [ref=f15e565] [cursor=pointer]:
+                - /url: /nl/pages/widerruf-formular
+        - generic [ref=f15e566]:
+          - button "LEER ONS KENNEN" [disabled] [ref=f15e567]
+          - list [ref=f15e570]:
+            - listitem [ref=f15e571]:
+              - link "Over ons" [ref=f15e572] [cursor=pointer]:
+                - /url: /nl/pages/over-ons
+            - listitem [ref=f15e573]:
+              - link "Algemene voorwaarden" [ref=f15e574] [cursor=pointer]:
+                - /url: /nl/policies/terms-of-service
+            - listitem [ref=f15e575]:
+              - link "Beveiliging en privacy" [ref=f15e576] [cursor=pointer]:
+                - /url: /nl/policies/privacy-policy
+            - listitem [ref=f15e577]:
+              - link "Persruimte" [ref=f15e578] [cursor=pointer]:
+                - /url: /nl/pages/press-room
+        - generic [ref=f15e579]:
+          - button "ZAKELIJKE KANSEN" [disabled] [ref=f15e580]
+          - list [ref=f15e583]:
+            - listitem [ref=f15e584]:
+              - link "Wordt enn robotintegrator" [ref=f15e585] [cursor=pointer]:
+                - /url: /nl/pages/robotica-integratie
+            - listitem [ref=f15e586]:
+              - link "Wordt een marktplaatsverkoper" [ref=f15e587] [cursor=pointer]:
+                - /url: /nl/pages/marktplaats
+            - listitem [ref=f15e588]:
+              - link "Wordt een dealer" [ref=f15e589] [cursor=pointer]:
+                - /url: /nl/pages/dealer-programma
+            - listitem [ref=f15e590]:
+              - link "Stel uw producten voor" [ref=f15e591] [cursor=pointer]:
+                - /url: /nl/pages/manufacturers-distributors
+            - listitem [ref=f15e592]:
+              - link "Stel uw apps voor" [ref=f15e593] [cursor=pointer]:
+                - /url: /nl/pages/suggest-your-apps
+            - listitem [ref=f15e594]:
+              - link "Commercialiseer uw uitvinding" [ref=f15e595] [cursor=pointer]:
+                - /url: /nl/pages/accelerator
+        - generic [ref=f15e596]:
+          - button "GEMEENSCHAP" [disabled] [ref=f15e597]
+          - list [ref=f15e600]:
+            - listitem [ref=f15e601]:
+              - link "Forums" [ref=f15e602] [cursor=pointer]:
+                - /url: https://community.robotshop.com/forum/
+            - listitem [ref=f15e603]:
+              - link "Blogs" [ref=f15e604] [cursor=pointer]:
+                - /url: https://community.robotshop.com/blog
+            - listitem [ref=f15e605]:
+              - link "Robots" [ref=f15e606] [cursor=pointer]:
+                - /url: https://community.robotshop.com/robots
+            - listitem [ref=f15e607]:
+              - link "Tutorials" [ref=f15e608] [cursor=pointer]:
+                - /url: https://community.robotshop.com/tutorials
+            - listitem [ref=f15e609]:
+              - link "Leaderboards" [ref=f15e610] [cursor=pointer]:
+                - /url: https://community.robotshop.com/leaderboard
+        - generic [ref=f15e611]:
+          - paragraph [ref=f15e612]: Nieuwsbrief
+          - generic [ref=f15e613]:
+            - generic [ref=f15e614]: Schrijf je in voor onze nieuwsbrief en blijf op de hoogte van de laatste speciale aanbiedingen!
+            - generic [ref=f15e617]:
+              - generic [ref=f15e618]:
+                - textbox "Voornaam" [ref=f15e620]
+                - textbox "Achternaam" [ref=f15e623]
+              - textbox "Uw email" [ref=f15e626]
+              - button "Abonneren" [ref=f15e629] [cursor=pointer]
+      - complementary [ref=f15e630]:
+        - generic [ref=f15e631]:
+          - generic [ref=f15e633]:
+            - link "Onze Wereldwijde Websites" [ref=f15e635] [cursor=pointer]:
+              - /url: /pages/countries
+            - button [expanded] [ref=f15e637] [cursor=pointer]
+          - generic [ref=f15e644]:
+            - generic [ref=f15e645]: Taal
+            - button "Nederlands" [ref=f15e648] [cursor=pointer]
+        - generic [ref=f15e649]:
+          - paragraph [ref=f15e650]: Volg ons
+          - list [ref=f15e651]:
+            - listitem [ref=f15e652]:
+              - link "Volg ons op Facebook" [ref=f15e653] [cursor=pointer]:
+                - /url: https://www.facebook.com/robotshop/
+            - listitem [ref=f15e654]:
+              - link "Volg ons op Twitter" [ref=f15e655] [cursor=pointer]:
+                - /url: https://twitter.com/RobotShop
+            - listitem [ref=f15e656]:
+              - link "Volg ons op Instagram" [ref=f15e657] [cursor=pointer]:
+                - /url: https://www.instagram.com/robotshop/
+            - listitem [ref=f15e658]:
+              - link "Volg ons op Pinterest" [ref=f15e659] [cursor=pointer]:
+                - /url: https://www.pinterest.ca/robotshop/
+            - listitem [ref=f15e660]:
+              - link "Volg ons op YouTube" [ref=f15e661] [cursor=pointer]:
+                - /url: https://www.youtube.com/user/RobotShopTV
+            - listitem [ref=f15e662]:
+              - link "Volg ons op TikTok" [ref=f15e663] [cursor=pointer]:
+                - /url: https://www.tiktok.com/@robotshop_inc
+            - listitem [ref=f15e664]:
+              - link "Volg ons op LinkedIn" [ref=f15e665] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/robotshop
+            - listitem [ref=f15e666]:
+              - link "Volg ons op Threads" [ref=f15e667] [cursor=pointer]:
+                - /url: https://www.threads.com/@robotshop
+        - generic [ref=f15e668]:
+          - paragraph [ref=f15e669]: Wij accepteren
+          - generic [ref=f15e670]:
+            - img "Google Pay" [ref=f15e671]
+            - img "Mastercard" [ref=f15e679]
+            - img "PayPal" [ref=f15e686]
+            - img "Union Pay" [ref=f15e692]
+            - img "Visa" [ref=f15e698]
+            - iframe [ref=f15e704]:
+              - button "Store quality by Google dialog button" [ref=f17e1] [cursor=pointer]:
+                - button "Store rating by Google 4.5" [ref=f17e3]:
+                  - generic [ref=f17e4]:
+                    - generic [ref=f17e5]:
+                      - generic [ref=f17e6]: Store rating
+                      - generic [ref=f17e8]: by Google
+                    - generic [ref=f17e10]:
+                      - generic [ref=f17e11]: "4.5"
+                      - img [ref=f17e12]: star
+        - paragraph [ref=f15e706]: © RobotShop inc.Alles over Robotica, oneindige Mogelijkheden

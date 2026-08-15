@@ -13,7 +13,7 @@ Assistant, but fires alarms **on-device** so it works even if WiFi/HA is down.
 | Path | What | Details |
 |---|---|---|
 | `software/firmware/` | Rust (esp-idf) firmware — the device itself | [software/README.md](software/README.md) |
-| `software/homeassistant/` | Home Assistant custom integration (Python) | [README](software/homeassistant/README.md) |
+| `software/homeassistant/` | Home Assistant integration — HACS repo pointer | [README](software/homeassistant/README.md) |
 | `software/tools/` | `sim_device.py` — device simulator (REST + SSE) | — |
 | `hardware/` | PCB + enclosure + bench BOM & wiring | [hardware/README.md](hardware/README.md) |
 | `docs/` | Locked design + reasoning | [handoff.md](docs/handoff.md) |

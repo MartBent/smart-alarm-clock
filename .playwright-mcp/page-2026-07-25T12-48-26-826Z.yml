@@ -1,0 +1,1040 @@
+- generic [active] [ref=e1]:
+  - dialog "cookieconsent" [ref=e2]:
+    - generic [ref=e3]:
+      - text: This website uses cookies to ensure you get the best experience on our website.
+      - button "learn more about cookies" [ref=e4] [cursor=pointer]: Privacy Policy
+    - generic [ref=e5]:
+      - button "dismiss cookie message" [ref=e6] [cursor=pointer]
+      - button "settings cookies" [ref=e7] [cursor=pointer]: Preferences
+      - button "allow cookies" [ref=e8] [cursor=pointer]: Accept
+  - text:            
+  - generic [ref=e9]:
+    - banner [ref=e10]:
+      - text:      
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - list [ref=e15]:
+            - listitem [ref=e16]:
+              - link "" [ref=e17] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/index.php?route=account/login
+            - listitem [ref=e18]:
+              - link "" [ref=e19] [cursor=pointer]:
+                - /url: javascript:open_register_popup()
+            - listitem [ref=e20]:
+              - link "" [ref=e21] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/index.php?route=account/wishlist
+          - button [ref=e23] [cursor=pointer]:
+            - img "English" [ref=e26]
+        - generic [ref=e27]:
+          - link [ref=e30] [cursor=pointer]:
+            - /url: https://www.tinytronics.nl/en
+            - img "TinyTronics" [ref=e31]
+          - generic [ref=e32]:
+            - generic [ref=e33] [cursor=pointer]: 
+            - generic [ref=e35]:
+              - button "" [ref=e36] [cursor=pointer]
+              - text: 
+            - link "" [ref=e39] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/index.php?route=checkout/cart
+    - list [ref=e41]:
+      - listitem [ref=e42]:
+        - link "" [ref=e43] [cursor=pointer]:
+          - /url: https://www.tinytronics.nl/en
+      - listitem [ref=e45]:
+        - text: ">"
+        - link "Search":
+          - /url: https://www.tinytronics.nl/index.php?route=product/search&search=proximity+sensor
+    - heading "Search - proximity sensor" [level=1] [ref=e46]
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - textbox "Keywords" [ref=e53]: proximity sensor
+          - combobox [ref=e54]:
+            - option "All Categories" [selected]
+            - option "3D Printing"
+            - option "Electronics"
+            - option "Accessories"
+            - option "Cables"
+            - option "Endstops"
+            - option "Fans"
+            - option "Motherboards"
+            - option "Stepper Motor Drivers"
+            - option "Stepper Motors"
+            - option "Extrusion"
+            - option "Hotends and Extruders"
+            - option "Nozzles"
+            - option "PTFE Tubes"
+            - option "Filament"
+            - option "1.75mm Filament"
+            - option "2.85mm Filament"
+            - option "Master spools"
+            - option "Mechanics"
+            - option "Audio"
+            - option "Accessories"
+            - option "Enclosures"
+            - option "Knobs"
+            - option "Measuring Modules"
+            - option "Others"
+            - option "Potentiometers"
+            - option "Power Supplies"
+            - option "SD Cards"
+            - option "Amplifiers"
+            - option "Audio Sources"
+            - option "Cables"
+            - option "Connectors"
+            - option "Speakers"
+            - option "Buzzers"
+            - option "Speakers"
+            - option "Cables and Connectors"
+            - option "Cables and Adapters"
+            - option "Alligator Clip"
+            - option "Audio"
+            - option "Cigarette Lighter"
+            - option "Display"
+            - option "Ethernet and Telephone"
+            - option "FFC"
+            - option "Flatcables"
+            - option "Grove Compatible"
+            - option "JST Compatible"
+            - option "Mains Voltage"
+            - option "Molex Compatible"
+            - option "Others"
+            - option "Prototyping Wires"
+            - option "USB"
+            - option "Connectors"
+            - option "Alligator Clips"
+            - option "Audio"
+            - option "Aviation style"
+            - option "Banana"
+            - option "Cable Lugs"
+            - option "DB9"
+            - option "DC Jack"
+            - option "DuPont Compatible"
+            - option "Grove Compatible"
+            - option "JST Compatible"
+            - option "Molex Compatible"
+            - option "Others"
+            - option "Pin Headers"
+            - option "Push-in Wire Connectors"
+            - option "Screw Terminals"
+            - option "Slip Rings"
+            - option "USB"
+            - option "Clearance"
+            - option "B-Stock"
+            - option "Last chance"
+            - option "Communication and Signals"
+            - option "Ethernet"
+            - option "Cables"
+            - option "Modules"
+            - option "IO Converters"
+            - option "Level Converters"
+            - option "Serial and USB"
+            - option "CAN Bus"
+            - option "RS232"
+            - option "RS485"
+            - option "USB"
+            - option "Signal Generators and DACs"
+            - option "Wireless"
+            - option "Antennas"
+            - option "Bluetooth"
+            - option "GPS"
+            - option "Infrared"
+            - option "LoRa"
+            - option "RF"
+            - option "RFID"
+            - option "Telecommunication"
+            - option "Wi-Fi"
+            - option "Zigbee"
+            - option "Components"
+            - option "Capacitors"
+            - option "Coils and Transformers"
+            - option "Connectors"
+            - option "Crystals"
+            - option "Diodes"
+            - option "Fuses"
+            - option "ICs and Microcontroller Chips"
+            - option "ICs"
+            - option "Microcontroller Chips"
+            - option "Knobs, Caps and Covers"
+            - option "LEDs"
+            - option "Accessories"
+            - option "LEDs"
+            - option "MOSFET-FET"
+            - option "Optocouplers"
+            - option "Resistors"
+            - option "Potentiometers"
+            - option "Resistors"
+            - option "Sockets"
+            - option "Switches"
+            - option "Transistors"
+            - option "Voltage Regulators"
+            - option "Computer Accessories"
+            - option "Ethernet Adapters"
+            - option "Mice and Keyboards"
+            - option "SD Cards"
+            - option "USB Hubs"
+            - option "USB Sticks"
+            - option "Wi-Fi Adapters"
+            - option "Data Storage"
+            - option "Hard disks"
+            - option "Modules"
+            - option "SD Cards"
+            - option "USB Sticks"
+            - option "Development Boards"
+            - option "3D Printing"
+            - option "Accessories"
+            - option "Adapter Boards"
+            - option "External Processing Units"
+            - option "Kits"
+            - option "Microcontroller Boards"
+            - option "Arduino Compatible"
+            - option "Others"
+            - option "Teensy"
+            - option "With Bluetooth"
+            - option "With GPS"
+            - option "With LoRa"
+            - option "With Telecommunication"
+            - option "With Wi-Fi"
+            - option "Single-Board Computers"
+            - option "Displays"
+            - option "E-Ink"
+            - option "Embedded"
+            - option "Nextion"
+            - option "LCD"
+            - option "Matrix"
+            - option "OLED"
+            - option "Segments"
+            - option "TFT"
+            - option "Home automation"
+            - option "Control panels"
+            - option "Lighting"
+            - option "Remote controls"
+            - option "Sensors"
+            - option "Climate"
+            - option "Door and window"
+            - option "Energy"
+            - option "Motion and presence"
+            - option "Water"
+            - option "Smart hubs and bridges"
+            - option "Switches and dimmers"
+            - option "Temperature control"
+            - option "Lighting"
+            - option "Individual LEDs"
+            - option "Lasers"
+            - option "LED Strips"
+            - option "Accessories"
+            - option "LED Strips"
+            - option "Matrix"
+            - option "Others"
+            - option "Rings and Modules"
+            - option "Mechanics and Actuators"
+            - option "Electromagnets"
+            - option "Fans"
+            - option "Float valves"
+            - option "Kits"
+            - option "Locks"
+            - option "Motor Controllers and Drivers"
+            - option "Adapter Boards"
+            - option "Brushless DC Motor Controls and Drivers"
+            - option "DC-Motor Controllers and Drivers"
+            - option "Servomotor Controllers"
+            - option "Stepper Motor Controllers and Drivers"
+            - option "Motors"
+            - option "Brushless DC (BLDC) motors"
+            - option "DC-Motors"
+            - option "Pumps"
+            - option "Servomotors"
+            - option "Stepper Motors"
+            - option "Vibration Motors"
+            - option "Others"
+            - option "Parts"
+            - option "Bearings"
+            - option "Brackets"
+            - option "Cooling Elements"
+            - option "Hoses"
+            - option "Lead screws"
+            - option "Motor Couplers"
+            - option "Mounting Material"
+            - option "Pulleys"
+            - option "Shock Absorbers"
+            - option "Springs"
+            - option "Timing Belts"
+            - option "Wheels"
+            - option "Solenoids"
+            - option "Solenoid Valves"
+            - option "Solenoids"
+            - option "Platforms and Systems"
+            - option "Bitcraze Crazyflie"
+            - option "M5Stack"
+            - option "Accessories"
+            - option "Atom"
+            - option "Camera"
+            - option "Chain"
+            - option "E-Paper"
+            - option "M5Core"
+            - option "M5Stamp"
+            - option "M5Station"
+            - option "M5Stick"
+            - option "Other controllers"
+            - option "Unit"
+            - option "RAKwireless"
+            - option "Accessories"
+            - option "Base"
+            - option "Core"
+            - option "Display and LED"
+            - option "Interface"
+            - option "Motor"
+            - option "Power"
+            - option "Sensor"
+            - option "Storage"
+            - option "Wireless"
+            - option "SenseCAP"
+            - option "Sonoff"
+            - option "Accessories"
+            - option "RF"
+            - option "Wi-Fi"
+            - option "Zigbee"
+            - option "Power"
+            - option "Batteries"
+            - option "14500"
+            - option "18650"
+            - option "21700"
+            - option "9V"
+            - option "AA"
+            - option "AAA"
+            - option "Button Cell"
+            - option "Lead Battery"
+            - option "Li-Po"
+            - option "Others"
+            - option "Battery Holders and Clips"
+            - option "18650"
+            - option "2032"
+            - option "21700"
+            - option "9V"
+            - option "AA"
+            - option "AAA"
+            - option "C"
+            - option "D"
+            - option "BMS and Chargers"
+            - option "BMS"
+            - option "Lead Battery"
+            - option "Li-ion and Li-Po"
+            - option "LiFePO4"
+            - option "NiMH"
+            - option "Solar Chargers"
+            - option "Cables and Connectors"
+            - option "Generators"
+            - option "Power Banks and Battery Modules"
+            - option "Power Supplies"
+            - option "USB PD"
+            - option "3.3V"
+            - option "5V"
+            - option "9V"
+            - option "12V"
+            - option "24V"
+            - option "36V"
+            - option "Accessories"
+            - option "Solar Energy"
+            - option "Modules"
+            - option "Solar Panels"
+            - option "Voltage Converters"
+            - option "Boost (Step-Up) Converters"
+            - option "Buck (Step-Down) Converters"
+            - option "Buck-Boost (Step-Up-Down) Converters"
+            - option "Isolated Voltage Converters"
+            - option "Voltage Regulators"
+            - option "Sensors"
+            - option "Acceleration-Rotation"
+            - option "Air"
+            - option "Dust"
+            - option "Gas"
+            - option "Humidity"
+            - option "Pressure"
+            - option "Body"
+            - option "Current-Voltage"
+            - option "Distance"
+            - option "Endstop"
+            - option "Liquid"
+            - option "Magnetic Field"
+            - option "Material"
+            - option "Measuring Modules"
+            - option "Motion"
+            - option "Optical"
+            - option "Cameras and Scanners"
+            - option "Infrared"
+            - option "Light and Color"
+            - option "Light slots"
+            - option "Sound"
+            - option "Temperature"
+            - option "Time"
+            - option "Touch"
+            - option "Weight-Pressure-Force"
+            - option "Load Cells"
+            - option "Membrane"
+            - option "Switches"
+            - option "Switches"
+            - option "AC Dimmers"
+            - option "Endstops"
+            - option "Magnetic Switches"
+            - option "Manual Switches"
+            - option "Accessories"
+            - option "DIP Switches"
+            - option "Joysticks"
+            - option "Keypads"
+            - option "Micro Switches"
+            - option "PCB Switches"
+            - option "Push Buttons and Switches"
+            - option "Rocker Switches"
+            - option "Rotary Encoders"
+            - option "Rotary Switches"
+            - option "Slide Switches"
+            - option "Toggle Switches"
+            - option "Touch"
+            - option "Optocouplers"
+            - option "Relays"
+            - option "Relay Modules"
+            - option "Relays"
+            - option "Transistors and MOSFETs"
+            - option "MOSFET Modules"
+            - option "MOSFETs-FETs"
+            - option "Transistors"
+            - option "Tools and Mounting"
+            - option "Consumables"
+            - option "Glue"
+            - option "Lubricants"
+            - option "Soldering"
+            - option "Tape"
+            - option "Thermal conductive paste"
+            - option "Enclosures"
+            - option "Accessories"
+            - option "Arduino Compatible"
+            - option "Others"
+            - option "Raspberry Pi Compatible"
+            - option "Universal"
+            - option "Installation and Mounting Material"
+            - option "Bolts"
+            - option "Brackets"
+            - option "Cable Clips"
+            - option "Cable Glands"
+            - option "Cable Ties - Zip Ties - Tyraps"
+            - option "Glue"
+            - option "Heat Shrink Tubing"
+            - option "Magnets"
+            - option "Mounting Plates"
+            - option "Nuts"
+            - option "Screws"
+            - option "Spacers"
+            - option "Tape"
+            - option "Threaded Inserts"
+            - option "Prototyping Supplies"
+            - option "Breadboards"
+            - option "Breakout Boards"
+            - option "Experiment PCBs"
+            - option "Soldering"
+            - option "Accessories"
+            - option "Consumables"
+            - option "DIY Soldering Kits"
+            - option "Soldering Irons and Stations"
+            - option "Soldering Tips"
+            - option "Storage"
+            - option "Storage Boxes"
+            - option "Testing and Measuring"
+            - option "Accessories"
+            - option "Measuring Modules"
+            - option "Multimeters"
+            - option "Oscilloscopes and Logic Analyzers"
+            - option "Tools"
+            - option "Pliers and Cutters"
+            - option "Screwdrivers and Keys"
+            - option "Tweezers"
+            - option "Others"
+        - generic [ref=e56] [cursor=pointer]:
+          - checkbox "Search in subcategories" [disabled] [ref=e57]
+          - text: Search in subcategories
+        - generic [ref=e59] [cursor=pointer]:
+          - checkbox "Search in product descriptions" [ref=e60]
+          - text: Search in product descriptions
+      - button "Search" [ref=e63] [cursor=pointer]
+      - heading "Products found" [level=2] [ref=e65]
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - generic [ref=e68]:
+            - button "" [ref=e69] [cursor=pointer]
+            - button "" [ref=e70] [cursor=pointer]
+            - text: 
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - generic [ref=e73]: "Sort By:"
+              - combobox "Sort By:" [ref=e74]:
+                - option "Default" [selected]
+                - option "Name (A - Z)"
+                - option "Name (Z - A)"
+                - option "Price (Low > High)"
+                - option "Price (High > Low)"
+                - option "Rating (Highest)"
+                - option "Rating (Lowest)"
+                - option "Model (A - Z)"
+                - option "Model (Z - A)"
+            - generic [ref=e75]:
+              - generic [ref=e76]: "Show:"
+              - combobox "Show:" [ref=e77]:
+                - option "25"
+                - option "50" [selected]
+                - option "75"
+                - option "100"
+        - generic [ref=e78]:
+          - generic [ref=e80]:
+            - link [ref=e82] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/proximity-switch-lj12a34zbx-4mm
+              - generic [ref=e83]:
+                - img "LJ12A3-4-Z/BX Proximity Sensor- 4mm - M12"
+            - generic [ref=e84]:
+              - link "LJ12A3-4-Z/BX Proximity Sensor- 4mm - M12" [ref=e86] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/proximity-switch-lj12a34zbx-4mm
+              - generic [ref=e87]:
+                - generic [ref=e88]: €4.50
+                - generic [ref=e90]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e92]:
+                - generic [ref=e93]:
+                  - generic [ref=e94]:
+                    - textbox [ref=e95]: "1"
+                    - generic [ref=e96]:
+                      - generic [ref=e97] [cursor=pointer]: 
+                      - generic [ref=e98] [cursor=pointer]: 
+                  - generic [ref=e99] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e102]:
+            - link [ref=e104] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/dfrobot-gravity-digital-ir-proximity-sensor-0-200cm
+              - generic [ref=e105]:
+                - img "DFRobot Gravity Digital IR Proximity Sensor - 0-200cm"
+            - generic [ref=e106]:
+              - link "DFRobot Gravity Digital IR Proximity Sensor - 0-200cm" [ref=e108] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/dfrobot-gravity-digital-ir-proximity-sensor-0-200cm
+              - generic [ref=e109]:
+                - generic [ref=e110]: €14.00
+                - generic [ref=e112]: Ex Tax:€11.57
+              - text:     
+              - generic [ref=e114]:
+                - generic [ref=e115]:
+                  - generic [ref=e116]:
+                    - textbox [ref=e117]: "1"
+                    - generic [ref=e118]:
+                      - generic [ref=e119] [cursor=pointer]: 
+                      - generic [ref=e120] [cursor=pointer]: 
+                  - generic [ref=e121] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e124]:
+            - link [ref=e126] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj8a3-2-z-bx-proximity-sensor-2mm-m8
+              - generic [ref=e127]:
+                - img "LJ8A3-2-Z/BX Proximity Sensor - 2mm - M8"
+            - generic [ref=e128]:
+              - link "LJ8A3-2-Z/BX Proximity Sensor - 2mm - M8" [ref=e130] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj8a3-2-z-bx-proximity-sensor-2mm-m8
+              - generic [ref=e131]:
+                - generic [ref=e132]: €4.50
+                - generic [ref=e134]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - generic [ref=e138]:
+                    - textbox [ref=e139]: "1"
+                    - generic [ref=e140]:
+                      - generic [ref=e141] [cursor=pointer]: 
+                      - generic [ref=e142] [cursor=pointer]: 
+                  - generic [ref=e143] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e146]:
+            - link [ref=e148] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-4-z-bx-proximity-sensor-npn-no-4mm-m12-5v
+              - generic [ref=e149]:
+                - img "LJ12A3-4-Z/BX Proximity Sensor NPN NO - 4mm - M12 - 5V"
+            - generic [ref=e150]:
+              - link "LJ12A3-4-Z/BX Proximity Sensor NPN NO - 4mm - M12 - 5V" [ref=e152] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-4-z-bx-proximity-sensor-npn-no-4mm-m12-5v
+              - generic [ref=e153]:
+                - generic [ref=e154]: €4.50
+                - generic [ref=e156]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e158]:
+                - generic [ref=e159]:
+                  - generic [ref=e160]:
+                    - textbox [ref=e161]: "1"
+                    - generic [ref=e162]:
+                      - generic [ref=e163] [cursor=pointer]: 
+                      - generic [ref=e164] [cursor=pointer]: 
+                  - generic [ref=e165] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e168]:
+            - link [ref=e170] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/distance/capacitive-proximity-sensor-1-10mm
+              - generic [ref=e171]:
+                - img "Capacitive Proximity Sensor - 1-10mm"
+            - generic [ref=e172]:
+              - link "Capacitive Proximity Sensor - 1-10mm" [ref=e174] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/distance/capacitive-proximity-sensor-1-10mm
+              - generic [ref=e175]:
+                - generic [ref=e176]: €12.50
+                - generic [ref=e178]: Ex Tax:€10.33
+              - text:     
+              - generic [ref=e180]:
+                - generic [ref=e181]:
+                  - generic [ref=e182]:
+                    - textbox [ref=e183]: "1"
+                    - generic [ref=e184]:
+                      - generic [ref=e185] [cursor=pointer]: 
+                      - generic [ref=e186] [cursor=pointer]: 
+                  - generic [ref=e187] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e190]:
+            - link [ref=e192] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/dfrobot-digital-ir-proximity-sensor-0-400cm
+              - generic [ref=e193]:
+                - img "DFRobot Digital IR Proximity Sensor - 0-400cm"
+            - generic [ref=e194]:
+              - link "DFRobot Digital IR Proximity Sensor - 0-400cm" [ref=e196] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/dfrobot-digital-ir-proximity-sensor-0-400cm
+              - generic [ref=e197]:
+                - generic [ref=e198]: €26.00
+                - generic [ref=e200]: Ex Tax:€21.49
+              - text:     
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - generic [ref=e204]:
+                    - textbox [ref=e205]: "1"
+                    - generic [ref=e206]:
+                      - generic [ref=e207] [cursor=pointer]: 
+                      - generic [ref=e208] [cursor=pointer]: 
+                  - generic [ref=e209] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e212]:
+            - link [ref=e214] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-ax-proximity-sensor-npn-nc-2mm-m12
+              - generic [ref=e215]:
+                - img "LJ12A3-2-Z/AX Proximity Sensor NPN NC - 2mm - M12"
+            - generic [ref=e216]:
+              - link "LJ12A3-2-Z/AX Proximity Sensor NPN NC - 2mm - M12" [ref=e218] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-ax-proximity-sensor-npn-nc-2mm-m12
+              - generic [ref=e219]:
+                - generic [ref=e220]: €4.50
+                - generic [ref=e222]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e224]:
+                - generic [ref=e225]:
+                  - generic [ref=e226]:
+                    - textbox [ref=e227]: "1"
+                    - generic [ref=e228]:
+                      - generic [ref=e229] [cursor=pointer]: 
+                      - generic [ref=e230] [cursor=pointer]: 
+                  - generic [ref=e231] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e234]:
+            - link [ref=e236] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-bx-proximity-sensor-npn-no-2mm-m12
+              - generic [ref=e237]:
+                - img "LJ12A3-2-Z/BX Proximity Sensor NPN NO - 2mm - M12"
+            - generic [ref=e238]:
+              - link "LJ12A3-2-Z/BX Proximity Sensor NPN NO - 2mm - M12" [ref=e240] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-bx-proximity-sensor-npn-no-2mm-m12
+              - generic [ref=e241]:
+                - generic [ref=e242]: €4.50
+                - generic [ref=e244]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e246]:
+                - generic [ref=e247]:
+                  - generic [ref=e248]:
+                    - textbox [ref=e249]: "1"
+                    - generic [ref=e250]:
+                      - generic [ref=e251] [cursor=pointer]: 
+                      - generic [ref=e252] [cursor=pointer]: 
+                  - generic [ref=e253] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e256]:
+            - link [ref=e258] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-ay-proximity-sensor-pnp-nc-2mm-m12
+              - generic [ref=e259]:
+                - img "LJ12A3-2-Z/AY Proximity Sensor PNP NC - 2mm - M12"
+            - generic [ref=e260]:
+              - link "LJ12A3-2-Z/AY Proximity Sensor PNP NC - 2mm - M12" [ref=e262] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-ay-proximity-sensor-pnp-nc-2mm-m12
+              - generic [ref=e263]:
+                - generic [ref=e264]: €4.50
+                - generic [ref=e266]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e268]:
+                - generic [ref=e269]:
+                  - generic [ref=e270]:
+                    - textbox [ref=e271]: "1"
+                    - generic [ref=e272]:
+                      - generic [ref=e273] [cursor=pointer]: 
+                      - generic [ref=e274] [cursor=pointer]: 
+                  - generic [ref=e275] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e278]:
+            - link [ref=e280] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-by-proximity-sensor-pnp-no-2mm-m12
+              - generic [ref=e281]:
+                - img "LJ12A3-2-Z/BY Proximity Sensor PNP NO - 2mm - M12"
+            - generic [ref=e282]:
+              - link "LJ12A3-2-Z/BY Proximity Sensor PNP NO - 2mm - M12" [ref=e284] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/3d-printing/electronics/accessories/lj12a3-2-z-by-proximity-sensor-pnp-no-2mm-m12
+              - generic [ref=e285]:
+                - generic [ref=e286]: €4.50
+                - generic [ref=e288]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e290]:
+                - generic [ref=e291]:
+                  - generic [ref=e292]:
+                    - textbox [ref=e293]: "1"
+                    - generic [ref=e294]:
+                      - generic [ref=e295] [cursor=pointer]: 
+                      - generic [ref=e296] [cursor=pointer]: 
+                  - generic [ref=e297] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e300]:
+            - link [ref=e302] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/infrared-ir-proximity-sensor-10-80mm
+              - generic [ref=e303]:
+                - img "Infrared IR Proximity Sensor - 10-80mm"
+            - generic [ref=e304]:
+              - link "Infrared IR Proximity Sensor - 10-80mm" [ref=e306] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/infrared-ir-proximity-sensor-10-80mm
+              - generic [ref=e307]:
+                - generic [ref=e308]: €5.25
+                - generic [ref=e310]: Ex Tax:€4.34
+              - text:     
+              - generic [ref=e312]:
+                - generic [ref=e313]:
+                  - generic [ref=e314]:
+                    - textbox [ref=e315]: "1"
+                    - generic [ref=e316]:
+                      - generic [ref=e317] [cursor=pointer]: 
+                      - generic [ref=e318] [cursor=pointer]: 
+                  - generic [ref=e319] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e322]:
+            - generic [ref=e323]:
+              - link [ref=e324] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/seeed-studio-grove-light-gesture-color-and-proximity-sensor-tmg39931
+                - generic [ref=e325]:
+                  - img "Seeed Studio Grove Light Gesture Color and Proximity Sensor - TMG39931"
+              - generic: Discontinued
+            - generic [ref=e326]:
+              - link "Seeed Studio Grove Light Gesture Color and Proximity Sensor - TMG39931" [ref=e328] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/seeed-studio-grove-light-gesture-color-and-proximity-sensor-tmg39931
+              - generic [ref=e329]:
+                - generic [ref=e330]: €16.25
+                - generic [ref=e332]: Ex Tax:€13.43
+              - text:     
+              - generic [ref=e334]:
+                - generic [ref=e335]:
+                  - generic [ref=e336]:
+                    - textbox [ref=e337]: "1"
+                    - generic [ref=e338]:
+                      - generic [ref=e339] [cursor=pointer]: 
+                      - generic [ref=e340] [cursor=pointer]: 
+                  - generic [ref=e341] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e344]:
+            - link [ref=e346] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/5x-tcrt5000-tracking-and-object-sensor-module
+              - generic [ref=e347]:
+                - img "5x TCRT5000 Tracking and Object Sensor Module"
+            - generic [ref=e348]:
+              - link "5x TCRT5000 Tracking and Object Sensor Module" [ref=e350] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/5x-tcrt5000-tracking-and-object-sensor-module
+              - generic [ref=e351]:
+                - generic [ref=e352]: €7.00
+                - generic [ref=e354]: Ex Tax:€5.79
+              - text:     
+              - generic [ref=e356]:
+                - generic [ref=e357]:
+                  - generic [ref=e358]:
+                    - textbox [ref=e359]: "1"
+                    - generic [ref=e360]:
+                      - generic [ref=e361] [cursor=pointer]: 
+                      - generic [ref=e362] [cursor=pointer]: 
+                  - generic [ref=e363] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e366]:
+            - link [ref=e368] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/3x-tcrt5000-tracking-and-object-sensor-module
+              - generic [ref=e369]:
+                - img "3x TCRT5000 Tracking and Object Sensor Module"
+            - generic [ref=e370]:
+              - link "3x TCRT5000 Tracking and Object Sensor Module" [ref=e372] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/infrared/3x-tcrt5000-tracking-and-object-sensor-module
+              - generic [ref=e373]:
+                - generic [ref=e374]: €4.50
+                - generic [ref=e376]: Ex Tax:€3.72
+              - text:     
+              - generic [ref=e378]:
+                - generic [ref=e379]:
+                  - generic [ref=e380]:
+                    - textbox [ref=e381]: "1"
+                    - generic [ref=e382]:
+                      - generic [ref=e383] [cursor=pointer]: 
+                      - generic [ref=e384] [cursor=pointer]: 
+                  - generic [ref=e385] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e388]:
+            - link [ref=e390] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/development-boards/kits/arduino-plug-and-make-kit
+              - generic [ref=e391]:
+                - img "Arduino Plug and Make Kit"
+            - generic [ref=e392]:
+              - link "Arduino Plug and Make Kit" [ref=e394] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/development-boards/kits/arduino-plug-and-make-kit
+              - generic [ref=e395]:
+                - generic [ref=e396]: €74.25
+                - generic [ref=e398]: Ex Tax:€61.36
+              - text:     
+              - generic [ref=e400]:
+                - generic [ref=e401]:
+                  - generic [ref=e402]:
+                    - textbox [ref=e403]: "1"
+                    - generic [ref=e404]:
+                      - generic [ref=e405] [cursor=pointer]: 
+                      - generic [ref=e406] [cursor=pointer]: 
+                  - generic [ref=e407] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e410]:
+            - link [ref=e412] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/optical/light-and-color/gy-apds-9900-environment-sensor-module
+              - generic [ref=e413]:
+                - img "GY-APDS-9900 Environment Sensor Module"
+            - generic [ref=e414]:
+              - link "GY-APDS-9900 Environment Sensor Module" [ref=e416] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/optical/light-and-color/gy-apds-9900-environment-sensor-module
+              - generic [ref=e417]:
+                - generic [ref=e418]: €3.50
+                - generic [ref=e420]: Ex Tax:€2.89
+              - text:     
+              - generic [ref=e422]:
+                - generic [ref=e423]:
+                  - generic [ref=e424]:
+                    - textbox [ref=e425]: "1"
+                    - generic [ref=e426]:
+                      - generic [ref=e427] [cursor=pointer]: 
+                      - generic [ref=e428] [cursor=pointer]: 
+                  - generic [ref=e429] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e432]:
+            - link [ref=e434] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/sensors/distance/arduino-modulino-distance-time-of-flight-tof-distance-sensor-vl53l4cd
+              - generic [ref=e435]:
+                - img "Arduino Modulino Distance - Time-of-Flight ToF Distance Sensor - VL53L4CD"
+            - generic [ref=e436]:
+              - link "Arduino Modulino Distance - Time-of-Flight ToF Distance Sensor - VL53L4CD" [ref=e438] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/sensors/distance/arduino-modulino-distance-time-of-flight-tof-distance-sensor-vl53l4cd
+              - generic [ref=e439]:
+                - generic [ref=e440]: €13.25
+                - generic [ref=e442]: Ex Tax:€10.95
+              - text:     
+              - generic [ref=e444]:
+                - generic [ref=e445]:
+                  - generic [ref=e446]:
+                    - textbox [ref=e447]: "1"
+                    - generic [ref=e448]:
+                      - generic [ref=e449] [cursor=pointer]: 
+                      - generic [ref=e450] [cursor=pointer]: 
+                  - generic [ref=e451] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e454]:
+            - link [ref=e456] [cursor=pointer]:
+              - /url: https://www.tinytronics.nl/en/platforms-and-systems/rakwireless/sensor/rakwireless-rak12021-wisblock-rgb-color-sensor-module-tcs37725fn
+              - generic [ref=e457]:
+                - img "RAKWireless RAK12021 WisBlock RGB Color Sensor Module - TCS37725FN"
+            - generic [ref=e458]:
+              - link "RAKWireless RAK12021 WisBlock RGB Color Sensor Module - TCS37725FN" [ref=e460] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/platforms-and-systems/rakwireless/sensor/rakwireless-rak12021-wisblock-rgb-color-sensor-module-tcs37725fn
+              - generic [ref=e461]:
+                - generic [ref=e462]: €8.75
+                - generic [ref=e464]: Ex Tax:€7.23
+              - text:     
+              - generic [ref=e466]:
+                - generic [ref=e467]:
+                  - generic [ref=e468]:
+                    - textbox [ref=e469]: "1"
+                    - generic [ref=e470]:
+                      - generic [ref=e471] [cursor=pointer]: 
+                      - generic [ref=e472] [cursor=pointer]: 
+                  - generic [ref=e473] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e476]:
+            - generic [ref=e477]:
+              - link [ref=e478] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/development-boards/3d-printing/bigtreetech-octopus-v1.1-3d-printer-motherboard
+                - generic [ref=e479]:
+                  - img "BIGTREETECH Octopus V1.1 - 3D Printer Motherboard"
+              - generic: 2-4 Weeks
+            - generic [ref=e480]:
+              - link "BIGTREETECH Octopus V1.1 - 3D Printer Motherboard" [ref=e482] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/development-boards/3d-printing/bigtreetech-octopus-v1.1-3d-printer-motherboard
+              - generic [ref=e483]:
+                - generic [ref=e484]: €48.75
+                - generic [ref=e486]: Ex Tax:€40.29
+              - text:     
+              - generic [ref=e488]:
+                - generic [ref=e489]:
+                  - generic [ref=e490]:
+                    - textbox [ref=e491]: "1"
+                    - generic [ref=e492]:
+                      - generic [ref=e493] [cursor=pointer]: 
+                      - generic [ref=e494] [cursor=pointer]: 
+                  - generic [ref=e495] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e498]:
+            - generic [ref=e499]:
+              - link [ref=e500] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/arduino-nano-33-ble-sense-separate-headers
+                - generic [ref=e501]:
+                  - img "Arduino Nano 33 BLE Sense - Separate Headers"
+              - generic: Discontinued
+            - generic [ref=e502]:
+              - link "Arduino Nano 33 BLE Sense - Separate Headers" [ref=e504] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/arduino-nano-33-ble-sense-separate-headers
+              - generic [ref=e505]:
+                - generic [ref=e506]: €32.50
+                - generic [ref=e508]: Ex Tax:€26.86
+              - text:     
+              - generic [ref=e510]:
+                - generic [ref=e511]:
+                  - generic [ref=e512]:
+                    - textbox [ref=e513]: "1"
+                    - generic [ref=e514]:
+                      - generic [ref=e515] [cursor=pointer]: 
+                      - generic [ref=e516] [cursor=pointer]: 
+                  - generic [ref=e517] [cursor=pointer]: 
+                - generic: 
+          - generic [ref=e520]:
+            - generic [ref=e521]:
+              - link [ref=e522] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/arduino-nano-33-ble-sense
+                - generic [ref=e523]:
+                  - img "Arduino Nano 33 BLE Sense"
+              - generic: Discontinued
+            - generic [ref=e524]:
+              - link "Arduino Nano 33 BLE Sense" [ref=e526] [cursor=pointer]:
+                - /url: https://www.tinytronics.nl/en/arduino-nano-33-ble-sense
+              - generic [ref=e527]:
+                - generic [ref=e528]: €35.00
+                - generic [ref=e530]: Ex Tax:€28.93
+              - text:     
+              - generic [ref=e532]:
+                - generic [ref=e533]:
+                  - generic [ref=e534]:
+                    - textbox [ref=e535]: "1"
+                    - generic [ref=e536]:
+                      - generic [ref=e537] [cursor=pointer]: 
+                      - generic [ref=e538] [cursor=pointer]: 
+                  - generic [ref=e539] [cursor=pointer]: 
+                - generic: 
+        - generic [ref=e541]: Showing 1 to 21 of 21 (1 Pages)
+    - contentinfo [ref=e546]:
+      - generic [ref=e547]:
+        - list [ref=e554]:
+          - listitem [ref=e555]:
+            - link "" [ref=e556] [cursor=pointer]:
+              - /url: https://www.facebook.com/tinytronics/
+          - listitem [ref=e557]:
+            - link "" [ref=e558] [cursor=pointer]:
+              - /url: https://www.instagram.com/tinytronics/
+          - listitem [ref=e559]:
+            - link "" [ref=e560] [cursor=pointer]:
+              - /url: https://nl.linkedin.com/company/tinytronicsnl
+        - generic [ref=e562]:
+          - generic [ref=e566]:
+            - heading "Customer support" [level=3] [ref=e567]
+            - list [ref=e568]:
+              - listitem [ref=e569]:
+                - link "Pickup location" [ref=e570] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/location
+              - listitem [ref=e572]:
+                - link "Order" [ref=e573] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/order
+              - listitem [ref=e575]:
+                - link "Payment" [ref=e576] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/payment
+              - listitem [ref=e578]:
+                - link "Delivery information" [ref=e579] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/delivery-information
+              - listitem [ref=e581]:
+                - link "Customer support" [ref=e582] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/customer-support
+              - listitem [ref=e584]:
+                - link "Old-for-new arrangement" [ref=e585] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/old-for-new-arrangement
+              - listitem [ref=e587]:
+                - link "Returns" [ref=e588] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/return
+              - listitem [ref=e590]:
+                - link "For business" [ref=e591] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/business
+          - generic [ref=e596]:
+            - heading "My account" [level=3] [ref=e597]
+            - list [ref=e598]:
+              - listitem [ref=e599]:
+                - link "My account" [ref=e600] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/index.php?route=account/account
+              - listitem [ref=e602]:
+                - link "My orders" [ref=e603] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/index.php?route=account/order
+          - generic [ref=e608]:
+            - heading "About us" [level=3] [ref=e609]
+            - list [ref=e610]:
+              - listitem [ref=e611]:
+                - link "Terms & conditions" [ref=e612] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/terms-and-conditions
+              - listitem [ref=e614]:
+                - link "GDPR tools" [ref=e615] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/gdpr-tools
+              - listitem [ref=e617]:
+                - link "Disclaimer" [ref=e618] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/disclaimer
+              - listitem [ref=e620]:
+                - link "About us" [ref=e621] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/about-us
+              - listitem [ref=e623]:
+                - link "Privacy Policy" [ref=e624] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/privacy-policy
+              - listitem [ref=e626]:
+                - link:
+                  - /url: https://www.tinytronics.nl/en/vacancies
+              - listitem [ref=e627]:
+                - link "Packaging material" [ref=e628] [cursor=pointer]:
+                  - /url: https://www.tinytronics.nl/en/pm
+          - generic [ref=e633]:
+            - heading "Business information" [level=3] [ref=e634]
+            - list [ref=e635]:
+              - listitem [ref=e636]:
+                - generic [ref=e637]: "Chamber of Commerce number: 83192425"
+              - listitem [ref=e639]:
+                - generic [ref=e640]: "VAT-number: NL862763198B01"
+        - generic [ref=e643]:
+          - list [ref=e648]:
+            - listitem [ref=e649]:
+              - generic [ref=e650]: © TinyTronics B.V. 2014 - 2026
+          - list [ref=e656]:
+            - listitem [ref=e657]:
+              - link [ref=e658] [cursor=pointer]:
+                - /url: https://www.ideal.nl/
+            - listitem [ref=e659]
+            - listitem [ref=e661]:
+              - link [ref=e662] [cursor=pointer]:
+                - /url: https://www.bancontact.com/nl
+            - listitem [ref=e663]:
+              - link [ref=e664] [cursor=pointer]:
+                - /url: https://www.belfius.be/retail/nl/index.aspx
+            - listitem [ref=e665]:
+              - link [ref=e666] [cursor=pointer]:
+                - /url: https://epscards.com/
+            - listitem [ref=e667]:
+              - link [ref=e668] [cursor=pointer]:
+                - /url: https://www.paypal.com/nl/home/
+            - listitem [ref=e669]:
+              - link [ref=e670] [cursor=pointer]:
+                - /url: https://www.kbc.be/ondernemen/nl/product/online-ondernemen/betaalknop.html
+  - text: 
