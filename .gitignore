@@ -15,3 +15,7 @@ software/firmware/sdkconfig.old
 # Python bytecode (Home Assistant custom integration)
 __pycache__/
 *.pyc
+
+# Playwright MCP browser session artifacts
+.playwright-mcp/
+**/.playwright-mcp/
