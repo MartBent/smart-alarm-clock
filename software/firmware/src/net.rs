@@ -577,7 +577,7 @@ fn register(
         let shared = shared.clone();
         server
             .fn_handler::<anyhow::Error, _>("/api/state", Method::Get, move |req| {
-                req.into_ok_response()?.write_all(state_json(&shared).as_bytes())?;
+                json_response(req, &state_json(&shared))?;
                 Ok(())
             })
             .unwrap();
@@ -588,7 +588,7 @@ fn register(
         let shared = shared.clone();
         server
             .fn_handler::<anyhow::Error, _>("/api/alarms", Method::Get, move |req| {
-                req.into_ok_response()?.write_all(presets_json(&shared).as_bytes())?;
+                json_response(req, &presets_json(&shared))?;
                 Ok(())
             })
             .unwrap();
@@ -753,6 +753,15 @@ fn read_body(req: &mut Request<&mut EspHttpConnection<'_>>) -> anyhow::Result<Op
 fn bad_request(req: Request<&mut EspHttpConnection<'_>>, msg: &str) -> anyhow::Result<()> {
     req.into_status_response(400)?
         .write_all(format!("{{\"error\":\"{msg}\"}}").as_bytes())?;
+    Ok(())
+}
+
+/// Send a 200 with `Content-Type: application/json`. Strict HTTP clients (e.g.
+/// aiohttp's `resp.json()`, used by the Home Assistant integration) reject a JSON
+/// body served as the default `text/html`, so set the type explicitly.
+fn json_response(req: Request<&mut EspHttpConnection<'_>>, body: &str) -> anyhow::Result<()> {
+    req.into_response(200, Some("OK"), &[("Content-Type", "application/json")])?
+        .write_all(body.as_bytes())?;
     Ok(())
 }
 
