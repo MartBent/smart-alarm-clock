@@ -8,7 +8,8 @@
 //! Entities (all under one HA device):
 //!   * sensor  — Phase
 //!   * button  — Snooze, Dismiss
-//!   * switch  — one per alarm slot (enable/disable; enabling arms the clock)
+//!   * switch  — Display (all lights on/off), plus one per alarm slot
+//!               (enable/disable; enabling arms the clock)
 //!
 //! Broker is configured via `POST /api/mqtt` (stored in NVS); this worker is
 //! spawned by `net.rs` once WiFi is up and a broker is configured.
@@ -85,6 +86,7 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
     let mut was_connected = false;
     let mut last_version: Option<u64> = None;
     let mut last_phase: Option<Phase> = None;
+    let mut last_display: Option<bool> = None;
     let mut last_enabled: Vec<bool> = Vec::new();
 
     loop {
@@ -94,6 +96,7 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
             // Force a full state republish below.
             last_version = None;
             last_phase = None;
+            last_display = None;
             last_enabled.clear();
         }
         was_connected = now_conn;
@@ -102,13 +105,17 @@ pub fn run(cfg: MqttCfg, shared: SharedState, bus: CommandBus) {
             // Only snapshot state when the core reports a material change; the
             // per-second `now` tick doesn't bump `version`.
             if version_advanced(&shared, &mut last_version) {
-                let (phase, enabled) = {
+                let (phase, display_on, enabled) = {
                     let s = shared.lock().unwrap();
-                    (s.phase, s.settings.presets.iter().map(|p| p.enabled).collect::<Vec<_>>())
+                    (s.phase, s.display_on, s.settings.presets.iter().map(|p| p.enabled).collect::<Vec<_>>())
                 };
                 if last_phase != Some(phase) {
                     enq(&mut client, &format!("{BASE}/phase"), phase_str(phase).as_bytes());
                     last_phase = Some(phase);
+                }
+                if last_display != Some(display_on) {
+                    enq(&mut client, &format!("{BASE}/display"), on_off(display_on));
+                    last_display = Some(display_on);
                 }
                 if last_enabled != enabled {
                     for (i, on) in enabled.iter().enumerate() {
@@ -154,6 +161,7 @@ fn route(topic: &str, data: &[u8], bus: &CommandBus) {
     match rest {
         "snooze/set" => submit(bus, Command::Snooze),
         "dismiss/set" => submit(bus, Command::Dismiss),
+        "display/set" => submit(bus, Command::SetDisplay { on }),
         _ => {}
     }
 }
@@ -186,6 +194,15 @@ fn on_connect(client: &mut EspMqttClient<'static>, shared: &SharedState) {
     disc(client, "button", "dismiss", &serde_json::json!({
         "name": "Dismiss", "unique_id": "sac_dismiss",
         "command_topic": format!("{BASE}/dismiss/set"),
+        "availability_topic": AVAIL, "device": dev,
+    }));
+    // Display master switch (all light-emitting components on/off).
+    disc(client, "switch", "display", &serde_json::json!({
+        "name": "Display", "unique_id": "sac_display",
+        "command_topic": format!("{BASE}/display/set"),
+        "state_topic": format!("{BASE}/display"),
+        "payload_on": "ON", "payload_off": "OFF",
+        "icon": "mdi:clock-digital",
         "availability_topic": AVAIL, "device": dev,
     }));
     // One enable switch per preset.

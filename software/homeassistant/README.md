@@ -30,6 +30,7 @@ One device, **Smart Alarm Clock**, with:
 | Phase | sensor | `syncing` / `idle` / `armed` / `ringing` / `snoozed` |
 | Time | sensor | the device's own wall clock |
 | Snooze, Dismiss | button | while ringing (Dismiss disables the fired alarm) |
+| Display | switch | all light-emitting components on/off (a firing alarm lights up anyway) |
 | Alarm *N* | switch | enable/disable each slot — enabling arms the clock |
 | Alarm *N* time | time | edit each slot's time |
 

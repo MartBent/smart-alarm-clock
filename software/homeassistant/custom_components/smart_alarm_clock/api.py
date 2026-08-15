@@ -16,15 +16,19 @@ class SmartAlarmApi:
         self._base = f"http://{host}"
 
     async def get_state(self) -> dict:
-        """GET /api/state -> {phase, now, snooze_secs, alarms:[...]}"""
+        """GET /api/state -> {phase, now, display_on, snooze_secs, alarms:[...]}"""
         async with asyncio.timeout(10):
             async with self._session.get(f"{self._base}/api/state") as resp:
                 resp.raise_for_status()
                 return await resp.json()
 
     async def command(self, cmd: str) -> None:
-        """POST /api/command {cmd: arm|disarm|snooze|dismiss}"""
+        """POST /api/command {cmd: snooze|dismiss|display_on|display_off|display_toggle}"""
         await self._post("/api/command", {"cmd": cmd})
+
+    async def set_display(self, on: bool) -> None:
+        """Turn all light-emitting components on/off."""
+        await self.command("display_on" if on else "display_off")
 
     async def set_preset_enabled(self, idx: int, enabled: bool) -> None:
         await self._post("/api/alarm/enabled", {"idx": idx, "enabled": enabled})
