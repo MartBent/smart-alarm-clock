@@ -15,7 +15,9 @@
 
 use std::time::{Duration, Instant};
 
-use crate::state::{fmt_hms, Command, CommandBus, Phase, SharedState};
+use esp_idf_svc::nvs::{EspDefaultNvsPartition, EspNvs, NvsDefault};
+
+use crate::state::{fmt_hms, Command, CommandBus, Phase, SharedState, NUM_PRESETS};
 
 /// Ignore button input for this long after ringing starts (fire-time guard).
 const GRACE: Duration = Duration::from_millis(1500);
@@ -23,9 +25,35 @@ const GRACE: Duration = Duration::from_millis(1500);
 const TICK: Duration = Duration::from_millis(200);
 /// Unix time below this (≈ 2023-11) means the clock hasn't been SNTP-set yet.
 const VALID_AFTER: i64 = 1_700_000_000;
+/// An unattended alarm stops (as if dismissed) after ringing this long.
+const RING_TIMEOUT: Duration = Duration::from_secs(30 * 60);
+/// NVS namespace/key holding the alarm slots + display flag.
+const NVS_NS: &str = "alarm";
+const NVS_KEY: &str = "cfg";
+/// Blob layout: per slot 4 bytes LE secs + 1 byte enabled, then 1 byte display_on.
+const BLOB_LEN: usize = NUM_PRESETS * 5 + 1;
 
-pub fn run(bus: CommandBus, shared: SharedState) {
+pub fn run(bus: CommandBus, shared: SharedState, nvs_part: EspDefaultNvsPartition) {
     log::info!(target: "alarm", "worker started; waiting for time sync");
+
+    // Firing-rule self-check (debug builds): normal tick, midnight wrap, and
+    // backward clock steps (DST fall-back, SNTP correction) must not fire.
+    debug_assert!(crossed(25_199, 25_200, 25_200));
+    debug_assert!(!crossed(30_000, 30_001, 25_200));
+    debug_assert!(crossed(86_399, 0, 0));
+    debug_assert!(!crossed(30_000, 29_999, 25_200));
+    debug_assert!(!crossed(10_799, 7_200, 25_200));
+
+    let mut nvs = match EspNvs::new(nvs_part, NVS_NS, true) {
+        Ok(n) => Some(n),
+        Err(e) => {
+            log::error!(target: "alarm", "NVS open failed ({e}); alarms won't survive a reboot");
+            None
+        }
+    };
+    if let Some(n) = &nvs {
+        load_settings(n, &shared);
+    }
 
     let snooze_secs = shared.lock().unwrap().settings.snooze_secs;
 
@@ -60,14 +88,7 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                 }
                 Command::Dismiss | Command::ButtonLong => {
                     if matches!(phase, Phase::Ringing | Phase::Snoozed) && !in_grace {
-                        if let Some(idx) = fired_idx.take() {
-                            let mut s = shared.lock().unwrap();
-                            if let Some(p) = s.settings.presets.get_mut(idx) {
-                                p.enabled = false;
-                                settings_changed = true;
-                            }
-                            log::info!(target: "alarm", "dismissed; disabled alarm {idx}");
-                        }
+                        settings_changed |= disable_fired(&shared, &mut fired_idx);
                         // Base phase (armed/idle) is recomputed below from what's
                         // still enabled.
                         phase = Phase::Idle;
@@ -147,7 +168,13 @@ pub fn run(bus: CommandBus, shared: SharedState) {
                             log::warn!(target: "alarm", "*** RINGING (after snooze) ***");
                         }
                     }
-                    Phase::Ringing => {}
+                    Phase::Ringing => {
+                        if ring_start.elapsed() >= RING_TIMEOUT {
+                            log::warn!(target: "alarm", "nobody answered; stopping after {}m", RING_TIMEOUT.as_secs() / 60);
+                            settings_changed |= disable_fired(&shared, &mut fired_idx);
+                            phase = Phase::Idle; // armed/idle re-derived next tick
+                        }
+                    }
                 }
                 prev_secs = Some(secs);
             }
@@ -165,7 +192,59 @@ pub fn run(bus: CommandBus, shared: SharedState) {
         }
         published_phase = Some(phase);
 
+        if settings_changed {
+            if let Some(n) = &mut nvs {
+                save_settings(n, &shared);
+            }
+        }
+
         std::thread::sleep(TICK);
+    }
+}
+
+/// Dismiss bookkeeping: turn off the slot that fired (alarms are one-shot).
+/// Returns `true` if a setting changed.
+fn disable_fired(shared: &SharedState, fired_idx: &mut Option<usize>) -> bool {
+    let Some(idx) = fired_idx.take() else { return false };
+    let mut s = shared.lock().unwrap();
+    let Some(p) = s.settings.presets.get_mut(idx) else { return false };
+    p.enabled = false;
+    log::info!(target: "alarm", "dismissed; disabled alarm {idx}");
+    true
+}
+
+/// Restore alarm slots + display flag saved by [`save_settings`], if any.
+fn load_settings(nvs: &EspNvs<NvsDefault>, shared: &SharedState) {
+    let mut buf = [0u8; BLOB_LEN];
+    match nvs.get_blob(NVS_KEY, &mut buf) {
+        Ok(Some(b)) if b.len() == BLOB_LEN => {
+            let mut s = shared.lock().unwrap();
+            for (p, c) in s.settings.presets.iter_mut().zip(b.chunks_exact(5)) {
+                p.secs = u32::from_le_bytes([c[0], c[1], c[2], c[3]]) % 86_400;
+                p.enabled = c[4] != 0;
+            }
+            s.display_on = b[BLOB_LEN - 1] != 0;
+            s.version = s.version.wrapping_add(1);
+            log::info!(target: "alarm", "restored alarms from NVS");
+        }
+        Ok(_) => log::info!(target: "alarm", "no saved alarms; using defaults"),
+        Err(e) => log::warn!(target: "alarm", "NVS read failed ({e}); using defaults"),
+    }
+}
+
+/// Persist alarm slots + display flag so they survive a reboot / power cut.
+fn save_settings(nvs: &mut EspNvs<NvsDefault>, shared: &SharedState) {
+    let mut buf = Vec::with_capacity(BLOB_LEN);
+    {
+        let s = shared.lock().unwrap();
+        for p in &s.settings.presets {
+            buf.extend_from_slice(&p.secs.to_le_bytes());
+            buf.push(p.enabled as u8);
+        }
+        buf.push(s.display_on as u8);
+    }
+    if let Err(e) = nvs.set_blob(NVS_KEY, &buf) {
+        log::warn!(target: "alarm", "NVS save failed: {e}");
     }
 }
 
@@ -184,10 +263,14 @@ fn now_local_secs() -> Option<u32> {
 }
 
 /// Did `target` fall within the half-open interval `(prev, now]` (mod 24 h)?
+/// A backward step is a midnight wrap only if it's large (> 12 h); a small one
+/// (DST fall-back, SNTP pulling a fast clock back) crosses nothing.
 fn crossed(prev: u32, now: u32, target: u32) -> bool {
     if now >= prev {
         prev < target && target <= now
-    } else {
+    } else if prev - now > 43_200 {
         target > prev || target <= now
+    } else {
+        false
     }
 }

@@ -6,14 +6,16 @@ integration — or a browser / curl — can be exercised with no hardware and no
 WiFi provisioning. Pure stdlib; no pip installs.
 
 Contract mirrored from the firmware:
-    GET  /api/state              -> {phase, now, snooze_secs, alarms:[...]}
+    GET  /api/state              -> {id, phase, now, display_on, snooze_secs, alarms:[...]}
     GET  /api/alarms             -> [{idx,time,enabled}, ...]  (fixed pool of slots)
-    POST /api/command            {"cmd":"arm|disarm|snooze|dismiss"}
+    POST /api/command            {"cmd":"snooze|dismiss|display_on|display_off|display_toggle"}
     POST /api/alarm/enabled      {"idx":int,"enabled":bool}
     POST /api/alarm/time         {"idx":int,"hour":int,"minute":int,"second"?:int}
     POST /api/wifi | /api/wifi/reset | /api/mqtt   -> {"ok":true}  (stubs)
     GET  /api/events   (on the SSE port, default 8081)  -> text/event-stream,
          emits `data: <state json>\n\n` on every material change + heartbeats.
+Every POST must carry `Content-Type: application/json` (the device rejects
+others with 400, which blocks cross-site form posts from browsers).
 
 The device serves the API on :80 and SSE on :81. Here they default to 8080 /
 8081 so it runs without root; override with --api-port / --sse-port.
@@ -41,6 +43,8 @@ _PHASES_ACTIVE = {"armed", "ringing", "snoozed"}
 # their times; a disabled slot is effectively "no alarm". Mirrors NUM_PRESETS in
 # the firmware (software/firmware/src/state.rs).
 NUM_PRESETS = 8
+# Stands in for the device's MAC-based id (HA uses it as the unique_id).
+SIM_ID = "000000000000"
 
 
 class Device:
@@ -52,6 +56,7 @@ class Device:
         self.version = 0
         self.phase = "idle"
         self.snooze_secs = 10
+        self.display_on = True
         # Fixed pool of slots (secs-since-midnight, enabled) — matches
         # Settings::default(): slot 0 on at 07:00, the rest off. Set times/enable
         # from HA; index is the stable id.
@@ -87,8 +92,10 @@ class Device:
     def _state_json_locked(self) -> str:
         return json.dumps(
             {
+                "id": SIM_ID,
                 "phase": self.phase,
                 "now": self._hms(self.now_secs),
+                "display_on": self.display_on,
                 "snooze_secs": self.snooze_secs,
                 "alarms": [
                     {
@@ -135,6 +142,10 @@ class Device:
                         self._fired_idx = None
                     self._snooze_deadline = None
                     self.phase = self._derive_phase_locked()
+            elif cmd in ("display_on", "display_off", "display_toggle"):
+                self.display_on = (
+                    not self.display_on if cmd == "display_toggle" else cmd == "display_on"
+                )
             else:
                 return False
             self._bump()
@@ -155,7 +166,9 @@ class Device:
         with self._lock:
             if not (0 <= idx < len(self.presets)):
                 return False
-            self.presets[idx]["secs"] = (hour * 3600 + minute * 60 + second) % 86400
+            if not (0 <= hour <= 23 and 0 <= minute <= 59 and 0 <= second <= 59):
+                return False
+            self.presets[idx]["secs"] = hour * 3600 + minute * 60 + second
             self._bump()
             return True
 
@@ -198,7 +211,9 @@ class Device:
             return False
         if prev < now:
             return prev < target <= now
-        return target > prev or target <= now  # wrapped past midnight
+        if prev - now > 43200:  # wrapped past midnight
+            return target > prev or target <= now
+        return False  # small backward step (DST fall-back, NTP correction)
 
 
 DEV = Device()
@@ -249,6 +264,10 @@ class ApiHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = self.path.split("?")[0]
+        if not self.headers.get("Content-Type", "").startswith("application/json"):
+            _read_json(self)  # drain the body so the keep-alive connection stays usable
+            self._bad("need Content-Type: application/json")
+            return
         if path in ("/api/wifi", "/api/wifi/reset", "/api/mqtt"):
             _read_json(self)  # consume, ignore
             self._ok()
@@ -276,7 +295,7 @@ class ApiHandler(BaseHTTPRequestHandler):
             ):
                 self._ok()
             else:
-                self._bad("bad idx")
+                self._bad("bad idx or time out of range")
         else:
             self._send(404, b'{"error":"not found"}')
 

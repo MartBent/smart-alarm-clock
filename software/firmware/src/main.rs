@@ -30,6 +30,7 @@ use std::thread::Builder;
 
 use esp_idf_hal::peripherals::Peripherals;
 use esp_idf_svc::log::EspLogger;
+use esp_idf_svc::nvs::EspDefaultNvsPartition;
 
 fn main() {
     // Required once at startup on the esp-idf std path.
@@ -47,6 +48,8 @@ fn main() {
     let peripherals = Peripherals::take().expect("take peripherals");
     let shared = state::new_shared();
     let bus = state::new_bus();
+    // Taken once here: the alarm core (saved alarms) and net (WiFi/MQTT creds) share it.
+    let nvs_part = EspDefaultNvsPartition::take().expect("nvs partition");
 
     // RTC worker (DS3231 over I2C: SDA=GPIO8, SCL=GPIO9). Spawned first so it can
     // seed the system clock from the RTC before the other workers read the time.
@@ -65,10 +68,11 @@ fn main() {
     {
         let shared = shared.clone();
         let bus = bus.clone();
+        let nvs_part = nvs_part.clone();
         Builder::new()
             .name("alarm".into())
             .stack_size(8 * 1024)
-            .spawn(move || alarm::run(bus, shared))
+            .spawn(move || alarm::run(bus, shared, nvs_part))
             .expect("spawn alarm worker");
     }
 
@@ -131,7 +135,7 @@ fn main() {
         Builder::new()
             .name("net".into())
             .stack_size(16 * 1024)
-            .spawn(move || net::run(modem, shared, bus))
+            .spawn(move || net::run(modem, shared, bus, nvs_part))
             .expect("spawn net worker");
     }
 

@@ -4,15 +4,15 @@
 //! is up (and offline operation). Two jobs:
 //!   1. At boot: if the RTC holds a valid time, seed the system clock from it so
 //!      the display shows the time immediately instead of waiting for SNTP.
-//!   2. After SNTP has corrected the system clock: write it back to the RTC
-//!      periodically, keeping the RTC disciplined to network time.
+//!   2. Each time SNTP completes a sync (at boot, then ~hourly): write the fresh
+//!      network time back to the RTC. Never from an unsynced system clock, which
+//!      drifts far more than the DS3231 it would overwrite.
 //!
 //! Times are handled in UTC (the system clock is UTC; TZ turns it into local
 //! wall-clock for display). Hardware: native 3.3V, no level shifter —
 //! SDA=GPIO8, SCL=GPIO9, VCC=3V3.
 
 use core::time::Duration;
-use std::time::Instant;
 
 use esp_idf_hal::delay::BLOCK;
 use esp_idf_hal::gpio::{Gpio8, Gpio9};
@@ -25,9 +25,7 @@ const REG_STATUS: u8 = 0x0F; // bit7 = OSF (oscillator stopped since last power-
 
 /// Unix time below this (~2023-11) is treated as "clock not set yet".
 const VALID_AFTER: i64 = 1_700_000_000;
-/// How often to write the system clock back to the RTC once time is valid.
-const PERSIST_EVERY: Duration = Duration::from_secs(3600);
-/// Poll cadence; the first tick also gives SNTP a head start before we persist.
+/// How often to check whether SNTP has completed a sync.
 const TICK: Duration = Duration::from_secs(30);
 
 fn bcd_to_dec(b: u8) -> u8 {
@@ -128,24 +126,19 @@ pub fn run(i2c0: I2C0, sda: Gpio8, scl: Gpio9) {
         None => log::warn!(target: "rtc", "RTC time invalid (OSF/plausibility); waiting for SNTP"),
     }
 
-    // Discipline loop: once the system clock is valid (SNTP or the RTC seed),
-    // persist it back to the RTC on boot and roughly hourly.
-    let mut last_persist: Option<Instant> = None;
+    // Discipline loop: copy network time into the RTC after each SNTP sync.
+    // The IDF reports COMPLETED once per sync, then resets the status.
     loop {
-        std::thread::sleep(TICK); // first sleep gives SNTP time to correct the clock
+        std::thread::sleep(TICK);
+        let synced = unsafe { esp_idf_sys::sntp_get_sync_status() }
+            == esp_idf_sys::sntp_sync_status_t_SNTP_SYNC_STATUS_COMPLETED;
         let now = sys_unix();
-        if now < VALID_AFTER {
-            continue; // still no valid time from any source
+        if !synced || now < VALID_AFTER {
+            continue;
         }
-        let due = last_persist.map_or(true, |t| t.elapsed() >= PERSIST_EVERY);
-        if due {
-            match write_unix(&mut i2c, now) {
-                Ok(()) => {
-                    log::info!(target: "rtc", "RTC updated from system clock (unix {now})");
-                    last_persist = Some(Instant::now());
-                }
-                Err(e) => log::warn!(target: "rtc", "RTC write failed: {e}"),
-            }
+        match write_unix(&mut i2c, now) {
+            Ok(()) => log::info!(target: "rtc", "RTC updated from SNTP time (unix {now})"),
+            Err(e) => log::warn!(target: "rtc", "RTC write failed: {e}"),
         }
     }
 }

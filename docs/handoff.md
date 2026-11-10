@@ -77,7 +77,7 @@ Worker threads (each a `std::thread`; the alarm core never blocks on the network
 Every input transport (button, REST, MQTT) pushes the same `Command`s onto one bus.
 
 **Not yet wired (bench tasks):** DS3231 RTC read (SNTP works; RTC boot-fallback scaffolded), MAX7219
-time render, capacitive-touch input + tuning, NVS persistence of slots/settings.
+time render, capacitive-touch input + tuning. (Alarm slots + display flag now persist in NVS.)
 
 **Toolchain:** `espup` (Xtensa S3 fork) → from `software/firmware/`, `cargo run` builds + flashes over USB-C.
 

@@ -27,7 +27,8 @@ sole writer.
 (armed whenever any slot is enabled); dismiss is one-shot (disables the slot that fired).
 
 Working: alarm core, SNTP wall-clock firing, web UI + captive portal, MQTT + custom HA integration.
-Bench TODOs: DS3231 RTC read, MAX7219 time render, capacitive-touch input, NVS persistence.
+Alarm slots and the display setting are saved to NVS and survive a reboot.
+Bench TODOs: DS3231 RTC read, MAX7219 time render, capacitive-touch input.
 
 ## Toolchain / build
 

@@ -7,12 +7,14 @@
 //!     so the OS shows a setup sheet; the config page posts the SSID/password
 //!     to `/api/wifi`, which saves them to NVS and reboots into STA.
 //!
-//! The alarm REST API is available in both modes:
+//! The alarm REST API is available in both modes. Every POST must send
+//! `Content-Type: application/json` (blocks cross-site form posts):
 //!   curl http://<ip>/api/state
-//!   curl -X POST http://<ip>/api/command        -d '{"cmd":"snooze"}'
-//!   curl -X POST http://<ip>/api/command        -d '{"cmd":"display_off"}'
-//!   curl -X POST http://<ip>/api/alarm/enabled -d '{"idx":1,"enabled":true}'
-//!   curl -X POST http://<ip>/api/alarm/time    -d '{"idx":0,"hour":7,"minute":30}'
+//!   J='-H Content-Type:application/json'
+//!   curl $J -X POST http://<ip>/api/command        -d '{"cmd":"snooze"}'
+//!   curl $J -X POST http://<ip>/api/command        -d '{"cmd":"display_off"}'
+//!   curl $J -X POST http://<ip>/api/alarm/enabled -d '{"idx":1,"enabled":true}'
+//!   curl $J -X POST http://<ip>/api/alarm/time    -d '{"idx":0,"hour":7,"minute":30}'
 
 use core::convert::TryInto;
 
@@ -44,6 +46,15 @@ const AP_CHANNEL: u8 = 1;
 const NVS_NS: &str = "wifi";
 const MAX_BODY: usize = 256;
 const SERVER_STACK: usize = 10_240;
+/// Boot-time WiFi join attempts (and the gap between them) before falling back
+/// to the setup AP — a router rebooting after a power cut needs a minute or two.
+const JOIN_TRIES: u32 = 10;
+const JOIN_RETRY: core::time::Duration = core::time::Duration::from_secs(10);
+/// In the setup AP despite saved creds (join failed): reboot after this long to
+/// retry the join, so the clock doesn't sit as an open AP forever.
+const AP_FALLBACK_REBOOT: core::time::Duration = core::time::Duration::from_secs(10 * 60);
+/// How often to check the STA link and reconnect if it dropped.
+const LINK_CHECK: core::time::Duration = core::time::Duration::from_secs(10);
 
 /// Paths that OS captive-portal detectors probe — serving the setup page for
 /// these makes the "Sign in to network" sheet pop up.
@@ -210,13 +221,13 @@ fn default_mqtt_port() -> u16 {
     1883
 }
 
-pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
+pub fn run(modem: Modem, shared: SharedState, bus: CommandBus, nvs_part: EspDefaultNvsPartition) {
     log::info!(target: "net", "worker started");
 
     let sys_loop = EspSystemEventLoop::take().expect("system event loop");
-    let nvs_part = EspDefaultNvsPartition::take().expect("nvs partition");
 
     let creds = load_creds(&nvs_part);
+    let has_creds = creds.is_some();
     let mut wifi = BlockingWifi::wrap(
         EspWifi::new(modem, sys_loop.clone(), Some(nvs_part.clone())).expect("EspWifi::new"),
         sys_loop,
@@ -300,9 +311,22 @@ pub fn run(modem: Modem, shared: SharedState, bus: CommandBus) {
     // mDNS so Home Assistant auto-discovers us (and gives smart-alarm-clock.local).
     let _mdns = if ap_mode { None } else { start_mdns() };
 
-    // Keep `wifi`, `server`, `_sntp`, and `_mdns` alive for the process lifetime.
+    // Keep `wifi`, `server`, `_sntp`, and `_mdns` alive for the process lifetime,
+    // and keep the STA link up: esp-idf doesn't reconnect on its own.
+    let started = std::time::Instant::now();
     loop {
-        std::thread::sleep(core::time::Duration::from_secs(3600));
+        std::thread::sleep(LINK_CHECK);
+        if ap_mode {
+            if has_creds && started.elapsed() >= AP_FALLBACK_REBOOT {
+                log::warn!(target: "net", "still in setup AP with saved creds; rebooting to retry WiFi");
+                esp_idf_hal::reset::restart();
+            }
+        } else if !wifi.is_connected().unwrap_or(false) {
+            log::warn!(target: "net", "WiFi link down; reconnecting");
+            if let Err(e) = wifi.connect().and_then(|_| wifi.wait_netif_up()) {
+                log::warn!(target: "net", "reconnect failed: {e}");
+            }
+        }
     }
 }
 
@@ -431,8 +455,15 @@ fn connect_sta(
         ..Default::default()
     }))?;
     wifi.start()?;
-    wifi.connect()?;
-    wifi.wait_netif_up()?;
+    let mut tries = 1;
+    while let Err(e) = wifi.connect().and_then(|_| wifi.wait_netif_up()) {
+        if tries >= JOIN_TRIES {
+            return Err(e.into());
+        }
+        log::warn!(target: "net", "join attempt {tries}/{JOIN_TRIES} failed ({e}); retrying");
+        tries += 1;
+        std::thread::sleep(JOIN_RETRY);
+    }
     let ip = wifi.wifi().sta_netif().get_ip_info()?.ip;
     log::info!(target: "net", "STA connected: http://{ip}");
     Ok(())
@@ -600,7 +631,7 @@ fn register(
         server
             .fn_handler::<anyhow::Error, _>("/api/command", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
-                    return bad_request(req, "bad body");
+                    return bad_request(req, "need a JSON body (Content-Type: application/json)");
                 };
                 match serde_json::from_slice::<CmdReq>(&buf) {
                     Ok(r) => {
@@ -633,7 +664,7 @@ fn register(
         server
             .fn_handler::<anyhow::Error, _>("/api/alarm/enabled", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
-                    return bad_request(req, "bad body");
+                    return bad_request(req, "need a JSON body (Content-Type: application/json)");
                 };
                 match serde_json::from_slice::<PresetEnabledReq>(&buf) {
                     Ok(r) => {
@@ -653,9 +684,12 @@ fn register(
         server
             .fn_handler::<anyhow::Error, _>("/api/alarm/time", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
-                    return bad_request(req, "bad body");
+                    return bad_request(req, "need a JSON body (Content-Type: application/json)");
                 };
                 match serde_json::from_slice::<PresetTimeReq>(&buf) {
+                    Ok(r) if r.hour > 23 || r.minute > 59 || r.second > 59 => {
+                        return bad_request(req, "time out of range");
+                    }
                     Ok(r) => {
                         let secs = (r.hour as u32) * 3600 + (r.minute as u32) * 60 + r.second as u32;
                         submit(&bus, Command::SetPresetTime { idx: r.idx, secs });
@@ -674,7 +708,7 @@ fn register(
         server
             .fn_handler::<anyhow::Error, _>("/api/wifi", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
-                    return bad_request(req, "bad body");
+                    return bad_request(req, "need a JSON body (Content-Type: application/json)");
                 };
                 match serde_json::from_slice::<WifiReq>(&buf) {
                     Ok(r) if !r.ssid.is_empty() => {
@@ -696,6 +730,9 @@ fn register(
         let nvs_part = nvs_part.clone();
         server
             .fn_handler::<anyhow::Error, _>("/api/wifi/reset", Method::Post, move |req| {
+                if !is_json(&req) {
+                    return bad_request(req, "need Content-Type: application/json");
+                }
                 save_creds(&nvs_part, "", "")?; // empty ssid -> setup AP on next boot
                 log::info!(target: "net", "WiFi creds cleared; rebooting to setup AP");
                 req.into_ok_response()?
@@ -711,7 +748,7 @@ fn register(
         server
             .fn_handler::<anyhow::Error, _>("/api/mqtt", Method::Post, move |mut req| {
                 let Some(buf) = read_body(&mut req)? else {
-                    return bad_request(req, "bad body");
+                    return bad_request(req, "need a JSON body (Content-Type: application/json)");
                 };
                 match serde_json::from_slice::<MqttReq>(&buf) {
                     Ok(r) if !r.host.is_empty() => {
@@ -740,7 +777,18 @@ fn reboot_soon() {
         .ok();
 }
 
+/// Browsers can't send `Content-Type: application/json` cross-site without a
+/// CORS preflight (which we never approve), so requiring it stops any web page
+/// from POSTing commands to the clock via the visitor's browser.
+fn is_json(req: &Request<&mut EspHttpConnection<'_>>) -> bool {
+    req.content_type().is_some_and(|t| t.starts_with("application/json"))
+}
+
+/// JSON request body, or `None` if it's not JSON, empty, or too big.
 fn read_body(req: &mut Request<&mut EspHttpConnection<'_>>) -> anyhow::Result<Option<Vec<u8>>> {
+    if !is_json(req) {
+        return Ok(None);
+    }
     let len = req.content_len().unwrap_or(0) as usize;
     if len == 0 || len > MAX_BODY {
         return Ok(None);
